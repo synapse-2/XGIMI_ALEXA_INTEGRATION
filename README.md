@@ -9,6 +9,7 @@ The Arduinos communicate with each other via the I2C bus, with one acting as the
 
 Modules used
 
+
 Name                        Flash           RAM             Temp
  ESP32-S3-WROOM-1-N8        8MB(QuadSPI)    -               –40~85
  ESP32-S3-WROOM-1-N16       16MB(QuadSPI)   -               –40~85
