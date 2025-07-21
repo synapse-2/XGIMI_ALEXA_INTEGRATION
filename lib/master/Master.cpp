@@ -11,6 +11,14 @@ void Master::checkResetPressed()
 {
     if (UtilityFunctions::isResetPressed())
     {
+        Serial.printf("Reset pressed num time: %i need 3 to reset system", UtilityFunctions::numTimesResetPressed());
+
+        if (UtilityFunctions::numTimesResetPressed() < 3)
+        {
+            UtilityFunctions::unpressRest();
+            return;
+        }
+
         wm.resetSettings(); // Reset WiFi settings
         Serial.println("Resetting WiFi settings...");
         for (int i = 0; i < 5; i++)
@@ -26,6 +34,9 @@ void Master::checkResetPressed()
     }
 }
 
+String Master::getSSID() { return wm.getWiFiSSID(); }
+String Master::getPSK() { return wm.getWiFiPass(); }
+
 void Master::start()
 {
     // reset settings - wipe stored credentials for testing
@@ -40,12 +51,12 @@ void Master::start()
     bool res;
     UtilityFunctions::ledRed();
 
-
     wm.setConfigPortalTimeout(AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
-    wm.setDebugOutput(true);
+    wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
-    wm.setHostname(HOHSTNAME_Local); // Set the hostname for the device
-    res = wm.autoConnect();          // auto generated AP name from chipid
+    wm.setHostname(HOHSTNAME_Local);
+    wm.setDebugOutput(true); // Set the hostname for the device
+    res = wm.autoConnect();  // auto generated AP name from chipid
     // res = wm.autoConnect("AutoConnectAP"); // anonymous ap
     // res = wm.autoConnect("AutoConnectAP","password"); // password protected ap
 

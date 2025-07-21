@@ -11,6 +11,8 @@ const char DEVICE_KEY[] = "#e0num8EJjkWIVZCv5Avp0RmO"; // Secret device password
 
 // SECRET_DEVICE_KEY;    // Secret device password
 
+WiFiConnectionHandler * iot_connector;
+
 void onProjectorChange();
 
 CloudTelevision projector;
@@ -23,4 +25,4 @@ void initProperties()
     ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
 }
 
-WiFiConnectionHandler ArduinoIoTPreferredConnection(SSID, PASS);
+

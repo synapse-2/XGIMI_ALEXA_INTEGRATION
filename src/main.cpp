@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-
 #include <WiFiManager.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -65,7 +64,10 @@ void setup()
     // Defined in thingProperties.h
     initProperties();
     // Connect to Arduino IoT Cloud
-    ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+    // initialize the WiFiConnectionHandler pointer
+    iot_connector = new WiFiConnectionHandler(m.getSSID().c_str(), m.getPSK().c_str());
+
+    ArduinoCloud.begin(*iot_connector);
 
     /*
        The following function allows you to obtain more information
@@ -74,7 +76,7 @@ void setup()
        The default is 0 (only errors).
        Maximum is 4
    */
-    setDebugMessageLevel(2);
+    setDebugMessageLevel(ArduinoCloudDebugLevel);
     ArduinoCloud.printDebugInfo();
   }
   else
@@ -96,7 +98,6 @@ void loop()
   }
 }
 
-
 /*
   Since Projector is READ_WRITE variable, onProjectorChange() is
   executed every time a new value is received from IoT Cloud.
@@ -104,4 +105,7 @@ void loop()
 void onProjectorChange()
 {
   // Add your code here to act upon Projector change
+  Serial.println("update received from cloud");
+  Serial.println("Projector switch changed to: " + String(projector.getSwitch()));
+  Serial.println("Projector volume changed to: " + String(projector.getVolume()));
 }

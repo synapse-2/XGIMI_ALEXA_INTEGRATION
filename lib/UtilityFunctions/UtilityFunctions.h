@@ -18,6 +18,8 @@ namespace UtilityFunctions {
     bool MasterOrSlave();
     int findI2cOtherAddress();
     bool isResetPressed();
+    int numTimesResetPressed();
+    void unpressRest();
 
     
 }

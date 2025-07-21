@@ -74,12 +74,27 @@ namespace UtilityFunctions
             buttonReset.pressed = true;
             last_buttonReset_time = buttonReset_time;
         }
+        if (buttonReset_time - last_buttonReset_time > 5000)
+        {
+            buttonReset.numberKeyPresses = 1; // Reset the count if over 5 secs
+            buttonReset.pressed = true;      // Unpress the button
+            last_buttonReset_time = buttonReset_time;
+        }
+
     }
 
     bool isResetPressed()
     {
 
         return buttonReset.pressed;
+    }
+
+    int numTimesResetPressed(){
+        return buttonReset.numberKeyPresses;
+    }
+
+    void unpressRest(){
+        buttonReset.pressed = false;
     }
 
     void UtilityFunctionsInit()
