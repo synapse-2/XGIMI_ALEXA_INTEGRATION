@@ -1,13 +1,11 @@
 #include <Arduino.h>
 
-// New feature! Overclocking WS2812
-// #define FASTLED_OVERCLOCK 1.2 // 20% overclock ~ 960 khz.
-#include <FastLED.h>
+
 #include <WiFiManager.h>
-#include "UtilityFunctions.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "Master.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <Master.h>
+#include <UtilityFunctions.h>
 #include "thingProperties.h"
 
 // Define the LED_BUILTIN pin for the ESP32
@@ -66,6 +64,18 @@ void setup()
 
     // Defined in thingProperties.h
     initProperties();
+    // Connect to Arduino IoT Cloud
+    ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+
+    /*
+       The following function allows you to obtain more information
+       related to the state of network and IoT Cloud connection and errors
+       the higher number the more granular information you’ll get.
+       The default is 0 (only errors).
+       Maximum is 4
+   */
+    setDebugMessageLevel(2);
+    ArduinoCloud.printDebugInfo();
   }
   else
   {
@@ -86,20 +96,6 @@ void loop()
   }
 }
 
-// Connect to Arduino IoT Cloud
-ArduinoCloud.begin(ArduinoIoTPreferredConnection)
-{
-
-  /*
-     The following function allows you to obtain more information
-     related to the state of network and IoT Cloud connection and errors
-     the higher number the more granular information you’ll get.
-     The default is 0 (only errors).
-     Maximum is 4
-  */
-  setDebugMessageLevel(2);
-  ArduinoCloud.printDebugInfo();
-}
 
 /*
   Since Projector is READ_WRITE variable, onProjectorChange() is

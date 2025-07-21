@@ -1,8 +1,8 @@
-#include "UtilityFunctions.h"
-#include "defaults.h"
+#include <UtilityFunctions.h>
+#include <defaults.h>
 #include <Wire.h>
+#include <Arduino.h>
 #include <FastLED.h>
-
 
 CRGB UtilityFunctions::leds[NUMPIXELS];
 namespace UtilityFunctions
@@ -26,7 +26,6 @@ namespace UtilityFunctions
         unsigned long last_buttonReset_time = 0;
 
         Button buttonReset = {ResetButton, 0, false};
-
 
     }
 
@@ -54,7 +53,6 @@ namespace UtilityFunctions
         FastLED.show();
     }
 
-
     void ledWhite()
     {
         leds[0] = CRGB::White;
@@ -76,15 +74,11 @@ namespace UtilityFunctions
             buttonReset.pressed = true;
             last_buttonReset_time = buttonReset_time;
         }
-
-    
-       
-        
     }
 
     bool isResetPressed()
     {
-        
+
         return buttonReset.pressed;
     }
 
@@ -93,7 +87,7 @@ namespace UtilityFunctions
         pinMode(buttonReset.PIN, INPUT_PULLUP);
         attachInterrupt(buttonReset.PIN, isr, FALLING);
 
-        FastLED.addLeds<NEOPIXEL, LED_BUILTINIO>(leds, NUMPIXELS);
+        // FastLED.addLeds<NEOPIXEL, LED_BUILTINIO>(leds, NUMPIXELS);
         uint64_t macID = ESP.getEfuseMac(); // Get the MAC address
         Serial.printf("Device MAC Address: %04X:%04X:%04X:%04X:%04X:%04X\n",
                       (uint16_t)(macID >> 32),
