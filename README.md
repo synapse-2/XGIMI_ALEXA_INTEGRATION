@@ -7,6 +7,8 @@ The code uses two ESP32-S3 Arduino chips to simultaneously do Wi-Fi and Bluetoot
 
 The Arduinos communicate with each other via the I2C bus, with one acting as the master and the other as the slave.
 
+
+
 Modules used
 
 
