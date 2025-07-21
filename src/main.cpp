@@ -3,20 +3,17 @@
 // New feature! Overclocking WS2812
 // #define FASTLED_OVERCLOCK 1.2 // 20% overclock ~ 960 khz.
 #include <FastLED.h>
-
-
-
+#include <WiFiManager.h>
+#include "UtilityFunctions.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "Master.h"
+#include "thingProperties.h"
 
 // Define the LED_BUILTIN pin for the ESP32
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
 
-#define LED_BUILTINIO GPIO_NUM_48
-// Define the number of pixels in the NeoPixel strip
-#define NUMPIXELS 1
-CRGB leds[NUMPIXELS];
-
-
-
+Master m;
 
 void setup()
 {
@@ -28,12 +25,8 @@ void setup()
   Serial.println("Initializing...");
   Serial.flush();
 
-  Serial.println("Example configured to blink GPIO LED!");
-
   Serial.println();
   Serial.println("Running...");
-
-  printf("Hello world!\n");
 
   /* Print chip information */
   esp_chip_info_t chip_info;
@@ -61,18 +54,58 @@ void setup()
 
   printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-  FastLED.addLeds<NEOPIXEL, LED_BUILTINIO>(leds, NUMPIXELS);
+  UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
+  UtilityFunctions::ledRed();               // Turn on the LED to indicate setup is complete
+
+  // Check if the device is in master or slave mode
+  if (UtilityFunctions::MasterOrSlave())
+  {
+    Serial.println("Device is in Master mode.");
+
+    m.start(); // Start the master functionality
+
+    // Defined in thingProperties.h
+    initProperties();
+  }
+  else
+  {
+    Serial.println("Device is in Slave mode.");
+  }
 }
 
 void loop()
 {
 
   delay(1000);
+  Serial.println("we are in the LOOP");
+  m.checkResetPressed(); // Check if the reset button has been pressed
+  if (UtilityFunctions::MasterOrSlave())
+  {
+    // If in master mode, update the properties
+    ArduinoCloud.update();
+  }
+}
 
-    leds[0] = CRGB::;
-     FastLED.show(); delay(30);
-    leds[0] = CRGB::Black; 
-    FastLED.show(); 
-    
-    delay(30);
+// Connect to Arduino IoT Cloud
+ArduinoCloud.begin(ArduinoIoTPreferredConnection)
+{
+
+  /*
+     The following function allows you to obtain more information
+     related to the state of network and IoT Cloud connection and errors
+     the higher number the more granular information you’ll get.
+     The default is 0 (only errors).
+     Maximum is 4
+  */
+  setDebugMessageLevel(2);
+  ArduinoCloud.printDebugInfo();
+}
+
+/*
+  Since Projector is READ_WRITE variable, onProjectorChange() is
+  executed every time a new value is received from IoT Cloud.
+*/
+void onProjectorChange()
+{
+  // Add your code here to act upon Projector change
 }
