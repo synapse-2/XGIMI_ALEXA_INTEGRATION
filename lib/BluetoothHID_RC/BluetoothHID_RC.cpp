@@ -138,9 +138,10 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   
   advertisingData.setAppearance(HID_REMOTE);
   advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
+  advertisingData.setCompleteServices(hidService()->getUUID());
   advertising = server->getAdvertising();
   advertising->setAdvertisementData(advertisingData);
-  advertising->addServiceUUID(hidService()->getUUID());
+  //advertising->addServiceUUID(hidService()->getUUID());
   advertising->setScanResponse(false);
   advertising->start();
 
@@ -197,6 +198,9 @@ void BluetoothHID_RC::onWrite(BLECharacteristic *me)
   {
     UtilityFunctions::debugLog("Unknown characteristic written");
   }
+
+  UtilityFunctions::debugLogf("Data length %i\n",me->getLength());
+  UtilityFunctions::debugLogf("Data received %s\n",me->getValue());
 }
 
 BluetoothHID_RC::~BluetoothHID_RC()
