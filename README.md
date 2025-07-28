@@ -6,7 +6,6 @@ Objective of the project is to use esp32s3 arduino to enable voice commands from
 The code uses two ESP32-S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections. It may be possible with one (not sure), but I wanted to keep it simple.
 
 The Arduinos communicate with each other via the I2C bus, with one acting as the master and the other as the slave.
-
 https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 https://dronebotworkshop.com/esp32-bluetooth/
 
