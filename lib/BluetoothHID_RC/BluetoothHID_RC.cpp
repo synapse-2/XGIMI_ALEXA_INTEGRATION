@@ -25,8 +25,8 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   secondDeviceOutput->setCallbacks(this);
 
   // format is not shown in xigimi rc remote so overridethe descriptor set by the BLE HID Class
-  BLEDescriptor *batteryLevelDescriptor = new BLEDescriptor(BLEUUID((uint16_t)0x2904));
-  batteryService()->getCharacteristic((uint16_t)0x2a19)->addDescriptor(batteryLevelDescriptor); // set battlevel cchar desc to null format 
+  // BLEDescriptor *batteryLevelDescriptor = new BLEDescriptor(BLEUUID((uint16_t)0x2904));
+  // batteryService()->getCharacteristic((uint16_t)0x2a19)->addDescriptor(batteryLevelDescriptor); // set battlevel cchar desc to null format
 
   /*
   B) Device information  service UUID 0x180A - Primary has
@@ -83,6 +83,7 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   m_0xA001CharacteristicDescriptor->setFormat(0);
   m_0xA001Characteristic->addDescriptor(m_0xA001CharacteristicDescriptor);
   m_0xA002Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA002, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xa002,
+  m_0xA001Characteristic->setCallbacks(this);
 
   /* D) Customm service uuid 0000D0FF-3C17-D293-8E48-14FE2E4DA212 primary has
      1) uuid 0xffd1, custom characteristic, write, no response,
@@ -97,7 +98,8 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
      */
   m_CustomService2 = server->createService(BLEUUID("0000D0FF-3C17-D293-8E48-14FE2E4DA212"));                               // uuid 0000D0FF-3C17-D293-8E48-14FE2E4DA212
   m_0xFFD1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD1, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xFFD1
-  m_0xFFD2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD2, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD2
+  m_0xFFD1Characteristic->setCallbacks(this);
+  m_0xFFD2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD2, BLECharacteristic::PROPERTY_READ); // uuid 0xFFD2
   m_0xFFD2Characteristic->setValue(HID_uuid_0xffd2, sizeof(HID_uuid_0xffd2));
   m_0xFFD3Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD3, BLECharacteristic::PROPERTY_READ); // uuid 0xFFD3
   m_0xFFD3Characteristic->setValue(HID_uuid_0xffd3, sizeof(HID_uuid_0xffd3));
@@ -105,11 +107,13 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   m_0xFFD4Characteristic->setValue(HID_uuid_0xffd4, sizeof(HID_uuid_0xffd4));
   m_0xFFD5Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD5, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD5
   m_0xFFD8Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD8, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xFFD8
-  m_0xFFF1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF1, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFF1
+  m_0xFFD8Characteristic->setCallbacks(this);
+  m_0xFFF1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF1, BLECharacteristic::PROPERTY_READ); // uuid 0xFFF1
 
   m_0xFFF1Characteristic->setValue(HID_uuid_0xfff1, sizeof(HID_uuid_0xfff1));
   m_0xFFF2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF2, BLECharacteristic::PROPERTY_WRITE); // uuid 0xFFF2
-  m_0xFFE0Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFE0, BLECharacteristic::PROPERTY_READ);  // uuid 0xFFE0
+  m_0xFFF2Characteristic->setCallbacks(this);
+  m_0xFFE0Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFE0, BLECharacteristic::PROPERTY_READ); // uuid 0xFFE0
   m_0xFFE0Characteristic->setValue(HID_uuid_0xffe0, sizeof(HID_uuid_0xffe0));
 
   /* E) Customm service uuid 00006287-3C17-D293-8E48-14FE2E4DA212 primary has
@@ -121,9 +125,12 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   m_0x6287Characteristic = m_CustomService3->createCharacteristic("00006387-3C17-D293-8E48-14FE2E4DA212", BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY); // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
   BLE2904 *m_0x6287CharacteristicDescriptor = new BLE2904();
   m_0xA001Characteristic->addDescriptor(m_0x6287CharacteristicDescriptor);
+  m_0xA001Characteristic->setCallbacks(this);
 
   BLESecurity *pSecurity = new BLESecurity();
-  pSecurity->setAuthenticationMode(ESP_LE_AUTH_REQ_SC_MITM_BOND);
+
+  pSecurity->setAuthenticationMode(ESP_LE_AUTH_REQ_BOND_MITM);
+  // pSecurity->setAuthenticationMode(ESP_LE_AUTH_REQ_SC_MITM_BOND);
 
   // set the report map
   reportMap((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR));
@@ -135,13 +142,13 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
 
   UtilityFunctions::debugLog("Setting up Advertising");
 
-  
   advertisingData.setAppearance(HID_REMOTE);
   advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
   advertisingData.setCompleteServices(hidService()->getUUID());
   advertising = server->getAdvertising();
   advertising->setAdvertisementData(advertisingData);
-  //advertising->addServiceUUID(hidService()->getUUID());
+  advertising->setAppearance(HID_REMOTE);
+  advertising->addServiceUUID(hidService()->getUUID());
   advertising->setScanResponse(false);
   advertising->start();
 
@@ -199,8 +206,8 @@ void BluetoothHID_RC::onWrite(BLECharacteristic *me)
     UtilityFunctions::debugLog("Unknown characteristic written");
   }
 
-  UtilityFunctions::debugLogf("Data length %i\n",me->getLength());
-  UtilityFunctions::debugLogf("Data received %s\n",me->getValue());
+  UtilityFunctions::debugLogf("Data length %i\n", me->getLength());
+  UtilityFunctions::debugLogf("Data received %s\n", me->getValue());
 }
 
 BluetoothHID_RC::~BluetoothHID_RC()

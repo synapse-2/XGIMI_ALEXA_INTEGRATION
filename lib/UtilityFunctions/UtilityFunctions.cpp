@@ -141,6 +141,7 @@ namespace UtilityFunctions
         Serial.begin(115200);
         while (!Serial)
             ; // wait for serial attach
+        Serial.setDebugOutput(true);
         debugLog("Initializing...");
 
         FastLED.addLeds<RGBCHIP, LED_BUILTINIO, RGB_DATA_ORDER>(leds, NUMPIXELS);

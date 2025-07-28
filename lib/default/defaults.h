@@ -12,7 +12,9 @@
 #define I2C_FREQ 100000     // 100 kHz
 #define I2C_SLAVE_ADDR 0x3f // Slave address for I2C
 
+
 //set to not start the wifi and aIoT connection
+// #define XIGIMI_DEBUG_WIFI_OFF
 #undef XIGIMI_DEBUG_WIFI_OFF
 #define AIOT_POLL_TIME 3000 //milis for arduino poll any less(faster) and blutooth is not able to connecet
 
