@@ -79,11 +79,12 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
      */
   m_CustomService1 = server->createService(BLEUUID("0000D1FF-3C17-D293-8E48-14FE2E4DA212"));                                                                    // uuid 0000D1FF-3C17-D293-8E48-14FE2E4DA212
   m_0xA001Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA001, BLECharacteristic::PROPERTY_WRITE_NR | BLECharacteristic::PROPERTY_NOTIFY); // uuid 0xa001,
-  BLE2904 *m_0xA001CharacteristicDescriptor = new BLE2904();
-  m_0xA001CharacteristicDescriptor->setFormat(0);
+  BLE2902 *m_0xA001CharacteristicDescriptor = new BLE2902();
+  
   m_0xA001Characteristic->addDescriptor(m_0xA001CharacteristicDescriptor);
-  m_0xA002Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA002, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xa002,
   m_0xA001Characteristic->setCallbacks(this);
+  m_0xA002Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA002, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xa002,
+  m_0xA002Characteristic->setCallbacks(this);
 
   /* D) Customm service uuid 0000D0FF-3C17-D293-8E48-14FE2E4DA212 primary has
      1) uuid 0xffd1, custom characteristic, write, no response,
@@ -125,7 +126,7 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
   m_0x6287Characteristic = m_CustomService3->createCharacteristic("00006387-3C17-D293-8E48-14FE2E4DA212", BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY); // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
   BLE2904 *m_0x6287CharacteristicDescriptor = new BLE2904();
   m_0xA001Characteristic->addDescriptor(m_0x6287CharacteristicDescriptor);
-  m_0xA001Characteristic->setCallbacks(this);
+  m_0x6287Characteristic->setCallbacks(this);
 
   BLESecurity *pSecurity = new BLESecurity();
 
@@ -205,7 +206,8 @@ void BluetoothHID_RC::onWrite(BLECharacteristic *me)
   {
     UtilityFunctions::debugLog("Unknown characteristic written");
   }
-
+  UtilityFunctions::debugLogf("UUID ");
+  UtilityFunctions::debugLog(me->getUUID().toString().c_str());
   UtilityFunctions::debugLogf("Data length %i\n", me->getLength());
   UtilityFunctions::debugLogf("Data received %s\n", me->getValue());
 }
