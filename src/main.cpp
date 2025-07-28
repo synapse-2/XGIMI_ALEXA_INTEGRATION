@@ -3,65 +3,39 @@
 #include <WiFiManager.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#include <Master.h>
-#include <UtilityFunctions.h>
+#include "Master.h"
+#include "Slave.h"
+#include "UtilityFunctions.h"
 #include "thingProperties.h"
+#include <BleKeyboard.h>
 
 // Define the LED_BUILTIN pin for the ESP32
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
 
 Master m;
+Slave s;
+TaskHandle_t Task0;
+TaskHandle_t Task1;
 
-void setup()
+void Task1code(void *pvParameters)
 {
-  Serial.begin(115200);
-  while (!Serial)
-    ; // wait for serial attach
-
-  Serial.println();
-  Serial.println("Initializing...");
-  Serial.flush();
-
-  Serial.println();
-  Serial.println("Running...");
-
-  /* Print chip information */
-  esp_chip_info_t chip_info;
-  uint32_t flash_size;
-  esp_chip_info(&chip_info);
-  printf("This is %s chip with %d CPU core(s), %s%s%s%s, ",
-         CONFIG_IDF_TARGET,
-         chip_info.cores,
-         (chip_info.features & CHIP_FEATURE_WIFI_BGN) ? "WiFi/" : "",
-         (chip_info.features & CHIP_FEATURE_BT) ? "BT" : "",
-         (chip_info.features & CHIP_FEATURE_BLE) ? "BLE" : "",
-         (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "");
-
-  unsigned major_rev = chip_info.revision / 100;
-  unsigned minor_rev = chip_info.revision % 100;
-  printf("silicon revision v%d.%d, ", major_rev, minor_rev);
-  if (esp_flash_get_size(NULL, &flash_size) != ESP_OK)
-  {
-    printf("Get flash size failed");
-    return;
-  }
-
-  printf("%" PRIu32 "MB %s flash\n", flash_size / (uint32_t)(1024 * 1024),
-         (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
-
-  printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
-
   UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
-  UtilityFunctions::ledRed();               // Turn on the LED to indicate setup is complete
+
+  UtilityFunctions::debugLog("Running...");
+
+  UtilityFunctions::ledRed(); // Turn on the LED to indicate setup is complete
 
   // Check if the device is in master or slave mode
-  if (UtilityFunctions::MasterOrSlave())
+  if (UtilityFunctions::isMaster())
   {
-    Serial.println("Device is in Master mode.");
+    UtilityFunctions::debugLog("Device is in Master mode. Starting MASTER job");
 
+#ifdef XIGIMI_DEBUG_WIFI_OFF
+#else
     m.start(); // Start the master functionality
 
-    // Defined in thingProperties.h
+    // Defined in thingProperties.h for AIot cloud
+
     initProperties();
     // Connect to Arduino IoT Cloud
     // initialize the WiFiConnectionHandler pointer
@@ -78,23 +52,58 @@ void setup()
    */
     setDebugMessageLevel(ArduinoCloudDebugLevel);
     ArduinoCloud.printDebugInfo();
+#endif
   }
   else
   {
-    Serial.println("Device is in Slave mode.");
+    UtilityFunctions::debugLog("Device is in Slave mode.");
+    return; // exit this task as we are not the master
+  }
+
+  // this will only run if we are the master
+  UtilityFunctions::debugLog("we are in the MAIN LOOP");
+  for (;;) // infinite loop
+  {
+    UtilityFunctions::delay(AIOT_POLL_TIME);
+
+    // If in master mode, update the properties
+#ifdef XIGIMI_DEBUG_WIFI_OFF
+    UtilityFunctions::debugLog("WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
+#else
+    m.checkResetPressed(); // Check if the reset button has been pressed
+    ArduinoCloud.update();
+#endif
   }
 }
 
-void loop()
+// Task0code: bluetooth server only
+void Task0code(void *pvParameters)
 {
 
-  delay(1000);
-  Serial.println("we are in the LOOP");
-  m.checkResetPressed(); // Check if the reset button has been pressed
-  if (UtilityFunctions::MasterOrSlave())
+  BleKeyboard bleKeyboard;
+
+  UtilityFunctions::waitTillInitComplete(); // master core will do the init we wait till then
+  UtilityFunctions::debugLog("Task0 Init COMPLETE ");
+  // we also start the slave
+  // BLEDevice::init(HID_DEVICE_NAME); // Initialize BLE device with a name
+  //bleKeyboard.begin();
+   s.start();
+  UtilityFunctions::debugLog("Task0 BLE SERVER started ... ");
+  for (;;) // infinite loop
   {
-    // If in master mode, update the properties
-    ArduinoCloud.update();
+    UtilityFunctions::ledStop();
+    UtilityFunctions::delay(1000);
+    UtilityFunctions::ledBlue();
+    /*
+    if (bleKeyboard.isConnected())
+    {
+      UtilityFunctions::debugLog("Sending 'Hello world'...");
+      bleKeyboard.print("Hello world");
+
+      UtilityFunctions::delay(1000);
+      UtilityFunctions::ledStop();
+    }
+      */
   }
 }
 
@@ -105,7 +114,39 @@ void loop()
 void onProjectorChange()
 {
   // Add your code here to act upon Projector change
-  Serial.println("update received from cloud");
-  Serial.println("Projector switch changed to: " + String(projector.getSwitch()));
-  Serial.println("Projector volume changed to: " + String(projector.getVolume()));
+  UtilityFunctions::debugLog("update received from cloud");
+  UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
+  UtilityFunctions::debugLog("Projector switch changed to: " + String(projector.getSwitch()));
+  UtilityFunctions::debugLog("Projector volume changed to: " + String(projector.getVolume()));
+  UtilityFunctions::delay(30);
+  UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+}
+
+void setup()
+{
+
+  // btStart(); // need to init BT stack before anything else on core 0
+  xTaskCreatePinnedToCore(
+      Task0code, /* Task function. */
+      "Task0",   /* name of task. */
+      10000,     /* Stack size of task */
+      NULL,      /* parameter of the task */
+      1,         /* priority of the task */
+      &Task0,    /* Task handle to keep track of created task */
+      0);        /* pin task to core 0 */
+
+  // create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
+  xTaskCreatePinnedToCore(
+      Task1code, /* Task function. */
+      "Task1",   /* name of task. */
+      10000,     /* Stack size of task */
+      NULL,      /* parameter of the task */
+      1,         /* priority of the task */
+      &Task1,    /* Task handle to keep track of created task */
+      1);        /* pin task to core 1 */
+}
+
+void loop()
+{
+  yield(); // for the watchdog timer on core 0
 }

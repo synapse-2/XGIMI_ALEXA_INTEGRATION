@@ -15,11 +15,17 @@ namespace UtilityFunctions {
     void ledWhite();
     void ledStop();
     void UtilityFunctionsInit();
-    bool MasterOrSlave();
+    bool isMaster();
     int findI2cOtherAddress();
     bool isResetPressed();
     int numTimesResetPressed();
     void unpressRest();
+    void delay(long waitMills);
+    void waitTillInitComplete();
+
+    void debugLog(String message);
+    void debugLog();
+    void debugLogf(const char *format, ...);
 
     
 }

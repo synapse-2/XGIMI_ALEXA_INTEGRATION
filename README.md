@@ -7,7 +7,11 @@ The code uses two ESP32-S3 Arduino chips to simultaneously do Wi-Fi and Bluetoot
 
 The Arduinos communicate with each other via the I2C bus, with one acting as the master and the other as the slave.
 
+https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
+https://dronebotworkshop.com/esp32-bluetooth/
 
+https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
+https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
 
 Modules used
 

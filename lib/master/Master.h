@@ -7,6 +7,7 @@ public:
     void start();
     String getSSID();
     String getPSK();
+    void LogWifiDebugInfo();
     static void checkResetPressed();
 
 

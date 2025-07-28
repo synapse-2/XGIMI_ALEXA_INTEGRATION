@@ -1,6 +1,6 @@
 
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
-#include <UtilityFunctions.h> // Custom utility functions
+#include "UtilityFunctions.h" // Custom utility functions
 #include "Master.h"           // Master class for I2C master functionality
 
 WiFiManager Master::wm;
@@ -9,33 +9,51 @@ Master::Master() {}
 
 void Master::checkResetPressed()
 {
-    if (UtilityFunctions::isResetPressed())
+    if (UtilityFunctions::isMaster())
     {
-        Serial.printf("Reset pressed num time: %i need 3 to reset system", UtilityFunctions::numTimesResetPressed());
-
-        if (UtilityFunctions::numTimesResetPressed() < 3)
+        // only check the boot button is pressed if we are the master
+        
+        if (UtilityFunctions::isResetPressed())
         {
-            UtilityFunctions::unpressRest();
-            return;
-        }
+            UtilityFunctions::debugLogf("Reset pressed num time: %i need 3 to reset system", UtilityFunctions::numTimesResetPressed());
 
-        wm.resetSettings(); // Reset WiFi settings
-        Serial.println("Resetting WiFi settings...");
-        for (int i = 0; i < 5; i++)
-        {
-            UtilityFunctions::ledYellow();
-            delay(30);
-            UtilityFunctions::ledStop();
-            delay(30);
+            if (UtilityFunctions::numTimesResetPressed() < 3)
+            {
+                UtilityFunctions::unpressRest();
+                return;
+            }
+
+            wm.resetSettings(); // Reset WiFi settings
+            UtilityFunctions::debugLog("Resetting WiFi settings...");
+            for (int i = 0; i < 5; i++)
+            {
+                UtilityFunctions::ledYellow();
+                UtilityFunctions::delay(30);
+                UtilityFunctions::ledStop();
+                UtilityFunctions::delay(30);
+            }
+            UtilityFunctions::delay(1000); // Wait for a second before restarting
+            UtilityFunctions::debugLog("Restarting ESP...");
+            ESP.restart();
         }
-        delay(1000); // Wait for a second before restarting
-        Serial.println("Restarting ESP...");
-        ESP.restart();
     }
 }
 
 String Master::getSSID() { return wm.getWiFiSSID(); }
 String Master::getPSK() { return wm.getWiFiPass(); }
+
+void Master::LogWifiDebugInfo()
+{
+    // can contain gargbage on esp32 if wifi is not ready yet
+    UtilityFunctions::debugLog("[WIFI] WIFI_INFO DEBUG");
+    UtilityFunctions::debugLog("[WIFI] MODE: " + (String)(wm.getModeString(WiFi.getMode())));
+    UtilityFunctions::debugLog("[WIFI] SAVED: " + (String)(wm.getWiFiIsSaved() ? "YES" : "NO"));
+    UtilityFunctions::debugLog("[WIFI] SSID: " + (String)wm.getWiFiSSID());
+    UtilityFunctions::debugLog("[WIFI] CHANNEL: " + (String)(wm.getModeString(WiFi.channel())));
+    UtilityFunctions::debugLog("[WIFI] RSSI: " + (String)(wm.getModeString(WiFi.RSSI())));
+    UtilityFunctions::debugLog("[WIFI] PASS: " + (String)wm.getWiFiPass());
+    UtilityFunctions::debugLog("[WIFI] HOSTNAME: " + (String)WiFi.getHostname());
+}
 
 void Master::start()
 {
@@ -51,38 +69,41 @@ void Master::start()
     bool res;
     UtilityFunctions::ledRed();
 
-    wm.setConfigPortalTimeout(AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
+    UtilityFunctions::debugLog("Starting WiFiManager...");
     wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
     wm.setHostname(HOHSTNAME_Local);
-    wm.setDebugOutput(true); // Set the hostname for the device
-    res = wm.autoConnect();  // auto generated AP name from chipid
+    wm.setConfigPortalTimeout(AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
+
+    // Master::LogWifiDebugInfo();
+    res = wm.autoConnect(); // auto generated AP name from chipid
     // res = wm.autoConnect("AutoConnectAP"); // anonymous ap
     // res = wm.autoConnect("AutoConnectAP","password"); // password protected ap
 
     if (!res)
     {
-        Serial.println("Failed to connect");
+        UtilityFunctions::debugLog("Failed to connect");
         for (int i = 0; i < 5; i++)
         {
             UtilityFunctions::ledRed();
-            delay(30);
+            UtilityFunctions::delay(30);
             UtilityFunctions::ledStop();
-            delay(30);
+            UtilityFunctions::delay(30);
         }
-        Serial.println("Failed to connect: RESTARTING");
+        UtilityFunctions::debugLog("Failed to connect: RESTARTING");
         ESP.restart();
     }
     else
     {
         // if you get here you have connected to the WiFi
-        Serial.println("connected...yeey :)");
+        UtilityFunctions::debugLog("connected...yeey :)");
+        Master::LogWifiDebugInfo();
         for (int i = 0; i < 10; i++)
         {
             UtilityFunctions::ledGreen();
-            delay(30);
+            UtilityFunctions::delay(30);
             UtilityFunctions::ledStop();
-            delay(30);
+            UtilityFunctions::delay(30);
         }
     }
 }

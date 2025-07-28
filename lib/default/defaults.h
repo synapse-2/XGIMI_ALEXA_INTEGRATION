@@ -2,15 +2,23 @@
 // #define BOARD_HAS_PSRAM
 #define RGBCHIP WS2812B
 #define LED_BUILTINIO GPIO_NUM_48
+#define RGB_DATA_ORDER GRB
 #define NUMPIXELS 1
+//#define FASTLED_RMT_MAX_CHANNELS 1 
+//#define FASTLED_ESP32_I2S 
 
 #define I2C_SCLK GPIO_NUM_12
 #define I2C_SDA GPIO_NUM_21
 #define I2C_FREQ 100000     // 100 kHz
 #define I2C_SLAVE_ADDR 0x3f // Slave address for I2C
 
+//set to not start the wifi and aIoT connection
+#undef XIGIMI_DEBUG_WIFI_OFF
+#define AIOT_POLL_TIME 3000 //milis for arduino poll any less(faster) and blutooth is not able to connecet
+
+
 #define HOHSTNAME_Local "ALEXA_ESP32.local"
-#define AP_CONNECT_TIMEOUT 600 // 10 minutes
+#define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
 /* debugging
     typedef enum {
