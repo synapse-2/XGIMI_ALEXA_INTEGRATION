@@ -1,4 +1,3 @@
-
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 #include "UtilityFunctions.h" // Custom utility functions
 #include "Master.h"           // Master class for I2C master functionality

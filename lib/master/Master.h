@@ -1,4 +1,6 @@
 #pragma once
+
+#include "defaults.h"
 #include <WiFiManager.h>
 
 class Master {

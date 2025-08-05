@@ -1,5 +1,6 @@
-#include <Arduino.h>
 
+#include "defaults.h"
+#include <Arduino.h>
 #include <WiFiManager.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -7,7 +8,15 @@
 #include "Slave.h"
 #include "UtilityFunctions.h"
 #include "thingProperties.h"
-#include <BleKeyboard.h>
+#include "magicEnum/magic_enum.hpp"
+#include "magicEnum/magic_enum_iostream.hpp"
+
+
+template <typename E>
+auto to_integer(magic_enum::Enum<E> value) -> int {
+  // magic_enum::Enum<E> - C++17 Concept for enum type.
+  return static_cast<magic_enum::underlying_type_t<E>>(value);
+}
 
 // Define the LED_BUILTIN pin for the ESP32
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
@@ -80,30 +89,16 @@ void Task1code(void *pvParameters)
 void Task0code(void *pvParameters)
 {
 
-  BleKeyboard bleKeyboard;
-
   UtilityFunctions::waitTillInitComplete(); // master core will do the init we wait till then
   UtilityFunctions::debugLog("Task0 Init COMPLETE ");
-  // we also start the slave
-  // BLEDevice::init(HID_DEVICE_NAME); // Initialize BLE device with a name
-  //bleKeyboard.begin();
-   s.start();
+
+  s.start();
   UtilityFunctions::debugLog("Task0 BLE SERVER started ... ");
   for (;;) // infinite loop
   {
     UtilityFunctions::ledStop();
     UtilityFunctions::delay(1000);
     UtilityFunctions::ledBlue();
-    /*
-    if (bleKeyboard.isConnected())
-    {
-      UtilityFunctions::debugLog("Sending 'Hello world'...");
-      bleKeyboard.print("Hello world");
-
-      UtilityFunctions::delay(1000);
-      UtilityFunctions::ledStop();
-    }
-      */
   }
 }
 
@@ -117,7 +112,11 @@ void onProjectorChange()
   UtilityFunctions::debugLog("update received from cloud");
   UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
   UtilityFunctions::debugLog("Projector switch changed to: " + String(projector.getSwitch()));
-  UtilityFunctions::debugLog("Projector volume changed to: " + String(projector.getVolume()));
+  UtilityFunctions::debugLogf("Projector volume changed to: %i\n", projector.getVolume());
+  UtilityFunctions::debugLogf("Projector channel changed to: %i\n", projector.getChannel());
+  UtilityFunctions::debugLog("Projector Mute changed to: " + String(projector.getMute()));
+  String cmd = String((magic_enum::enum_name(projector.getPlaybackCommand())).data());
+  UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd );
   UtilityFunctions::delay(30);
   UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 }

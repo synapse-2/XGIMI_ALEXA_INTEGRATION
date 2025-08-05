@@ -1,6 +1,9 @@
 #pragma once
+
+#include "defaults.h"
 #include <WiFiManager.h>
-#include "BluetoothHID_RC.h"
+#include "BlueXGIMI_RC.h"
+
 
 class Slave {
 public:
@@ -9,5 +12,5 @@ public:
 
 
 private:
-     BluetoothHID_RC* rcHID;
+     BlueXGIMI_RC* rcHID;
 };

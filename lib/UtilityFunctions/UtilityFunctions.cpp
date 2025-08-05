@@ -1,8 +1,18 @@
-#include <UtilityFunctions.h>
-#include <defaults.h>
+#include "defaults.h"
 #include <Wire.h>
 #include <Arduino.h>
 #include <FastLED.h>
+#include <esp_chip_info.h>
+#include <magicEnum/magic_enum.hpp>
+#include <magicEnum/magic_enum_iostream.hpp>
+#include "UtilityFunctions.h"
+
+
+template <typename E>
+auto to_integer(magic_enum::Enum<E> value) -> int {
+  // magic_enum::Enum<E> - C++17 Concept for enum type.
+  return static_cast<magic_enum::underlying_type_t<E>>(value);
+}
 
 CRGB UtilityFunctions::leds[NUMPIXELS];
 namespace UtilityFunctions
@@ -154,31 +164,37 @@ namespace UtilityFunctions
 
         debugLog();
         /* Print chip information */
+        
+        unsigned major_rev = ESP.getChipRevision() / 100;
+        unsigned minor_rev = ESP.getChipRevision()  % 100;
+        uint32_t flash_size = ESP.getFlashChipSize();
         esp_chip_info_t chip_info;
-        uint32_t flash_size;
         esp_chip_info(&chip_info);
-        unsigned major_rev = chip_info.revision / 100;
-        unsigned minor_rev = chip_info.revision % 100;
-        if (esp_flash_get_size(NULL, &flash_size) != ESP_OK)
-        {
-            debugLog("Get flash size failed");
-        }
 
-        debugLogf("This is %s chip with %d CPU core(s), %s%s%s%s, silicon revision v%d.%d, %" PRIu32 "MB %s flash\n",
-                  CONFIG_IDF_TARGET,
-                  chip_info.cores,
+        debugLogf("This is %s chip with %d CPU core(s) Clok Feq %i MHz, %s%s%s%s, silicon revision v%d.%d, %" PRIu32 "MB %s flash\n",
+                  ESP.getChipModel(),
+                  ESP.getChipCores(),
+                  ESP.getCpuFreqMHz(),
                   (chip_info.features & CHIP_FEATURE_WIFI_BGN) ? "WiFi/" : "",
                   (chip_info.features & CHIP_FEATURE_BT) ? "BT" : "",
                   (chip_info.features & CHIP_FEATURE_BLE) ? "BLE" : "",
                   (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "", major_rev, minor_rev, flash_size / (uint32_t)(1024 * 1024),
                   (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-        printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size);
-        printf("Total heap: %u\n", ESP.getHeapSize());
-        printf("Free heap: %u\n", ESP.getFreeHeap());
-        printf("Total PSRAM: %u\n", ESP.getPsramSize());
-        printf("Free PSRAM: %d\n", ESP.getFreePsram());
+        debugLogf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size);
+        debugLogf("Total heap: %u\n", ESP.getHeapSize());
+        debugLogf("Free heap: %u\n", ESP.getFreeHeap());
+        debugLogf("Total Flash Chip Mode: %u\n", magic_enum::enum_name(ESP.getFlashChipMode()));
+        debugLogf("Fash Chip Speed %i\n", ESP.getFlashChipSpeed());
+        debugLogf("Total PSRAM: %u\n", ESP.getPsramSize());
+        debugLogf("Free PSRAM: %d\n", ESP.getFreePsram());
+
+        debugLogf("SDK version: %s\n", ESP.getSdkVersion());
+        debugLogf("Core version: %s\n", ESP.getCoreVersion());
+
         
+        debugLogf("Sketch Size: %i\n", ESP.getSketchSize());
+        debugLogf("Sketch Free Space: %i\n", ESP.getFreeSketchSpace());
 
         // FastLED.addLeds<NEOPIXEL, LED_BUILTINIO>(leds, NUMPIXELS);
         uint64_t macID = ESP.getEfuseMac(); // Get the MAC address

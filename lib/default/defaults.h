@@ -1,5 +1,24 @@
 #pragma once
-// #define BOARD_HAS_PSRAM
+#ifndef BOARD_HAS_PSRAM
+#define BOARD_HAS_PSRAM
+#endif
+
+#ifndef ARDUINO_RUNNING_CORE
+#define ARDUINO_RUNNING_CORE 1
+#endif
+
+#ifndef ARDUINO_EVENT_RUNNING_CORE
+#define ARDUINO_EVENT_RUNNING_CORE 1
+#endif
+
+//#ifndef CONFIG_NIMBLE_ENABLED
+//#define CONFIG_NIMBLE_ENABLED
+//#endif
+
+// use if we want to use the h2zero/NimBLE-Arduino@ ^2.3.3
+//#define USE_H2ZERO_NIMBLE_LIB
+#undef USE_H2ZERO_NIMBLE_LIB
+
 #define RGBCHIP WS2812B
 #define LED_BUILTINIO GPIO_NUM_48
 #define RGB_DATA_ORDER GRB
