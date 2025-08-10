@@ -20,6 +20,7 @@ namespace UtilityFunctions {
     bool isResetPressed();
     int numTimesResetPressed();
     void unpressRest();
+    unsigned long resetMills();
     void delay(long waitMills);
     void waitTillInitComplete();
 

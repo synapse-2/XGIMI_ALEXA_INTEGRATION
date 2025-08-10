@@ -1,12 +1,6 @@
 #include "UtilityFunctions.h"
 #include "BlueXGIMI_RC.h"
 
-
-uint8_t BLESecurity::m_iocap = 0;
-uint8_t BLESecurity::m_authReq = 0;
-uint8_t BLESecurity::m_initKey = 0;
-uint8_t BLESecurity::m_respKey = 0;
-
 BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
 {
 
@@ -18,23 +12,34 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
 
 BluetoothHID_RC::~BluetoothHID_RC()
 {
+#ifndef CONFIG_BT_NIMBLE_EXT_ADV
   // Cleanup resources if needed
   if (advertising)
   {
     advertising->stop();
     delete advertising;
   }
-
+#endif
   if (BLE_server->getConnectedCount() > 0)
   {
 
+#ifndef USE_H2ZERO_NIMBLE_LIB
     BLE_server->disconnect(BLE_server->getConnId());
+#else
+
+    std::vector<uint16_t> conIds = BLE_server->getPeerDevices();
+    for (const auto &peer : conIds)
+    {
+      BLE_server->disconnect(peer);
+    }
+
+#endif
   }
   else
   {
     UtilityFunctions::debugLog("No active connections to disconnect");
   }
-  // delete BLE_server;
+  //delete BLE_server;
   UtilityFunctions::debugLog("BluetoothHID_RC destroyed");
 }
 
@@ -59,7 +64,6 @@ void BluetoothHID_RC::onDisconnect(BLEServer *pServer)
 
   UtilityFunctions::debugLog("Bluetooth Client disconnected");
 }
-
 
 #ifdef USE_H2ZERO_NIMBLE_LIB
 void BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}

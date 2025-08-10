@@ -7,11 +7,11 @@
 #include <magicEnum/magic_enum_iostream.hpp>
 #include "UtilityFunctions.h"
 
-
 template <typename E>
-auto to_integer(magic_enum::Enum<E> value) -> int {
-  // magic_enum::Enum<E> - C++17 Concept for enum type.
-  return static_cast<magic_enum::underlying_type_t<E>>(value);
+auto to_integer(magic_enum::Enum<E> value) -> int
+{
+    // magic_enum::Enum<E> - C++17 Concept for enum type.
+    return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
 CRGB UtilityFunctions::leds[NUMPIXELS];
@@ -32,7 +32,6 @@ namespace UtilityFunctions
         };
 
         // variables to keep track of the timing of recent interrupts
-        unsigned long buttonReset_time = 0;
         unsigned long last_buttonReset_time = 0;
 
         Button buttonReset = {ResetButton, 0, false};
@@ -56,7 +55,7 @@ namespace UtilityFunctions
         {
 
             //__asm__("nop"); // saver battery/power
-            //yield();        // tell watchdog timer do other level 0 idle tasks
+            // yield();        // tell watchdog timer do other level 0 idle tasks
             vTaskDelay(waitMills * portTICK_PERIOD_MS);
         }
     }
@@ -110,17 +109,23 @@ namespace UtilityFunctions
             // we are slave and this ISR is not valid for us
             return;
         }
-        buttonReset_time = millis();
-        if (buttonReset_time - last_buttonReset_time > 250)
+        unsigned long buttonReset_time = millis();
+
+        if (buttonReset_time < last_buttonReset_time) {
+            // we have overflowed the mills re set the lasst button time 
+             last_buttonReset_time = buttonReset_time;
+        }
+        unsigned long diff = buttonReset_time - last_buttonReset_time;
+        if ((diff > 250) && (diff < 3000))
         {
             buttonReset.numberKeyPresses++;
             buttonReset.pressed = true;
             last_buttonReset_time = buttonReset_time;
         }
-        if (buttonReset_time - last_buttonReset_time > 5000)
+        if (diff > 3000)
         {
-            buttonReset.numberKeyPresses = 1; // Reset the count if over 5 secs
-            buttonReset.pressed = true;       // Unpress the button
+            buttonReset.numberKeyPresses = 0; // Reset the count if over 3 secs
+            buttonReset.pressed = false;      // Unpress the button
             last_buttonReset_time = buttonReset_time;
         }
     }
@@ -134,6 +139,10 @@ namespace UtilityFunctions
     int numTimesResetPressed()
     {
         return buttonReset.numberKeyPresses;
+    }
+    unsigned long resetMills()
+    {
+        return last_buttonReset_time;
     }
 
     void unpressRest()
@@ -164,9 +173,9 @@ namespace UtilityFunctions
 
         debugLog();
         /* Print chip information */
-        
+
         unsigned major_rev = ESP.getChipRevision() / 100;
-        unsigned minor_rev = ESP.getChipRevision()  % 100;
+        unsigned minor_rev = ESP.getChipRevision() % 100;
         uint32_t flash_size = ESP.getFlashChipSize();
         esp_chip_info_t chip_info;
         esp_chip_info(&chip_info);
@@ -192,7 +201,6 @@ namespace UtilityFunctions
         debugLogf("SDK version: %s\n", ESP.getSdkVersion());
         debugLogf("Core version: %s\n", ESP.getCoreVersion());
 
-        
         debugLogf("Sketch Size: %i\n", ESP.getSketchSize());
         debugLogf("Sketch Free Space: %i\n", ESP.getFreeSketchSpace());
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "defaults.h"
+#include <HEXBuilder.h>
 
 #ifdef USE_H2ZERO_NIMBLE_LIB
 #include <nimconfig.h>
@@ -8,7 +9,7 @@
 #include <HIDTypes.h>
 // for compatabality it does not exiist in Nimble code
 #define BLEHIDDevice NimBLEHIDDevice
-#else
+#else 
 #include <BLEDevice.h>
 #include <BLEHIDDevice.h>
 #include <HIDTypes.h>
@@ -20,6 +21,10 @@
 
 #define HID_REMOTE 0x0180
 
+
+
+
+
 class BluetoothHID_RC : public BLEHIDDevice, public BLEServerCallbacks, public BLECharacteristicCallbacks
 {
 public:
@@ -30,8 +35,13 @@ public:
 
 protected:
     BLEServer *BLE_server;
+    
+#ifndef CONFIG_BT_NIMBLE_EXT_ADV   
     BLEAdvertising *advertising;
     BLEAdvertisementData advertisingData;
+    BLEAdvertisementData advertisingScanData;
+#endif
+    BLECharacteristic* manufData; 
     bool connected = false;
 
 #ifdef USE_H2ZERO_NIMBLE_LIB

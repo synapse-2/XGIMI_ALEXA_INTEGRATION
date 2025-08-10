@@ -11,13 +11,59 @@
 #define ARDUINO_EVENT_RUNNING_CORE 1
 #endif
 
+/*
+ * @brief Log level
+    ESP_LOG_NONE    = 0,    //!< No log output 
+    ESP_LOG_ERROR   = 1,    //!< Critical errors, software module can not recover on its own 
+    ESP_LOG_WARN    = 2,    //!< Error conditions from which recovery measures have been taken 
+    ESP_LOG_INFO    = 3,    //!< Information messages which describe normal flow of events 
+    ESP_LOG_DEBUG   = 4,    //!< Extra information which is not necessary for normal use (values, pointers, sizes, etc). 
+    ESP_LOG_VERBOSE = 5,    //!< Bigger chunks of debugging information, or frequent messages which can potentially flood the output. 
+    ESP_LOG_MAX     = 6,    //!< Number of levels supported 
+*/
+// do in platform.ini for log_e to output -DCORE_DEBUG_LEVEL=YOURLEVEL
+
+//#ifdef CONFIG_BT_NIMBLE_LOG_LEVEL
+//#undef CONFIG_BT_NIMBLE_LOG_LEVEL
+//#endif
+// for the NewNimBle stack
+/** @brief Un-comment to set the debug log messages level from the NimBLE host stack.\n
+ *  Values: 0 = DEBUG, 1 = INFO, 2 = WARNING, 3 = ERROR, 4 = CRITICAL, 5+ = NONE\n
+ *  Uses approx. 32kB of flash memory.
+ */
+#ifdef CONFIG_BT_NIMBLE_LOG_LEVEL
+#undef CONFIG_BT_NIMBLE_LOG_LEVEL
+#endif
+#define CONFIG_BT_NIMBLE_LOG_LEVEL 4
+
+ /** @brief Un-comment to set the debug log messages level from the NimBLE CPP Wrapper.\n
+ *  Values: 0 = NONE, 1 = ERROR, 2 = WARNING, 3 = INFO, 4+ = DEBUG\n
+ *  Uses approx. 32kB of flash memory.
+ */
+ #define CONFIG_NIMBLE_CPP_LOG_LEVEL 4
+
+/** @brief Un-comment to see NimBLE host return codes as text debug log messages.
+ *  Uses approx. 7kB of flash memory.
+ */
+#define CONFIG_NIMBLE_CPP_ENABLE_RETURN_CODE_TEXT 1
+
+/** @brief Un-comment to see GAP event codes as text in debug log messages.
+ *  Uses approx. 1kB of flash memory.
+ */
+#define CONFIG_NIMBLE_CPP_ENABLE_GAP_EVENT_CODE_TEXT 1
+
+
 //#ifndef CONFIG_NIMBLE_ENABLED
 //#define CONFIG_NIMBLE_ENABLED
 //#endif
 
-// use if we want to use the h2zero/NimBLE-Arduino@ ^2.3.3
-//#define USE_H2ZERO_NIMBLE_LIB
-#undef USE_H2ZERO_NIMBLE_LIB
+
+// esp32 Ble does not support having null cars in mauf data so we created our own NewBLE stack
+//  the h2zero/NimBLE-Arduino@ ^2.3.3 derrived stack does not work with AruinoIoT  so  we have the updated stack that works with ArduinoIoT, and esp32 arduino 3.3.0 core called it NewNimBLE
+#define USE_H2ZERO_NIMBLE_LIB // set for NewNimBLE and  h2zero/NimBLE-Arduino
+//#undef USE_H2ZERO_NIMBLE_LIB // unset for BLE and NewBLE
+//#define CONFIG_BT_NIMBLE_EXT_ADV 1 // set for BLE 5.0 extended advertisment
+
 
 #define RGBCHIP WS2812B
 #define LED_BUILTINIO GPIO_NUM_48

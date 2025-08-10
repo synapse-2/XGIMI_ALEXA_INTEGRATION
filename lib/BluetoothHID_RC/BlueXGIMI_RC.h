@@ -4,7 +4,7 @@
 #include "BluetoothHID_RC.h"
 
 
-#define HID_DEVICE_NAME "XGIMI RCBH"
+#define HID_DEVICE_NAME "XGIMI BH"
 #define HID_MANUFACTURER_NAME "Realtek BT"
 #define HID_MODEL_NUMBER "Model nbr 0.9"
 #define HID_SERIAL_NUMBER "RTKBeeSerialNum"
@@ -15,11 +15,11 @@
 #define HID_IEE11073_CERT "RTKBeeIEEEDatalist"
 
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
-static std::vector<uint8_t> HID_AD_MANUF_DATA = {0x38,0x38,0x02,0x00,0x00,0x01,0xff,0xff,0x42,0x52,0x56,0x31,0x2e,0x30,0x30};
-#else
-    static String HID_AD_MANUF_DATA = "\x38\x38\x02\x00\x00\x01\xff\xff\x42\x52\x56\x31\x2e\x30\x30";
-#endif
+//  cannou use the esp32 BLE lib as the advertisment takes string and it cannot have nulls in it so we made out own BleNEW
+static std::vector<uint8_t> HID_AD_SACAN_MANUF_DATA = {0x0D,0x00,0xff,0xff,0x42,0x52,0x56,0x31,0x2e,0x30,0x30};
+static std::vector<uint8_t> HID_AD_MANUF_DATA = {0x0D,0x00,0x38,0x38,0x02,0x00,0x00,0x01};
+//static String HID_AD_MANUF_DATA = "\x38\x38\x02\x00\x00\x01\xff\xff\x42\x52\x56\x31\x2e\x30\x30";
+
 
 static uint8_t HID_uuid_0xffd2[] = {0x1c, 0xf3, 0x02, 0xa8, 0x96, 0xdc};
 static uint8_t HID_uuid_0xffd3[] = {0x01, 0xa0, 0x10, 0x28};
@@ -306,10 +306,7 @@ public:
     void startServices();
     virtual ~BlueXGIMI_RC();
 
-private:
-    BLEServer *BLE_server;
-    BLEAdvertising *advertising;
-    BLEAdvertisementData advertisingData;
+protected:
     bool connected = false;
 
     BLECharacteristic *keyboardInput;      // one byte input, one byte const; 48 bits for keys input for num pad

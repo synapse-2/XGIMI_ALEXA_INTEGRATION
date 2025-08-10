@@ -14,7 +14,7 @@ void Master::checkResetPressed()
         
         if (UtilityFunctions::isResetPressed())
         {
-            UtilityFunctions::debugLogf("Reset pressed num time: %i need 3 to reset system", UtilityFunctions::numTimesResetPressed());
+            UtilityFunctions::debugLogf("Boot pressed num time: %i need 3 to reset system count goees to zero after 3 secs reset detected at mills %i\n", UtilityFunctions::numTimesResetPressed(),UtilityFunctions::resetMills());
 
             if (UtilityFunctions::numTimesResetPressed() < 3)
             {
