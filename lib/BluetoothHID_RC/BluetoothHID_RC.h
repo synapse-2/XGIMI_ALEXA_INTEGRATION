@@ -9,39 +9,74 @@
 #include <HIDTypes.h>
 // for compatabality it does not exiist in Nimble code
 #define BLEHIDDevice NimBLEHIDDevice
-#else 
+#else
 #include <BLEDevice.h>
 #include <BLEHIDDevice.h>
 #include <HIDTypes.h>
 #include <BLE2902.h>
 #include <BLE2904.h>
 #include <BLECharacteristic.h>
-#define  NIMBLE_PROPERTY BLECharacteristic
+#define NIMBLE_PROPERTY BLECharacteristic
 #endif
 
+// apreiance of the device and the advertisment
 #define HID_REMOTE 0x0180
 
+/* 
+Define the Prefered prepheripral config params for the device
+this is all done by defines in NimbleBLE - ESP32 so we have to put them in the platform.ini
+uint16_t connIntervalMin;    // !< Minimum connection interval. In 1.25 ms unit
+uint16_t connIntervalMax;    // !< Maximum connection interval. In 1.25 ms unit
+uint16_t connLatency;        // !< Slave latency.
+uint16_t supTimeout;         // !< Supervision timeout. In 10 ms unit
+uint16_t minCeLen;           // !< Minimum CE length. Set to 0
+uint16_t maxCeLen;           // !< Maximum CE length. Set to 0
+
+#ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL (11) // 11.25 ms
+#endif
+
+#ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL (11) // 11.25 ms
+#endif 
+
+#ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SLAVE_LATENCY
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SLAVE_LATENCY (50)     // 50 ms
+#endif 
+
+#ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO (500)  // 500
+#endif
 
 
+define the CENTRAL_ADDRESS_RESOLUTION params for the device
+this is all done by defines in NimbleBLE - ESP32 so we have to put them in the platform.ini
 
+#ifndef CONFIG_BT_NIMBLE_SVC_GAP_CENTRAL_ADDRESS_RESOLUTION
+#define CONFIG_BT_NIMBLE_SVC_GAP_CENTRAL_ADDRESS_RESOLUTION 0
+#endif
+*/
 
 class BluetoothHID_RC : public BLEHIDDevice, public BLEServerCallbacks, public BLECharacteristicCallbacks
 {
 public:
     BluetoothHID_RC(BLEServer *server);
+
+    // we donot have these in NibmeBLE NimBLEDevice so we need to ADD !!!
+    void setDeviceAppreance(uint16_t appearance);
     void sendButtonPress(uint8_t command);
     void startServices();
     virtual ~BluetoothHID_RC();
 
 protected:
     BLEServer *BLE_server;
-    
-#ifndef CONFIG_BT_NIMBLE_EXT_ADV   
+
+#ifndef CONFIG_BT_NIMBLE_EXT_ADV
     BLEAdvertising *advertising;
     BLEAdvertisementData advertisingData;
     BLEAdvertisementData advertisingScanData;
 #endif
-    BLECharacteristic* manufData; 
+    BLECharacteristic *manufData;
     bool connected = false;
 
 #ifdef USE_H2ZERO_NIMBLE_LIB
@@ -63,8 +98,8 @@ protected:
     virtual void onStatus(BLECharacteristic *pCharacteristic, Status s, uint32_t code) override;
 
     BLEService *getDeviceInfoService();
-    BLECharacteristic* getInputReport(uint8_t reportID);
-    BLECharacteristic* getOutputReport(uint8_t reportID);
+    BLECharacteristic *getInputReport(uint8_t reportID);
+    BLECharacteristic *getOutputReport(uint8_t reportID);
     void setManufacturer(std::string name);
     void setPnp(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version);
     void setHidInfo(uint8_t country, uint8_t flags);

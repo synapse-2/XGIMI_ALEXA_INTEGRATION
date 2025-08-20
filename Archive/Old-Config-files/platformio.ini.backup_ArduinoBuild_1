@@ -1,0 +1,114 @@
+; PlatformIO Project Configuration File
+;
+;   Build options: build flags, source filter
+;   Upload options: custom upload port, speed and extra flags
+;   Library options: dependencies, extra library storages
+;   Advanced options: extra scripting
+;
+; Please visit documentation for the other options and examples
+; https://docs.platformio.org/page/projectconf.html
+
+[platformio]
+default_envs = esp32s3-n16r8-USBOTG
+
+[env:esp32s3-n16r8-USBOTG]
+platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip
+board = esp32s3-n16r8-USBOTG
+framework = arduino
+build_unflags = -std=gnu++11 -std=gnu++2b -std=gnu++2a
+build_flags = 
+	-std=gnu++23 
+	-Iinclude 
+	-MMD 
+	-c 
+	-D BOARD_HAS_PSRAM					
+	-D ARDUINO_RUNNING_CORE=1			
+	-D ARDUINO_EVENT_RUNNING_CORE=1		
+	-D CORE_DEBUG_LEVEL=4				
+board_build.arduino.memory_type = qio_opi
+board_build.flash_mode = qio
+board_build.psram_type = opi
+board_upload.flash_size = 16MB
+board_build.partitions = default_16MB.csv
+lib_ldf_mode = off
+lib_compat_mode = strict
+lib_deps = 
+	Wire       						
+	FS								
+	EEPROM								
+	Networking						
+	ESP32 Async UDP					
+	NetworkClientSecure				
+	WiFi							
+	Update							
+	WebServer						
+	DNSServer						
+	NewNimBLE
+	fastled/FastLED@ ^3.10.1
+	tzapu/WiFiManager@ ^2.0.17
+	arduino-libraries/ArduinoECCX08@ ^1.3.9
+	arduino-libraries/Arduino_DebugUtils@ ^1.4.0
+	arduino-libraries/ArduinoMqttClient@ ^0.1.8
+	arduino-libraries/ArduinoHttpClient@ ^0.6.1
+	arduino-libraries/Arduino_CloudUtils@ ^1.1.1
+	arduino-libraries/Arduino_NetworkConfigurator@ ^0.3.1
+	arduino-libraries/Arduino_ConnectionHandler@ ^1.1.2
+	arduino-libraries/ArduinoIoTCloud@ ^2.7.0
+	default
+	UtilityFunctions
+	ArduinoCloudIoTAlexa
+	BluetoothHID_RC
+	Master
+	Slave
+custom_component_remove = 
+	espressif/cbor
+	espressif/esp_diag_data_store
+	espressif/esp_insights
+	espressif/esp_modem
+	espressif/esp_rainmaker
+	espressif/esp_rcp_update
+	espressif/esp_schedule
+	espressif/esp_secure_cert_mgr
+	espressif/esp-dsp
+	espressif/esp-modbus
+	espressif/esp-serial-flasher
+	espressif/esp-sr
+	espressif/esp-zbosss-lib
+	espressif/esp-zigbee-lib
+	espressif/jsmn
+	espressif/jason_generator
+	espressif/jason_parser
+	espressif/libsodium
+	espressif/esp-mdns
+	espressif/network_provisioning
+	espressif/qrcode
+	espressif/rmaker_common
+	joltwallet/littlefs
+	espressif/esp_hosted
+	espressif/esp_wifi_remote
+	espressif/esp_insights
+	espressif/esp_diag_data_store
+	espressif/esp_diagnostics
+	espressif/esp32-camera
+lib_ignore = 
+	WiFiNINA
+	MKRGSM
+	MKRNB
+	MKRWAN
+	WiFi101
+	Blues Wireless Notecard
+	ArduinoECCX08
+	RTCZero
+	Adafruit SleepyDog Library
+	ArduinoBLE
+	RTCZero
+upload_port = COM8
+monitor_port = COM8
+debug_init_break = tbreak setup
+build_type = debug
+upload_speed = 2000000
+monitor_speed = 115200
+monitor_filters = esp32_exception_decoder
+
+
+

@@ -176,8 +176,17 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
   UtilityFunctions::debugLog("IN XGIMI HIG Security startup!");
 #ifdef USE_H2ZERO_NIMBLE_LIB
-  NimBLEDevice::setSecurityAuth(BLE_SM_PAIR_AUTHREQ_BOND | BLE_SM_PAIR_AUTHREQ_MITM | BLE_SM_PAIR_AUTHREQ_SC);
+
+  // BLE_SM_PAIR_AUTHREQ_BOND  - bond
+  // BLE_SM_PAIR_AUTHREQ_MITM  - man in middle
+  // BLE_SM_PAIR_AUTHREQ_SC - secure connection
+  NimBLEDevice::setSecurityAuth(BLE_SM_PAIR_AUTHREQ_BOND);
   NimBLEDevice::setSecurityIOCap(BLE_HS_IO_NO_INPUT_OUTPUT);
+  // BLE_SM_PAIR_KEY_DIST_ENC LTK key
+  // BLE_SM_PAIR_KEY_DIST_ID  IRK key
+  // BLE_SM_PAIR_KEY_DIST_SIGN CRSK key
+  NimBLEDevice::setSecurityInitKey( BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID  | BLE_SM_PAIR_KEY_DIST_SIGN);
+  NimBLEDevice::setSecurityRespKey(BLE_SM_PAIR_KEY_DIST_ID  | BLE_SM_PAIR_KEY_DIST_SIGN);
 #else
   BLESecurity::setAuthenticationMode(BLE_SM_PAIR_AUTHREQ_BOND | BLE_SM_PAIR_AUTHREQ_MITM | BLE_SM_PAIR_AUTHREQ_SC);
   BLESecurity::setCapability(BLE_HS_IO_NO_INPUT_OUTPUT);

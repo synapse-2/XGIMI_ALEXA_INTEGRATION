@@ -1,5 +1,6 @@
 #include "UtilityFunctions.h"
 #include "BlueXGIMI_RC.h"
+#include "nimble/nimble/host/services/gap/include/services/gap/ble_svc_gap.h"
 
 BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
 {
@@ -8,6 +9,13 @@ BluetoothHID_RC::BluetoothHID_RC(BLEServer *server) : BLEHIDDevice(server)
 
   BLE_server = server;
   BLE_server->setCallbacks(this);
+  setDeviceAppreance(HID_REMOTE);
+}
+
+void BluetoothHID_RC::setDeviceAppreance(uint16_t appearance)
+{
+
+  ble_svc_gap_device_appearance_set(appearance);
 }
 
 BluetoothHID_RC::~BluetoothHID_RC()
@@ -39,7 +47,7 @@ BluetoothHID_RC::~BluetoothHID_RC()
   {
     UtilityFunctions::debugLog("No active connections to disconnect");
   }
-  //delete BLE_server;
+  // delete BLE_server;
   UtilityFunctions::debugLog("BluetoothHID_RC destroyed");
 }
 

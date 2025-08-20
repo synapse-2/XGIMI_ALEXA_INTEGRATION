@@ -1,4 +1,8 @@
+//default ddefines for the project
+
 #pragma once
+
+#include <sdkconfig.h>
 #ifndef BOARD_HAS_PSRAM
 #define BOARD_HAS_PSRAM
 #endif
@@ -31,10 +35,9 @@
  *  Values: 0 = DEBUG, 1 = INFO, 2 = WARNING, 3 = ERROR, 4 = CRITICAL, 5+ = NONE\n
  *  Uses approx. 32kB of flash memory.
  */
-#ifdef CONFIG_BT_NIMBLE_LOG_LEVEL
-#undef CONFIG_BT_NIMBLE_LOG_LEVEL
-#endif
+#ifndef CONFIG_BT_NIMBLE_LOG_LEVEL
 #define CONFIG_BT_NIMBLE_LOG_LEVEL 4
+#endif
 
  /** @brief Un-comment to set the debug log messages level from the NimBLE CPP Wrapper.\n
  *  Values: 0 = NONE, 1 = ERROR, 2 = WARNING, 3 = INFO, 4+ = DEBUG\n
