@@ -18,7 +18,9 @@ framework = arduino, espidf
 
 </code>
 
-You can also build this using the native new fork of platoformio called #PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
+
+### PIOArduino 
+You can also build this using the native new fork of platoformio called # PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
 
 
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
@@ -51,7 +53,7 @@ cli for commands avaliable:pio run --list-targets
 
 Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
 
-# How Blutooh works:
+# How Bluetooh works:
 
 https://dronebotworkshop.com/esp32-bluetooth/
 https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
