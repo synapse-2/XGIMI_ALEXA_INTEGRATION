@@ -3,7 +3,7 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
-Project built uisng Visual Stuido Code and PlatformIO extension.
+# Project built uisng Visual Stuido Code and PlatformIO extension.
 
 The code is built on PlatformIO  (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
@@ -17,15 +17,14 @@ You can also build this using the native new fork of platoformio called PIOArdui
 
 
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
-Apprently coextance work but barely in my testing read more at https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
+Apprently coexistance works but barely in my testing read more at https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
-For coexisstance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
-The tas
-k loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
+For coexistance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
+The task loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
 
 Threre is a ring buffer between the cores for communication.
 
-THE LIB MUST BE COMPILED with GNU++23 
+# THE LIB MUST BE COMPILED with GNU++23 
 You must see "- toolchain-xtensa-esp-elf @ 14.2.0+20241119" or above in the build output
 If you want to use the old platfromm code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
 
@@ -45,7 +44,7 @@ cli for commands avaliable:pio run --list-targets
 
 Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
 
-How Blutooh works:
+# How Blutooh works:
 
 https://dronebotworkshop.com/esp32-bluetooth/
 https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
@@ -56,7 +55,7 @@ https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
 
 Modules used
 
-
+<code>
 Name                        Flash           RAM             Temp        RAM Speed
  ESP32-S3-WROOM-1-N8        8MB(QuadSPI)    -               –40~85
  ESP32-S3-WROOM-1-N16       16MB(QuadSPI)   -               –40~85
@@ -68,3 +67,4 @@ Name                        Flash           RAM             Temp        RAM Spee
  ESP32-S3-WROOM-1-N8R8      8MB(QuadSPI)    8MB(OctalSPI)   –40~65
  ESP32-S3-WROOM-1-N16R8     16MB(QuadSPI)   8MB(OctalSPI)   –40~65      80Mhz
  ESP32-S3-WROOM-1-N16R16VA8 16MB(QuadSPI)   16MB(OctalSPI)   –40~65
+</code>
