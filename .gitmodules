@@ -1,0 +1,3 @@
+[submodule "lib/NewNimBLE-esp32"]
+	path = lib/NewNimBLE-esp32
+	url = https://github.com/synapse-2/esp-nimble-cpp.git
