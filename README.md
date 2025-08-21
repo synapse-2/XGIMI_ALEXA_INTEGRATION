@@ -10,10 +10,12 @@ It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework wi
 
 The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
 
-### platform.io
+### platformio.ini
 <code>
 platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip (version: Arduino Release v3.3.0 based on ESP-IDF v5.5.0)
 framework = arduino, espidf
+
+
 </code>
 
 You can also build this using the native new fork of platoformio called #PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
