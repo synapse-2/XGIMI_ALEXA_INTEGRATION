@@ -8,12 +8,15 @@ Objective of the project is to use esp32s3 arduino to enable voice commands from
 The code is built on PlatformIO  (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
 
-The code used hybrid build it builds exprisif and arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
+The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
+
+### platform.io
+<code>
 platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip (version: Arduino Release v3.3.0 based on ESP-IDF v5.5.0)
 framework = arduino, espidf
+</code>
 
-
-You can also build this using the native new fork of platoformio called PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
+You can also build this using the native new fork of platoformio called #PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
 
 
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
@@ -32,9 +35,11 @@ If you want to change the sdkconfig options then use the "pio run -t menuconfig"
 
 You can also usue two Esp32 chips with I2C bus on two pins
 The Arduinos communicate with each other via the I2C bus, with one acting as the master and the other as the slave.
+<code>
 Pins for I2C defined by in the defaults.h (NOT TESTED)
 #define I2C_SCLK GPIO_NUM_12
 #define I2C_SDA GPIO_NUM_21
+</code>
 
 you connect each pin 12 on together on ESP32 and pin 21 on each esp32 together. 
 You fash the same code on the ESP32. They will figure out who the master and slave is determistically every time.
