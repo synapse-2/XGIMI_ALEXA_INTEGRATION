@@ -375,7 +375,7 @@ protected:
     BLECharacteristic *m_0x6287Characteristic; // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
     BLECharacteristic *m_0x6387Characteristic; // uuid 00006487-3C17-D293-8E48-14FE2E4DA212
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
+
     // BLEServerCallbacks
     virtual void onConnect(BLEServer *pServer, BLEConnInfo &connInfo) override;
     virtual void onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason) override;
@@ -384,16 +384,5 @@ protected:
     virtual void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;
     virtual void onStatus(NimBLECharacteristic *pCharacteristic, int code) override;
     virtual void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) override;
-#else
-    virtual void onConnect(BLEServer *pServer) override;
-    virtual void onDisconnect(BLEServer *pServer) override;
-
-    virtual void onRead(BLECharacteristic *pCharacteristic) override;
-    virtual void onWrite(BLECharacteristic *pCharacteristic) override;
-    virtual void onNotify(BLECharacteristic *pCharacteristic) override;
-    virtual void onStatus(BLECharacteristic *pCharacteristic, Status s, uint32_t code) override;
-
-
-#endif
 
 };

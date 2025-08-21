@@ -37,24 +37,13 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   9) uuid 0x2a50 - pnp id, red only,  value "0x010D0038380300" (note big endian representation)
   */
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
-  m_modelNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a24, NIMBLE_PROPERTY::NIM_READ);         // uuid 0x2a24
-  m_SerialNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a25, NIMBLE_PROPERTY::NIM_READ);        // uuid 0x2a25
-  m_hardwarRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a27, NIMBLE_PROPERTY::NIM_READ);  // uuid 0x2a27
-  m_firmwareRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a26, NIMBLE_PROPERTY::NIM_READ); // uuid 0x2a26
-  m_softwareRevisionCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a28, NIMBLE_PROPERTY::NIM_READ);    // uuid 0x2a28
-  m_systemIDCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a23, NIMBLE_PROPERTY::NIM_READ);            // uuid 0x2a23
-  m_IEE11073CertCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a2a, NIMBLE_PROPERTY::NIM_READ);        // uuid 0x2a2a
-#else
-  m_modelNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a24, BLECharacteristic::PROPERTY_READ);         // uuid 0x2a24
-  m_SerialNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a25, BLECharacteristic::PROPERTY_READ);        // uuid 0x2a25
-  m_hardwarRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a27, BLECharacteristic::PROPERTY_READ);  // uuid 0x2a27
-  m_firmwareRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a26, BLECharacteristic::PROPERTY_READ); // uuid 0x2a26
-  m_softwareRevisionCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a28, BLECharacteristic::PROPERTY_READ);    // uuid 0x2a28
-  m_systemIDCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a23, BLECharacteristic::PROPERTY_READ);            // uuid 0x2a23
-  m_IEE11073CertCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a2a, BLECharacteristic::PROPERTY_READ);        // uuid 0x2a2a
-
-#endif
+  m_modelNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a24, NIMBLE_PROPERTY::BLE_READ);         // uuid 0x2a24
+  m_SerialNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a25, NIMBLE_PROPERTY::BLE_READ);        // uuid 0x2a25
+  m_hardwarRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a27, NIMBLE_PROPERTY::BLE_READ);  // uuid 0x2a27
+  m_firmwareRevisionStrCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a26, NIMBLE_PROPERTY::BLE_READ); // uuid 0x2a26
+  m_softwareRevisionCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a28, NIMBLE_PROPERTY::BLE_READ);    // uuid 0x2a28
+  m_systemIDCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a23, NIMBLE_PROPERTY::BLE_READ);            // uuid 0x2a23
+  m_IEE11073CertCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a2a, NIMBLE_PROPERTY::BLE_READ);        // uuid 0x2a2a
 
   UtilityFunctions::debugLog("In XIGIMI RC HID startup callback registered level 1 chars creaetd");
 
@@ -92,13 +81,8 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
     UtilityFunctions::debugLog("In XIGIMI RC HID startup info set level 2 after unable to create service 1");
   }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
   m_0xA001Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA001, NIMBLE_PROPERTY::WRITE_NR | NIMBLE_PROPERTY::NOTIFY); // uuid 0xa001,
   m_0xA002Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA002, NIMBLE_PROPERTY::WRITE_NR);                           // uuid 0xa002,
-#else
-  m_0xA001Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA001, BLECharacteristic::PROPERTY_WRITE_NR | BLECharacteristic::PROPERTY_NOTIFY); // uuid 0xa001,
-  m_0xA002Characteristic = m_CustomService1->createCharacteristic((uint16_t)0xA002, BLECharacteristic::PROPERTY_WRITE_NR);                                      // uuid 0xa002,
-#endif
 
   // BLE2902 *m_0xA001CharacteristicDescriptor = new BLE2902();
 
@@ -121,28 +105,15 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
      */
   m_CustomService2 = server->createService(BLEUUID("0000D0FF-3C17-D293-8E48-14FE2E4DA212")); // uuid 0000D0FF-3C17-D293-8E48-14FE2E4DA21
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
   m_0xFFD1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD1, NIMBLE_PROPERTY::WRITE_NR);  // uuid 0xFFD1
-  m_0xFFD2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD2, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFD2
-  m_0xFFD3Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD3, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFD
-  m_0xFFD4Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD4, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFD4
-  m_0xFFD5Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD5, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFD5
+  m_0xFFD2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD2, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFD2
+  m_0xFFD3Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD3, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFD
+  m_0xFFD4Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD4, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFD4
+  m_0xFFD5Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD5, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFD5
   m_0xFFD8Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD8, NIMBLE_PROPERTY::WRITE_NR);  // uuid 0xFFD8
-  m_0xFFF1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF1, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFF1
-  m_0xFFF2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF2, NIMBLE_PROPERTY::NIM_WRITE); // uuid 0xFFF2
-  m_0xFFE0Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFE0, NIMBLE_PROPERTY::NIM_READ);  // uuid 0xFFE0
-#else
-  m_0xFFD1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD1, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xFFD1
-  m_0xFFD2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD2, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD2
-  m_0xFFD3Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD3, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD
-  m_0xFFD4Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD4, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD4
-  m_0xFFD5Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD5, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFD5
-  m_0xFFD8Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFD8, BLECharacteristic::PROPERTY_WRITE_NR); // uuid 0xFFD8
-  m_0xFFF1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF1, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFF1
-  m_0xFFF2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF2, BLECharacteristic::PROPERTY_WRITE);    // uuid 0xFFF2
-  m_0xFFE0Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFE0, BLECharacteristic::PROPERTY_READ);     // uuid 0xFFE0
-
-#endif
+  m_0xFFF1Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF1, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFF1
+  m_0xFFF2Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFF2, NIMBLE_PROPERTY::BLE_WRITE); // uuid 0xFFF2
+  m_0xFFE0Characteristic = m_CustomService2->createCharacteristic((uint16_t)0xFFE0, NIMBLE_PROPERTY::BLE_READ);  // uuid 0xFFE0
 
   m_0xFFD1Characteristic->setCallbacks(this);
   m_0xFFD2Characteristic->setValue(HID_uuid_0xffd2, sizeof(HID_uuid_0xffd2));
@@ -160,11 +131,7 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
     */
   m_CustomService3 = server->createService(BLEUUID("00006287-3C17-D293-8E48-14FE2E4DA212")); // uuid 00006287-3C17-D293-8E48-14FE2E4DA212
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
-  m_0x6287Characteristic = m_CustomService3->createCharacteristic("00006387-3C17-D293-8E48-14FE2E4DA212", NIMBLE_PROPERTY::NIM_WRITE | NIMBLE_PROPERTY::NOTIFY); // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
-#else
-  m_0x6287Characteristic = m_CustomService3->createCharacteristic("00006387-3C17-D293-8E48-14FE2E4DA212", BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY); // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
-#endif
+  m_0x6287Characteristic = m_CustomService3->createCharacteristic("00006387-3C17-D293-8E48-14FE2E4DA212", NIMBLE_PROPERTY::BLE_WRITE | NIMBLE_PROPERTY::NOTIFY); // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
 
   UtilityFunctions::debugLog("In XIGIMI RC HID startup callback setup level 4");
   BLE2904 *m_0x6287CharacteristicDescriptor = new BLE2904();
@@ -175,7 +142,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   setReportMap((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR));
 
   UtilityFunctions::debugLog("IN XGIMI HIG Security startup!");
-#ifdef USE_H2ZERO_NIMBLE_LIB
 
   // BLE_SM_PAIR_AUTHREQ_BOND  - bond
   // BLE_SM_PAIR_AUTHREQ_MITM  - man in middle
@@ -185,12 +151,8 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   // BLE_SM_PAIR_KEY_DIST_ENC LTK key
   // BLE_SM_PAIR_KEY_DIST_ID  IRK key
   // BLE_SM_PAIR_KEY_DIST_SIGN CRSK key
-  NimBLEDevice::setSecurityInitKey( BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID  | BLE_SM_PAIR_KEY_DIST_SIGN);
-  NimBLEDevice::setSecurityRespKey(BLE_SM_PAIR_KEY_DIST_ID  | BLE_SM_PAIR_KEY_DIST_SIGN);
-#else
-  BLESecurity::setAuthenticationMode(BLE_SM_PAIR_AUTHREQ_BOND | BLE_SM_PAIR_AUTHREQ_MITM | BLE_SM_PAIR_AUTHREQ_SC);
-  BLESecurity::setCapability(BLE_HS_IO_NO_INPUT_OUTPUT);
-#endif
+  NimBLEDevice::setSecurityInitKey(BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID | BLE_SM_PAIR_KEY_DIST_SIGN);
+  NimBLEDevice::setSecurityRespKey(BLE_SM_PAIR_KEY_DIST_ID | BLE_SM_PAIR_KEY_DIST_SIGN);
 
   UtilityFunctions::debugLog("Starting HID services");
   startServices(); // HID start service - must be called after all charstics have been built
@@ -200,32 +162,32 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 #ifndef CONFIG_BT_NIMBLE_EXT_ADV
 
   // we are doing BLE  non extended 31 byte restructed advertisment
-  // order is importamt as that is the same order teh remote sends, and without this order the windows will not see it 
+  // order is importamt as that is the same order teh remote sends, and without this order the windows will not see it
 
-  //advertisingData.setName("");
-  //BLE_HS_ADV_F_DISC_LTD (0x01) - limited discoverability
-  // BLE_HS_ADV_F_DISC_GEN (0x02) - general discoverability
-  //BLE_HS_ADV_F_BREDR_UNSUP (0x4)- BR/EDR not supported
- 
-  advertisingData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD );
-  advertisingData.addServiceUUID( BLEUUID( (uint16_t) 0x1812));
+  // advertisingData.setName("");
+  // BLE_HS_ADV_F_DISC_LTD (0x01) - limited discoverability
+  //  BLE_HS_ADV_F_DISC_GEN (0x02) - general discoverability
+  // BLE_HS_ADV_F_BREDR_UNSUP (0x4)- BR/EDR not supported
+
+  advertisingData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
+  advertisingData.addServiceUUID(BLEUUID((uint16_t)0x1812));
   advertisingData.setAppearance(HID_REMOTE);
   advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
-  //advertisingData.addTxPower(); // this is automatically added as the last byte
+  // advertisingData.addTxPower(); // this is automatically added as the last byte
 
   // we create the sacan data that has name etc in there wth extnded manuf data
   BLEAdvertisementData scanAdvData = BLEAdvertisementData();
   scanAdvData.setName(HID_DEVICE_NAME);
   scanAdvData.setManufacturerData(HID_AD_SACAN_MANUF_DATA);
-  //scanAdvData.addTxPower(); // this is automatically added as the last byte
+  // scanAdvData.addTxPower(); // this is automatically added as the last byte
 
   advertising = server->getAdvertising();
-  
+
   advertising->setAdvertisementData(advertisingData);
   advertising->setScanResponseData(scanAdvData);
   advertising->enableScanResponse(true);
-  //advertising->setConnectableMode(true); // this is done by default
-  
+  // advertising->setConnectableMode(true); // this is done by default
+
   advertising->start();
 #else
   // we are doing BLE 5.0 non extended  byte  advertisment
@@ -268,11 +230,7 @@ void BlueXGIMI_RC::sendButtonPress(uint8_t command)
 {
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onWrite(BLECharacteristic *pCharacteristic, BLEConnInfo &connInfo)
-#else
-void BlueXGIMI_RC::onWrite(BLECharacteristic *pCharacteristic)
-#endif
 {
   if (pCharacteristic->getUUID() == keyboardInput->getUUID())
   {
@@ -296,61 +254,32 @@ void BlueXGIMI_RC::onWrite(BLECharacteristic *pCharacteristic)
   UtilityFunctions::debugLogf("UUID ");
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
-  String value = HEXBuilder::bytes2hex(pCharacteristic->getData(), pCharacteristic->getLength());
+
+  NimBLEAttValue val = pCharacteristic->getValue();
+  String value = HEXBuilder::bytes2hex(val.data(), val.length());
   UtilityFunctions::debugLogf("Data received HEX %s\n", value);
   UtilityFunctions::debugLogf("Data received RAW %s\n", pCharacteristic->getValue());
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onRead(BLECharacteristic *pCharacteristic, BLEConnInfo &connInfo)
-#else
-void BlueXGIMI_RC::onRead(BLECharacteristic *pCharacteristic)
-#endif
 {
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onStatus(BLECharacteristic *pCharacteristic, int code)
-#else
-void BlueXGIMI_RC::onStatus(BLECharacteristic *pCharacteristic, Status s, uint32_t code)
-#endif
+
 {
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
-#else
-void BlueXGIMI_RC::onNotify(BLECharacteristic *pCharacteristic)
-{
-}
-#endif
-
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onConnect(BLEServer *pServer, BLEConnInfo &connInfo)
 {
   BluetoothHID_RC::onConnect(pServer, connInfo);
-#else
-void BlueXGIMI_RC::onConnect(BLEServer *pServer)
-{
-  BluetoothHID_RC::onConnect(pServer);
-
-#endif
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason)
 {
   BluetoothHID_RC::onDisconnect(pServer, connInfo, reason);
-
-#else
-void BlueXGIMI_RC::onDisconnect(BLEServer *pServer)
-{
-  BluetoothHID_RC::onDisconnect(pServer);
-
-#endif
 }
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 void BlueXGIMI_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {}
 
-#endif
 BlueXGIMI_RC::~BlueXGIMI_RC() {}

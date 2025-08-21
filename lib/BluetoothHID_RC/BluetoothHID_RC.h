@@ -2,28 +2,18 @@
 #include "defaults.h"
 #include <HEXBuilder.h>
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
 #include <nimconfig.h>
 #include <NimBLEDevice.h>
 #include <NimBLEHIDDevice.h>
 #include <HIDTypes.h>
-// for compatabality it does not exiist in Nimble code
-#define BLEHIDDevice NimBLEHIDDevice
-#else
-#include <BLEDevice.h>
-#include <BLEHIDDevice.h>
-#include <HIDTypes.h>
-#include <BLE2902.h>
-#include <BLE2904.h>
-#include <BLECharacteristic.h>
-#define NIMBLE_PROPERTY BLECharacteristic
-#endif
+
+
 
 // apreiance of the device and the advertisment
 #define HID_REMOTE 0x0180
 
 /* 
-Define the Prefered prepheripral config params for the device
+Define the Prefered prepheripral config params for the device in sdkconfig.defaults
 this is all done by defines in NimbleBLE - ESP32 so we have to put them in the platform.ini
 uint16_t connIntervalMin;    // !< Minimum connection interval. In 1.25 ms unit
 uint16_t connIntervalMax;    // !< Maximum connection interval. In 1.25 ms unit
@@ -33,11 +23,11 @@ uint16_t minCeLen;           // !< Minimum CE length. Set to 0
 uint16_t maxCeLen;           // !< Maximum CE length. Set to 0
 
 #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL
-#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL (11) // 11.25 ms
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL (10) // 11.25 ms
 #endif
 
 #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL
-#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL (11) // 11.25 ms
+#define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL (10) // 11.25 ms
 #endif 
 
 #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SLAVE_LATENCY
@@ -79,7 +69,7 @@ protected:
     BLECharacteristic *manufData;
     bool connected = false;
 
-#ifdef USE_H2ZERO_NIMBLE_LIB
+
     // BLEServerCallbacks
     virtual void onConnect(BLEServer *pServer, BLEConnInfo &connInfo) override;
     virtual void onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason) override;
@@ -88,24 +78,5 @@ protected:
     virtual void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;
     virtual void onStatus(NimBLECharacteristic *pCharacteristic, int code) override;
     virtual void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) override;
-#else
-    virtual void onConnect(BLEServer *pServer) override;
-    virtual void onDisconnect(BLEServer *pServer) override;
 
-    virtual void onRead(BLECharacteristic *pCharacteristic) override;
-    virtual void onWrite(BLECharacteristic *pCharacteristic) override;
-    virtual void onNotify(BLECharacteristic *pCharacteristic) override;
-    virtual void onStatus(BLECharacteristic *pCharacteristic, Status s, uint32_t code) override;
-
-    BLEService *getDeviceInfoService();
-    BLECharacteristic *getInputReport(uint8_t reportID);
-    BLECharacteristic *getOutputReport(uint8_t reportID);
-    void setManufacturer(std::string name);
-    void setPnp(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version);
-    void setHidInfo(uint8_t country, uint8_t flags);
-    void setReportMap(uint8_t *map, uint16_t size);
-    BLEService *getHidService();
-    BLEService *getBatteryService();
-
-#endif
 };

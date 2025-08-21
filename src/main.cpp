@@ -127,7 +127,7 @@ void setup()
   // btStart(); // need to init BT stack before anything else on core 0
   xTaskCreatePinnedToCore(
       Task0code, /* Task function. */
-      "Task0",   /* name of task. */
+      "BLE Core 0",   /* name of task. */
       10000,     /* Stack size of task */
       NULL,      /* parameter of the task */
       1,         /* priority of the task */
@@ -137,7 +137,7 @@ void setup()
   // create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
   xTaskCreatePinnedToCore(
       Task1code, /* Task function. */
-      "Task1",   /* name of task. */
+      "Wifi AIoT Core 1",   /* name of task. */
       10000,     /* Stack size of task */
       NULL,      /* parameter of the task */
       1,         /* priority of the task */
@@ -145,8 +145,10 @@ void setup()
       1);        /* pin task to core 1 */
 }
 
+// this shoud run on core 1
 void loop()
 {
   yield(); // for the watchdog timer on core 0
+  UtilityFunctions::delay(1000);
 }
 

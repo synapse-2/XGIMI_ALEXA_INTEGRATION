@@ -20,7 +20,8 @@ The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth
 Apprently coextance work but barely in my testing read more at https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
 For coexisstance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
-The tassk loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
+The tas
+k loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
 
 Threre is a ring buffer between the cores for communication.
 
