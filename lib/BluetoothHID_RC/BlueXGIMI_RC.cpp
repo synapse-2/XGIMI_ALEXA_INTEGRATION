@@ -9,14 +9,17 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   UtilityFunctions::debugLog("In XIGIMI RC HID startup!");
 
   // link the report ID's in the HID infopacket
-  keyboardInput = getInputReport(KEYBOARD_REPORT_ID);
-  keyboardOutput = getOutputReport(KEYBOARD_REPORT_ID);
-  secondDeviceInput = getInputReport(SECOND_REPORT_ID);
-  secondDeviceOutput = getOutputReport(SECOND_REPORT_ID);
-  thirdDeviceInput = getInputReport(THIRD_REPORT_ID);
+  keyboardInput_01 = getInputReport(KEYBOARD_REPORT_ID);
+  keyboardOutput_01 = getOutputReport(KEYBOARD_REPORT_ID);
+  secondDeviceInput_30 = getInputReport(SECOND_REPORT_ID);
+  secondDeviceOutput_30 = getOutputReport(SECOND_REPORT_ID);
+  thirdDeviceInput_03 = getInputReport(THIRD_REPORT_ID);
 
-  keyboardOutput->setCallbacks(this);
-  secondDeviceOutput->setCallbacks(this);
+  keyboardInput_01->setCallbacks(new Callback_handler_Rep_Inp_01(this));
+  keyboardOutput_01->setCallbacks(new Callback_handler_Rep_Out_01(this));
+  secondDeviceInput_30->setCallbacks(new Callback_handler_Rep_Inp_30(this));
+  secondDeviceOutput_30->setCallbacks(new Callback_handler_Rep_Out_30(this));
+  thirdDeviceInput_03->setCallbacks(new Callback_handler_Rep_Inp_03(this));
 
   UtilityFunctions::debugLog("In XIGIMI RC HID startup callback registered level 1");
 
@@ -52,7 +55,7 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   m_hardwarRevisionStrCharacteristic->setValue(HID_HARDWARE_REVISION);
   m_firmwareRevisionStrCharacteristic->setValue(HID_FIRMWARE_REVISION);
   m_softwareRevisionCharacteristic->setValue(HID_SOFTWARE_REVISION);
-  m_systemIDCharacteristic->setValue(HID_SYSTEM_ID);
+  m_systemIDCharacteristic->setValue(HID_SYSTEM_ID, sizeof(HID_SYSTEM_ID));
   m_IEE11073CertCharacteristic->setValue(HID_IEE11073_CERT);
 
   // set the manufacturer name
@@ -140,6 +143,7 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
   // set the report map
   setReportMap((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR));
+  UtilityFunctions::debugLogf("Set HID report map %s\n", HEXBuilder::bytes2hex((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR)).c_str());
 
   UtilityFunctions::debugLog("IN XGIMI HIG Security startup!");
 
@@ -170,25 +174,53 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   // BLE_HS_ADV_F_BREDR_UNSUP (0x4)- BR/EDR not supported
 
   advertisingData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
-  advertisingData.addServiceUUID(BLEUUID((uint16_t)0x1812));
+  advertisingData.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
   advertisingData.setAppearance(HID_REMOTE);
   advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
   // advertisingData.addTxPower(); // this is automatically added as the last byte
 
   // we create the sacan data that has name etc in there wth extnded manuf data
-  BLEAdvertisementData scanAdvData = BLEAdvertisementData();
-  scanAdvData.setName(HID_DEVICE_NAME);
-  scanAdvData.setManufacturerData(HID_AD_SACAN_MANUF_DATA);
+  advertisingScanData = NimBLEAdvertisementData();
+  advertisingScanData.setName(HID_DEVICE_NAME);
+  advertisingScanData.setManufacturerData(HID_AD_SACAN_MANUF_DATA);
   // scanAdvData.addTxPower(); // this is automatically added as the last byte
 
-  advertising = server->getAdvertising();
+  // set up  the advertisment packet for on button
+  advertisingOnButtonData.setName(ONBTN_HID_DEVICE_SHORT_NAME);
+  advertisingOnButtonData.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
 
-  advertising->setAdvertisementData(advertisingData);
-  advertising->setScanResponseData(scanAdvData);
-  advertising->enableScanResponse(true);
-  // advertising->setConnectableMode(true); // this is done by default
+  NimClassOfDeviceType::bluetooth_cod_t cod = NimClassOfDeviceType::encodeClassOfDevice(
+      // NimClassOfDeviceType::service_class_t::COD_SERVICE_NA,
+       //NimClassOfDeviceType::service_class_t::COD_SERVICE_RESERVED,
+      NimClassOfDeviceType::service_class_t::COD_SERVICE_TELEPHONY,
+      NimClassOfDeviceType::major_device_class_t::COD_MAJOR_MISCELLANEOUS,
+      0);
+  //    NimClassOfDeviceType::major_device_class_t::COD_MAJOR_PERIPHERAL,
+  //    NimClassOfDeviceType::peripheral_pointing_device_t::COD_MINOR_PERIPHERAL_KBD_UNCATEGORIZED);
 
-  advertising->start();
+  advertisingOnButtonData.setCODData(cod);
+  advertisingOnButtonData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
+
+  advertising->setAdvertisementData(advertisingOnButtonData);
+  // advertising->setAdvertisementData(advertisingData);
+  // advertising->setScanResponseData(advertisingScanData);
+
+  /**
+   * * BLE_GAP_CONN_MODE_NON    (0) - not connectable advertising
+   * * BLE_GAP_CONN_MODE_DIR    (1) - directed connectable advertising
+   * * BLE_GAP_CONN_MODE_UND    (2) - undirected connectable advertising
+   */
+  advertising->setConnectableMode(BLE_GAP_CONN_MODE_UND);
+
+  /**
+   * * BLE_GAP_DISC_MODE_NON    (0) - non-discoverable
+   * * BLE_GAP_DISC_MODE_LTD    (1) - limited discoverable
+   * * BLE_GAP_DISC_MODE_GEN    (2) - general discoverable
+   */
+  advertising->setDiscoverableMode(BLE_GAP_DISC_MODE_LTD);
+  
+  //advertising->enableScanResponse(true);
+  //advertising->start();
 #else
   // we are doing BLE 5.0 non extended  byte  advertisment
   NimBLEExtAdvertising *advertising = server->getAdvertising();
@@ -230,27 +262,10 @@ void BlueXGIMI_RC::sendButtonPress(uint8_t command)
 {
 }
 
-void BlueXGIMI_RC::onWrite(BLECharacteristic *pCharacteristic, BLEConnInfo &connInfo)
+// generic handlers
+void BlueXGIMI_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-  if (pCharacteristic->getUUID() == keyboardInput->getUUID())
-  {
-    // Handle keyboard input
-    UtilityFunctions::debugLog("Keyboard input received");
-  }
-  else if (pCharacteristic->getUUID() == secondDeviceInput->getUUID())
-  {
-    // Handle second device input
-    UtilityFunctions::debugLog("Second device input received");
-  }
-  else if (pCharacteristic->getUUID() == thirdDeviceInput->getUUID())
-  {
-    // Handle third device input
-    UtilityFunctions::debugLog("Third device input received");
-  }
-  else
-  {
-    UtilityFunctions::debugLog("Unknown characteristic written");
-  }
+
   UtilityFunctions::debugLogf("UUID ");
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
@@ -261,25 +276,162 @@ void BlueXGIMI_RC::onWrite(BLECharacteristic *pCharacteristic, BLEConnInfo &conn
   UtilityFunctions::debugLogf("Data received RAW %s\n", pCharacteristic->getValue());
 }
 
-void BlueXGIMI_RC::onRead(BLECharacteristic *pCharacteristic, BLEConnInfo &connInfo)
+void BlueXGIMI_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
+  UtilityFunctions::debugLogf("UUID ");
+  UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
+  UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
+
+  NimBLEAttValue val = pCharacteristic->getValue();
+  String value = HEXBuilder::bytes2hex(val.data(), val.length());
+  UtilityFunctions::debugLogf("Data SENT HEX %s\n", value);
+  UtilityFunctions::debugLogf("Data SENT RAW %s\n", pCharacteristic->getValue());
 }
 
-void BlueXGIMI_RC::onStatus(BLECharacteristic *pCharacteristic, int code)
-
+void BlueXGIMI_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
+  UtilityFunctions::debugLogf("UUID ");
+  UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
+  UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
+
+  UtilityFunctions::debugLogf("CODE RAW %i\n", code);
+  UtilityFunctions::debugLogf("CODE HEX %02x\n", code);
+}
+void BlueXGIMI_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+
+  UtilityFunctions::debugLogf("UUID ");
+  UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
+  UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
+
+  UtilityFunctions::debugLogf("SUBValue RAW %i\n", subValue);
+  UtilityFunctions::debugLogf("SUBValue HEX %02x\n", subValue);
 }
 
-void BlueXGIMI_RC::onConnect(BLEServer *pServer, BLEConnInfo &connInfo)
+void BlueXGIMI_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
 {
   BluetoothHID_RC::onConnect(pServer, connInfo);
 }
 
-void BlueXGIMI_RC::onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason)
+void BlueXGIMI_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason)
 {
   BluetoothHID_RC::onDisconnect(pServer, connInfo, reason);
 }
 
-void BlueXGIMI_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {}
-
 BlueXGIMI_RC::~BlueXGIMI_RC() {}
+
+// report id call backs for Report#01 Input i.e bytes sent from esp32 to the projector/computer
+//  BLECharacteristicCallbacks
+void BlueXGIMI_RC::ReportInput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_01_onRead - passing to default handler");
+  onRead(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_01_onWrite - passing to default handler");
+  onWrite(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_01_onStatus - passing to default handler");
+  onStatus(pCharacteristic, code);
+}
+
+void BlueXGIMI_RC::ReportInput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_01_onSubscribe - passing to default handler");
+  onSubscribe(pCharacteristic, connInfo, subValue);
+}
+
+// report id call backs for Report#01 Output i.e bytes sent from projector/computer to theesp32
+//  BLECharacteristicCallbacks
+void BlueXGIMI_RC::ReportOutput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_01_onRead - passing to default handler");
+  onRead(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportOutput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_01_onWrite - passing to default handler");
+  onWrite(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportOutput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_01_onStatus - passing to default handler");
+  onStatus(pCharacteristic, code);
+}
+void BlueXGIMI_RC::ReportOutput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_01_onSubscribe - passing to default handler");
+  onSubscribe(pCharacteristic, connInfo, subValue);
+}
+
+// report id call backs for Report#30 Input i.e bytes sent from esp32 to the projector/computer
+// BLECharacteristicCallbacks
+void BlueXGIMI_RC::ReportInput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_30_onRead - passing to default handler");
+  onRead(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_30_onWrite - passing to default handler");
+  onWrite(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_30_onStatus - passing to default handler");
+  onStatus(pCharacteristic, code);
+}
+void BlueXGIMI_RC::ReportInput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_30_onSubscribe - passing to default handler");
+  onSubscribe(pCharacteristic, connInfo, subValue);
+}
+
+// report id call backs for Report#30 Output i.e bytes sent from projector/computer to theesp32
+//  BLECharacteristicCallbacks
+void BlueXGIMI_RC::ReportOutput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_30_onRead - passing to default handler");
+  onRead(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportOutput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_30_onWrite - passing to default handler");
+  onWrite(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportOutput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_30_onStatus - passing to default handler");
+  onStatus(pCharacteristic, code);
+}
+void BlueXGIMI_RC::ReportOutput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+  UtilityFunctions::debugLog(" IN ReportOutput_30_onSubscribe - passing to default handler");
+  onSubscribe(pCharacteristic, connInfo, subValue);
+}
+
+// report id call backs for Report#03 Input i.e bytes sent from esp32 to the projector/computer
+// BLECharacteristicCallbacks
+void BlueXGIMI_RC::ReportInput_03_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_03_onRead - passing to default handler");
+  onRead(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_03_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_03_onWrite - passing to default handler");
+  onWrite(pCharacteristic, connInfo);
+}
+void BlueXGIMI_RC::ReportInput_03_onStatus(NimBLECharacteristic *pCharacteristic, int code)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_03_onStatus - passing to default handler");
+  onStatus(pCharacteristic, code);
+}
+void BlueXGIMI_RC::ReportInput_03_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+{
+  UtilityFunctions::debugLog(" IN ReportInput_03_onSubscribe - passing to default handler");
+  onSubscribe(pCharacteristic, connInfo, subValue);
+}

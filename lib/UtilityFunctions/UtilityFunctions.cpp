@@ -61,42 +61,55 @@ namespace UtilityFunctions
     }
     void ledRed()
     {
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED red");
+#endif
         leds[0] = CRGB::Red;
         FastLED.show();
     }
 
     void ledGreen()
     {
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED green");
+#endif
         leds[0] = CRGB::Green;
         FastLED.show();
     }
 
     void ledYellow()
     {
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED yellow");
+#endif
         leds[0] = CRGB::Yellow;
         FastLED.show();
     }
 
     void ledBlue()
     {
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED blue");
+#endif
         leds[0] = CRGB::Blue;
         FastLED.show();
     }
 
     void ledWhite()
     {
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED white");
+#endif
         leds[0] = CRGB::White;
         FastLED.show();
     }
 
     void ledStop()
     {
+
+#ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED off");
+#endif
         leds[0] = CRGB::Black;
         FastLED.show();
     }
@@ -111,9 +124,10 @@ namespace UtilityFunctions
         }
         unsigned long buttonReset_time = millis();
 
-        if (buttonReset_time < last_buttonReset_time) {
-            // we have overflowed the mills re set the lasst button time 
-             last_buttonReset_time = buttonReset_time;
+        if (buttonReset_time < last_buttonReset_time)
+        {
+            // we have overflowed the mills re set the lasst button time
+            last_buttonReset_time = buttonReset_time;
         }
         unsigned long diff = buttonReset_time - last_buttonReset_time;
         if ((diff > 250) && (diff < 3000))

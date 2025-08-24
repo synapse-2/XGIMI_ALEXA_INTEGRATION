@@ -9,7 +9,7 @@
 
 
 
-// apreiance of the device and the advertisment
+// appearance of the device and the advertisment
 #define HID_REMOTE 0x0180
 
 /* 
@@ -47,7 +47,7 @@ this is all done by defines in NimbleBLE - ESP32 so we have to put them in the p
 #endif
 */
 
-class BluetoothHID_RC : public BLEHIDDevice, public BLEServerCallbacks, public BLECharacteristicCallbacks
+class BluetoothHID_RC : public NimBLEHIDDevice, public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks
 {
 public:
     BluetoothHID_RC(BLEServer *server);
@@ -59,20 +59,19 @@ public:
     virtual ~BluetoothHID_RC();
 
 protected:
-    BLEServer *BLE_server;
+    NimBLEServer *BLE_server;
 
-#ifndef CONFIG_BT_NIMBLE_EXT_ADV
-    BLEAdvertising *advertising;
-    BLEAdvertisementData advertisingData;
-    BLEAdvertisementData advertisingScanData;
-#endif
-    BLECharacteristic *manufData;
+    NimBLEAdvertising *advertising;
+    NimBLEAdvertisementData advertisingData;
+    NimBLEAdvertisementData advertisingScanData;
+
+    NimBLECharacteristic *manufData;
     bool connected = false;
 
 
     // BLEServerCallbacks
-    virtual void onConnect(BLEServer *pServer, BLEConnInfo &connInfo) override;
-    virtual void onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason) override;
+    virtual void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) override;
+    virtual void onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason) override;
     // BLECharacteristicCallbacks
     virtual void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;
     virtual void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;

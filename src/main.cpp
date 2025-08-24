@@ -11,9 +11,9 @@
 #include "magicEnum/magic_enum.hpp"
 #include "magicEnum/magic_enum_iostream.hpp"
 
-
 template <typename E>
-auto to_integer(magic_enum::Enum<E> value) -> int {
+auto to_integer(magic_enum::Enum<E> value) -> int
+{
   // magic_enum::Enum<E> - C++17 Concept for enum type.
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
@@ -25,6 +25,22 @@ Master m;
 Slave s;
 TaskHandle_t Task0;
 TaskHandle_t Task1;
+
+void onNetworkConnect()
+{
+  m.onNetworkConnect();
+}
+
+void onNetworkDisconnect()
+{
+
+  m.onNetworkDisconnect();
+}
+
+void onNetworkError()
+{
+  m.onNetworkError();
+}
 
 void Task1code(void *pvParameters)
 {
@@ -46,13 +62,9 @@ void Task1code(void *pvParameters)
     // Defined in thingProperties.h for AIot cloud
 
     initProperties();
-    // Connect to Arduino IoT Cloud
-    // initialize the WiFiConnectionHandler pointer
-    iot_connector = new WiFiConnectionHandler(m.getSSID().c_str(), m.getPSK().c_str());
+    //when we get here we should have wi fi connected to the internet
 
-    ArduinoCloud.begin(*iot_connector);
-
-    /*
+     /*
        The following function allows you to obtain more information
        related to the state of network and IoT Cloud connection and errors
        the higher number the more granular information you’ll get.
@@ -61,6 +73,16 @@ void Task1code(void *pvParameters)
    */
     setDebugMessageLevel(ArduinoCloudDebugLevel);
     ArduinoCloud.printDebugInfo();
+    // Connect to Arduino IoT Cloud
+    // initialize the WiFiConnectionHandler pointer
+    iot_connector = new WiFiConnectionHandler(m.getSSID().c_str(), m.getPSK().c_str());
+    //iot_connector->addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
+    //iot_connector->addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
+    //iot_connector->addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
+
+    ArduinoCloud.begin(*iot_connector);
+
+   
 #endif
   }
   else
@@ -116,7 +138,7 @@ void onProjectorChange()
   UtilityFunctions::debugLogf("Projector channel changed to: %i\n", projector.getChannel());
   UtilityFunctions::debugLog("Projector Mute changed to: " + String(projector.getMute()));
   String cmd = String((magic_enum::enum_name(projector.getPlaybackCommand())).data());
-  UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd );
+  UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd);
   UtilityFunctions::delay(30);
   UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 }
@@ -126,23 +148,23 @@ void setup()
 
   // btStart(); // need to init BT stack before anything else on core 0
   xTaskCreatePinnedToCore(
-      Task0code, /* Task function. */
-      "BLE Core 0",   /* name of task. */
-      10000,     /* Stack size of task */
-      NULL,      /* parameter of the task */
-      1,         /* priority of the task */
-      &Task0,    /* Task handle to keep track of created task */
-      0);        /* pin task to core 0 */
+      Task0code,    /* Task function. */
+      "BLE Core 0", /* name of task. */
+      10000,        /* Stack size of task */
+      NULL,         /* parameter of the task */
+      1,            /* priority of the task */
+      &Task0,       /* Task handle to keep track of created task */
+      0);           /* pin task to core 0 */
 
   // create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
   xTaskCreatePinnedToCore(
-      Task1code, /* Task function. */
-      "Wifi AIoT Core 1",   /* name of task. */
-      10000,     /* Stack size of task */
-      NULL,      /* parameter of the task */
-      1,         /* priority of the task */
-      &Task1,    /* Task handle to keep track of created task */
-      1);        /* pin task to core 1 */
+      Task1code,          /* Task function. */
+      "Wifi AIoT Core 1", /* name of task. */
+      10000,              /* Stack size of task */
+      NULL,               /* parameter of the task */
+      1,                  /* priority of the task */
+      &Task1,             /* Task handle to keep track of created task */
+      1);                 /* pin task to core 1 */
 }
 
 // this shoud run on core 1
@@ -151,4 +173,3 @@ void loop()
   yield(); // for the watchdog timer on core 0
   UtilityFunctions::delay(1000);
 }
-

@@ -59,7 +59,13 @@ https://dronebotworkshop.com/esp32-bluetooth/
 https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
 https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
 
+# UID - HID Report decoder/encorder 
+https://eleccelerator.com/usbdescreqparser/
 
+# BLuetooth CoD (Class of device) encoder/decoder
+https://bluetooth-pentest.narod.ru/software/bluetooth_class_of_device-service_generator.html
+
+Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf 
 
 
 Modules used

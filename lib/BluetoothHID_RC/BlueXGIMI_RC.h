@@ -1,25 +1,24 @@
 #pragma once
 #include "defaults.h"
-
+#include "UtilityFunctions.h"
 #include "BluetoothHID_RC.h"
-
 
 #define HID_DEVICE_NAME "XGIMI BH"
 #define HID_MANUFACTURER_NAME "Realtek BT"
-#define HID_MODEL_NUMBER "Model nbr 0.9"
+#define HID_MODEL_NUMBER "Model Nbr 0.9"
 #define HID_SERIAL_NUMBER "RTKBeeSerialNum"
 #define HID_HARDWARE_REVISION "V1.0.0"
 #define HID_FIRMWARE_REVISION "B981C_HG2_CY_V1.0.9"
 #define HID_SOFTWARE_REVISION "B981C_HG2_CY_V1.0.9"
-#define HID_SYSTEM_ID "0x0001020000030405"
+static uint8_t HID_SYSTEM_ID[] = {0x00, 0x01, 0x02, 0x00, 0x00, 0x03, 0x04, 0x05};
 #define HID_IEE11073_CERT "RTKBeeIEEEDatalist"
 
+#define ONBTN_HID_DEVICE_SHORT_NAME "BLuetooth 4.0 RC"
 
 //  cannou use the esp32 BLE lib as the advertisment takes string and it cannot have nulls in it so we made out own BleNEW
-static std::vector<uint8_t> HID_AD_SACAN_MANUF_DATA = {0x0D,0x00,0xff,0xff,0x42,0x52,0x56,0x31,0x2e,0x30,0x30};
-static std::vector<uint8_t> HID_AD_MANUF_DATA = {0x0D,0x00,0x38,0x38,0x02,0x00,0x00,0x01};
-//static String HID_AD_MANUF_DATA = "\x38\x38\x02\x00\x00\x01\xff\xff\x42\x52\x56\x31\x2e\x30\x30";
-
+static std::vector<uint8_t> HID_AD_SACAN_MANUF_DATA = {0x0D, 0x00, 0xff, 0xff, 0x42, 0x52, 0x56, 0x31, 0x2e, 0x30, 0x30};
+static std::vector<uint8_t> HID_AD_MANUF_DATA = {0x0D, 0x00, 0x38, 0x38, 0x02, 0x00, 0x00, 0x01};
+// static String HID_AD_MANUF_DATA = "\x38\x38\x02\x00\x00\x01\xff\xff\x42\x52\x56\x31\x2e\x30\x30";
 
 static uint8_t HID_uuid_0xffd2[] = {0x1c, 0xf3, 0x02, 0xa8, 0x96, 0xdc};
 static uint8_t HID_uuid_0xffd3[] = {0x01, 0xa0, 0x10, 0x28};
@@ -118,7 +117,7 @@ Bluetooth Attribute Protocol
 0x05, 0x07,        //   Usage Page (Kbrd/Keypad)
 0x09, 0x06,        //   Usage (0x06)
 0xA1, 0x01,        //   Collection (Application)
-0x85, 0x01,        //     Report ID (1) // this is handle 0x0031 for inout reporet 1 handle 0x0034 for report 1 output
+0x85, 0x01,        //     Report ID (1) // this is handle 0x0031 for input report 1 handle 0x0034 for report 1 output in wireshark
 0x19, 0xE0,        //     Usage Mium (0xE0)
 0x29, 0xE7,        //     Usage Maximum (0xE7)
 0x15, 0x00,        //     Logical Mium (0)
@@ -150,7 +149,7 @@ Bluetooth Attribute Protocol
 0x06, 0x00, 0xFF,  //   Usage Page (Vendor Defined 0xFF00)
 0x0A, 0x00, 0xFF,  //   Usage (0xFF00)
 0xA1, 0x01,        //   Collection (Application)
-0x85, 0x1E,        //     Report ID (30)  // THIS report shhows up as handle 0x0038 in the wire snoop log it is inpout report haandle 0x003b is report 30 output report
+0x85, 0x1E,        //     Report ID (30)  // THIS report shows up as handle 0x0038 in the wire snoop log it is inpout report haandle 0x003b is report 30 output report
 0x09, 0x01,        //     Usage (0x01)
 0x75, 0x08,        //     Report Size (8)
 0x95, 0xFF,        //     Report Count (-1)
@@ -175,13 +174,15 @@ Bluetooth Attribute Protocol
 0x15, 0x00,        //     Logical Mium (0)
 0x26, 0x9C, 0x02,  //     Logical Maximum (668)
 0x95, 0x02,        //     Report Count (2)
-0x75, 0x10,        //     Report Size (16) //this is 8 bytes used for thexgimi  fumcton buttons like on/off settings, , projector config 
+0x75, 0x10,        //     Report Size (16) //this is 8 bytes used for thexgimi  fumcton buttons like on/off settings, , projector config
 0x81, 0x00,        //     Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
 0xC0,              //   End Collection
 0xC0,              // End Collection
 
+//static const uint8_t HID_REPORT_DESCRIPTOR[] = {0x5, 0x1, 0x9, 0x6, 0xa1, 0x1, 0x5, 0x7, 0x9, 0x6, 0xa1, 0x1, 0x85, 0x1, 0x19, 0xe0, 0x29, 0xe7, 0x15, 0x0, 0x25, 0x1, 0x75, 0x1, 0x95, 0x8, 0x81, 0x2, 0x95, 0x1, 0x75, 0x8, 0x81, 0x1, 0x95, 0x5, 0x75, 0x1, 0x5, 0x8, 0x19, 0x1, 0x29, 0x5, 0x91, 0x2, 0x95, 0x1, 0x75, 0x3, 0x91, 0x1, 0x95, 0x6, 0x75, 0x8, 0x15, 0x0, 0x25, 0xff, 0x5, 0x7, 0x19, 0x0, 0x29, 0xff, 0x81, 0x0, 0xc0, 0x6, 0x0, 0xff, 0xa, 0x0, 0xff, 0xa1, 0x1, 0x85, 0x1e, 0x9, 0x1, 0x75, 0x8, 0x95, 0xff, 0x16, 0x0, 0x0, 0x26, 0xff, 0x0, 0x19, 0x0, 0x29, 0xff, 0x81, 0x0, 0x95, 0x8, 0x75, 0x1, 0x5, 0x8, 0x19, 0x1, 0x29, 0x8, 0x91, 0x2, 0xc0, 0x5, 0xc, 0x9, 0x1, 0xa1, 0x1, 0x85, 0x3, 0x19, 0x0, 0x2a, 0x9c, 0x2, 0x15, 0x0, 0x26, 0x9c, 0x2, 0x95, 0x2, 0x75, 0x10, 0x81, 0x0, 0xc0, 0xc0};
 
 */
+
 static const uint8_t HID_REPORT_DESCRIPTOR[] = {
     // HID report descriptor for the XGIMI remote
     USAGE_PAGE(1), 0x01, // USAGE_PAGE (Generic Desktop Ctrls)
@@ -222,25 +223,25 @@ static const uint8_t HID_REPORT_DESCRIPTOR[] = {
     HIDINPUT(1), 0x00,                //   INPUT (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position) - 48 bits for keys input
     END_COLLECTION(0),                // END_COLLECTION
 
-    USAGE_PAGE(2), 0x00, 0xFF,       //   USAGE_PAGE (Vendor Defined 0xFF00)
-    USAGE(2), 0x00, 0xFF,            //   USAGE (0xFF00) // vendor defined usage
-    COLLECTION(1), 0x01,             //   COLLECTION (Application)
-    REPORT_ID(30), SECOND_REPORT_ID, //     REPORT_ID (30)
-    USAGE(1), 0x01,                  //     USAGE (0x01)
-    REPORT_SIZE(1), 0x08,            //     REPORT_SIZE (8)
-    REPORT_COUNT(1), 0xFF,           //     REPORT_COUNT (-1)
-    LOGICAL_MINIMUM(2), 0x00, 0x00,  //     //     LOGICAL_MIUM (0)
-    LOGICAL_MAXIMUM(2), 0xFF, 0x00,  //     //     LOGICAL_MAXIMUM (255)
-    USAGE_MINIMUM(1), 0x00,          //     USAGE_MIUM (0x00)
-    USAGE_MAXIMUM(1), 0xFF,          //     USAGE_MAXIMUM (0xFF)
-    HIDINPUT(1), 0x00,               //     INPUT (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position) 255 byye array
-    REPORT_COUNT(1), 0x08,           //     REPORT_COUNT (8)
-    REPORT_SIZE(1), 0x01,            //     REPORT_SIZE (1)
-    USAGE_PAGE(1), 0x08,             //     USAGE_PAGE (LEDs)
-    USAGE_MINIMUM(1), 0x01,          //     USAGE_MIUM (Num Lock)
-    USAGE_MAXIMUM(1), 0x08,          //     USAGE_MAXIMUM (Do Not Disturb)
-    HIDOUTPUT(1), 0x02,              //     OUTPUT (Data,Var, Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile) - one byte out
-    END_COLLECTION(0),               //   END_COLLECTION
+    USAGE_PAGE(2), 0x00, 0xFF,      //   USAGE_PAGE (Vendor Defined 0xFF00)
+    USAGE(2), 0x00, 0xFF,           //   USAGE (0xFF00) // vendor defined usage
+    COLLECTION(1), 0x01,            //   COLLECTION (Application)
+    REPORT_ID(1), SECOND_REPORT_ID, //     REPORT_ID (30)
+    USAGE(1), 0x01,                 //     USAGE (0x01)
+    REPORT_SIZE(1), 0x08,           //     REPORT_SIZE (8)
+    REPORT_COUNT(1), 0xFF,          //     REPORT_COUNT (-1)
+    LOGICAL_MINIMUM(2), 0x00, 0x00, //     //     LOGICAL_MIUM (0)
+    LOGICAL_MAXIMUM(2), 0xFF, 0x00, //     //     LOGICAL_MAXIMUM (255)
+    USAGE_MINIMUM(1), 0x00,         //     USAGE_MIUM (0x00)
+    USAGE_MAXIMUM(1), 0xFF,         //     USAGE_MAXIMUM (0xFF)
+    HIDINPUT(1), 0x00,              //     INPUT (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position) 255 byye array
+    REPORT_COUNT(1), 0x08,          //     REPORT_COUNT (8)
+    REPORT_SIZE(1), 0x01,           //     REPORT_SIZE (1)
+    USAGE_PAGE(1), 0x08,            //     USAGE_PAGE (LEDs)
+    USAGE_MINIMUM(1), 0x01,         //     USAGE_MIUM (Num Lock)
+    USAGE_MAXIMUM(1), 0x08,         //     USAGE_MAXIMUM (Do Not Disturb)
+    HIDOUTPUT(1), 0x02,             //     OUTPUT (Data,Var, Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile) - one byte out
+    END_COLLECTION(0),              //   END_COLLECTION
 
     USAGE_PAGE(1), 0x0C,            //   USAGE_PAGE (Consumer)
     USAGE(1), 0x01,                 //   USAGE (Consumer Control)
@@ -306,14 +307,22 @@ public:
     void startServices();
     virtual ~BlueXGIMI_RC();
 
+    friend class Callback_handler_Rep_Inp_01;
+    friend class Callback_handler_Rep_Out_01;
+    friend class Callback_handler_Rep_Inp_30;
+    friend class Callback_handler_Rep_Out_30;
+    friend class Callback_handler_Rep_Inp_03;
+
 protected:
     bool connected = false;
 
-    BLECharacteristic *keyboardInput;      // one byte input, one byte const; 48 bits for keys input for num pad
-    BLECharacteristic *keyboardOutput;     // onbyte output, 5 bits for LEDs, 3 bits for padding
-    BLECharacteristic *secondDeviceInput;  // 255 byye array
-    BLECharacteristic *secondDeviceOutput; // one byte out
-    BLECharacteristic *thirdDeviceInput;   // 32 bits for input
+    NimBLEAdvertisementData advertisingOnButtonData;
+
+    BLECharacteristic *keyboardInput_01;      // one byte input, one byte const; 48 bits for keys input for num pad
+    BLECharacteristic *keyboardOutput_01;     // onbyte output, 5 bits for LEDs, 3 bits for padding
+    BLECharacteristic *secondDeviceInput_30;  // 255 byye array
+    BLECharacteristic *secondDeviceOutput_30; // one byte out
+    BLECharacteristic *thirdDeviceInput_03;   // 32 bits for input
 
     /*
     B) Device information  service UUID 0x180A - Primary has
@@ -375,14 +384,329 @@ protected:
     BLECharacteristic *m_0x6287Characteristic; // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
     BLECharacteristic *m_0x6387Characteristic; // uuid 00006487-3C17-D293-8E48-14FE2E4DA212
 
-
     // BLEServerCallbacks
-    virtual void onConnect(BLEServer *pServer, BLEConnInfo &connInfo) override;
-    virtual void onDisconnect(BLEServer *pServer, BLEConnInfo &connInfo, int reason) override;
+    virtual void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) override;
+    virtual void onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason) override;
     // BLECharacteristicCallbacks
     virtual void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;
     virtual void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) override;
     virtual void onStatus(NimBLECharacteristic *pCharacteristic, int code) override;
     virtual void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) override;
 
+    // report id call backs for Report#01 Input i.e bytes sent from esp32 to the projector/computer
+    //  BLECharacteristicCallbacks
+    virtual void ReportInput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code);
+    virtual void ReportInput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
+
+    // report id call backs for Report#01 Output i.e bytes sent from projector/computer to theesp32
+    //  BLECharacteristicCallbacks
+    virtual void ReportOutput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportOutput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportOutput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code);
+    virtual void ReportOutput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
+
+    // report id call backs for Report#30 Input i.e bytes sent from esp32 to the projector/computer
+    // BLECharacteristicCallbacks
+    virtual void ReportInput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code);
+    virtual void ReportInput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
+
+    // report id call backs for Report#30 Output i.e bytes sent from projector/computer to theesp32
+    //  BLECharacteristicCallbacks
+    virtual void ReportOutput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportOutput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportOutput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code);
+    virtual void ReportOutput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
+
+    // report id call backs for Report#03 Input i.e bytes sent from esp32 to the projector/computer
+    // BLECharacteristicCallbacks
+    virtual void ReportInput_03_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_03_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+    virtual void ReportInput_03_onStatus(NimBLECharacteristic *pCharacteristic, int code);
+    virtual void ReportInput_03_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
+};
+
+class Callback_handler_Rep_Inp_01 : public BLECharacteristicCallbacks
+{
+
+private:
+    BlueXGIMI_RC *parent;
+
+public:
+    Callback_handler_Rep_Inp_01(BlueXGIMI_RC *p) { parent = p; }
+
+    // BLECharacteristicCallbacks
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_01_onRead(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 01 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_01_onWrite(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 01 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_01_onStatus(pCharacteristic, code);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 01 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
+        }
+    }
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_01_onSubscribe(pCharacteristic, connInfo, subValue);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 01 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
+        }
+    }
+};
+
+class Callback_handler_Rep_Inp_30 : public BLECharacteristicCallbacks
+{
+
+private:
+    BlueXGIMI_RC *parent;
+
+public:
+    Callback_handler_Rep_Inp_30(BlueXGIMI_RC *p) { parent = p; }
+
+    // BLECharacteristicCallbacks
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_30_onRead(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 30 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_30_onWrite(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 30 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_30_onStatus(pCharacteristic, code);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 30 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
+        }
+    }
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_30_onSubscribe(pCharacteristic, connInfo, subValue);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 30 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
+        }
+    }
+};
+
+class Callback_handler_Rep_Inp_03 : public BLECharacteristicCallbacks
+{
+
+private:
+    BlueXGIMI_RC *parent;
+
+public:
+    Callback_handler_Rep_Inp_03(BlueXGIMI_RC *p) { parent = p; }
+
+    // BLECharacteristicCallbacks
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_03_onRead(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 03 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_03_onWrite(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 03 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_03_onStatus(pCharacteristic, code);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 03 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
+        }
+    }
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportInput_03_onSubscribe(pCharacteristic, connInfo, subValue);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Input report 03 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
+        }
+    }
+};
+
+class Callback_handler_Rep_Out_01 : public BLECharacteristicCallbacks
+{
+
+private:
+    BlueXGIMI_RC *parent;
+
+
+public:
+    Callback_handler_Rep_Out_01(BlueXGIMI_RC *p) { parent = p; }
+
+    // BLECharacteristicCallbacks
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_01_onRead(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 01 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_01_onWrite(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 01 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_01_onStatus(pCharacteristic, code);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("output report 01 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
+        }
+    }
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_01_onSubscribe(pCharacteristic, connInfo, subValue);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 01 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
+        }
+    }
+};
+
+class Callback_handler_Rep_Out_30 : public BLECharacteristicCallbacks
+{
+
+private:
+    BlueXGIMI_RC *parent;
+
+
+public:
+    Callback_handler_Rep_Out_30(BlueXGIMI_RC *p) { parent = p; }
+
+    // BLECharacteristicCallbacks
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_30_onRead(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 30 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_30_onWrite(pCharacteristic, connInfo);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 30 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
+        }
+    }
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_30_onStatus(pCharacteristic, code);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("output report 30 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
+        }
+    }
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
+    {
+        if (parent != NULL)
+        {
+            parent->ReportOutput_30_onSubscribe(pCharacteristic, connInfo, subValue);
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Output report 30 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
+        }
+    }
 };

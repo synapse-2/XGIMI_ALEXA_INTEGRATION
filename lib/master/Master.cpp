@@ -106,3 +106,15 @@ void Master::start()
         }
     }
 }
+
+void Master::onNetworkConnect() {
+  Serial.println(">>>> CONNECTED to network");
+}
+
+void Master::onNetworkDisconnect() {
+  Serial.println(">>>> DISCONNECTED from network");
+}
+
+void Master::onNetworkError() {
+  Serial.println(">>>> ERROR");
+}

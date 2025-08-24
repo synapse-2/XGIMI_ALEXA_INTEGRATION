@@ -18,17 +18,6 @@
 #define ARDUINO_EVENT_RUNNING_CORE 1
 #endif
 
-
- * @brief Log level
-    ESP_LOG_NONE    = 0,    //!< No log output 
-    ESP_LOG_ERROR   = 1,    //!< Critical errors, software module can not recover on its own 
-    ESP_LOG_WARN    = 2,    //!< Error conditions from which recovery measures have been taken 
-    ESP_LOG_INFO    = 3,    //!< Information messages which describe normal flow of events 
-    ESP_LOG_DEBUG   = 4,    //!< Extra information which is not necessary for normal use (values, pointers, sizes, etc). 
-    ESP_LOG_VERBOSE = 5,    //!< Bigger chunks of debugging information, or frequent messages which can potentially flood the output. 
-    ESP_LOG_MAX     = 6,    //!< Number of levels supported 
-*/
-
 /* debugging
     typedef enum {
         WM_DEBUG_SILENT    = 0, // debug OFF but still compiled for runtime
@@ -42,6 +31,8 @@
 
 #define WIFIDEBUG WM_DEBUG_VERBOSE
 
+#define WM_MDNS //enable mdns for the name resolution
+
 /*
      The following function allows you to obtain more information
      related to the state of network and IoT Cloud connection and errors
@@ -52,7 +43,8 @@
 #define ArduinoCloudDebugLevel 5
 
 
-// esp32 Ble does not support having null cars in mauf data so we created our own NewBLE stack
+// esp32 Ble does not support having null cars in mauf data and we have issue with the NimbleBle stack due to 
+//incompatability with ArduinoIoT so we created our own NewNimBle-esp32 stack
 
 
 
@@ -69,9 +61,14 @@
 #define I2C_SLAVE_ADDR 0x3f // Slave address for I2C
 
 
-//set to not start the wifi and aIoT connection
+//set to not start the wifi and aIoT connection, only blutooth wwill be turned on for debugging
 // #define XIGIMI_DEBUG_WIFI_OFF
 #undef XIGIMI_DEBUG_WIFI_OFF
+
+//set to log debug messgaes for led state change
+// #define UTILFUNC_DEBUG_LED_ON
+#undef UTILFUNC_DEBUG_LED_ON
+
 #define AIOT_POLL_TIME 3000 //milis for arduino poll any less(faster) and blutooth is not able to connecet
 
 

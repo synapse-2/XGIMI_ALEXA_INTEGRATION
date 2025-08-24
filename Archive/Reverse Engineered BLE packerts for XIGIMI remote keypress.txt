@@ -1,0 +1,372 @@
+
+//settings button pressed
+
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+    Value: 0000410000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+//settings button relesed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000000000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// right button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 4500
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// right button released 
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// left button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 4400
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// left button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// top button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 4200
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//top boton released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+// bottom button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 4300
+        [Expert Info (Note/Undecoded): Undecoded]
+
+///bottom button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//ok button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 4100
+        [Expert Info (Note/Undecoded): Undecoded]
+ 
+
+//ok button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+
+//Back button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 2402
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//back button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+//home button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 2302
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//home button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//options button pressed one wwith three horizatal lines or stack
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 5000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+/options button  one wwith three horizatal lines or stack released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+
+// minus button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: ea00
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+//minus button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+//plus button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: e900
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+// plus button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//projector settings button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000440000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//projector setting button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000000000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+//off button pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000660000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+//off button released
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x002f (Human Interface Device: Report)
+        [Service UUID: Human Interface Device (0x1812)]
+        [UUID: Report (0x2a4d)]
+    Value: 0000000000000000
+        [Expert Info (Note/Undecoded): Undecoded]
+
+
+// On button pressed
+
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 42
+    Sub Event: LE Advertising Report (0x02)
+    Num Reports: 1
+    Event Type: Connectable Undirected Advertising (0x00)
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Data Length: 30
+    Advertising Data
+        Flags
+            Length: 2
+            Type: Flags (0x01)
+            000. .... = Reserved: 0x0
+            ...0 .... = Simultaneous LE and BR/EDR to Same Device Capable (Host): false (0x0)
+            .... 0... = Simultaneous LE and BR/EDR to Same Device Capable (Controller): false (0x0)
+            .... .1.. = BR/EDR Not Supported: true (0x1)
+            .... ..0. = LE General Discoverable Mode: false (0x0)
+            .... ...1 = LE Limited Discoverable Mode: true (0x1)
+        Device Name (shortened): BLuetooth 4.0 RC
+            Length: 17
+            Type: Device Name (shortened) (0x08)
+            Device Name: BLuetooth 4.0 RC
+        16-bit Service Class UUIDs
+            Length: 3
+            Type: 16-bit Service Class UUIDs (0x03)
+            UUID 16: Human Interface Device (0x1812)
+        Class Of Device
+            Length: 4
+            Type: Class Of Device (0x0d)
+            Class of Device: 0x000540 (Peripheral (HID):Unknown - services:)
+                01.. .... = Minor Device Class: Keyboard (0x1)
+                ..00 00.. = Minor Device Class: Uncategorized device (0x0)
+                .... ..00 = Format Type: 0x0
+                0... .... .... .... = Major Service Classes: Information: False
+                .0.. .... .... .... = Major Service Classes: Telephony: False
+                ..0. .... .... .... = Major Service Classes: Audio: False
+                ...0 .... .... .... = Major Service Classes: Object Transfer: False
+                .... 0... .... .... = Major Service Classes: Capturing: False
+                .... .0.. .... .... = Major Service Classes: Rendering: False
+                .... ..0. .... .... = Major Service Classes: Networking: False
+                .... ...0 .... .... = Major Service Classes: Positioning: False
+                .... .... 0... .... = Major Service Classes: Reserved: 0x0
+                .... .... .0.. .... = Major Service Classes: LE Audio: 0x0
+                .... .... ..0. .... = Major Service Classes: Limited Discoverable Mode: False
+                .... .... ...0 0101 = Major Device Class: Peripheral (HID) (0x05)
+    RSSI: -49 dBm
+
+
