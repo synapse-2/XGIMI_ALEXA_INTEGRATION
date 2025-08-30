@@ -114,6 +114,45 @@ namespace UtilityFunctions
         FastLED.show();
     }
 
+    void ledBlinkGreen()
+    {
+        UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
+        UtilityFunctions::delay(30);
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+    }
+
+    void ledBlinkBlue()
+    {
+        UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
+        UtilityFunctions::delay(30);
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+    }
+
+    
+    void ledBlinkGreenLong()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            UtilityFunctions::ledGreen();
+            UtilityFunctions::delay(30);
+            UtilityFunctions::ledStop();
+            UtilityFunctions::delay(30);
+        }
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+    }
+
+     void ledBlinkRedLong()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            UtilityFunctions::ledRed();
+            UtilityFunctions::delay(30);
+            UtilityFunctions::ledStop();
+            UtilityFunctions::delay(30);
+        }
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+    }
+
     void IRAM_ATTR isr()
     {
         // only work for master

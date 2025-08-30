@@ -318,8 +318,89 @@ Bluetooth Attribute Protocol
     Value: 0000000000000000
         [Expert Info (Note/Undecoded): Undecoded]
 
+// google butotn pressed
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Unknown)
+    Value: 2102
+
+//google button released 
+
+Bluetooth Attribute Protocol
+    Opcode: Handle Value Notification (0x1b)
+        0... .... = Authentication Signature: False
+        .0.. .... = Command: False
+        ..01 1011 = Method: Handle Value Notification (0x1b)
+    Handle: 0x003d (Unknown)
+    Value: 0000
+
+// paring request advertisement packet
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 33
+    Sub Event: LE Advertising Report (0x02)
+    Num Reports: 1
+    Event Type: Connectable Undirected Advertising (0x00)
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Data Length: 21
+    Advertising Data
+        Flags
+            Length: 2
+            Type: Flags (0x01)
+            000. .... = Reserved: 0x0
+            ...0 .... = Simultaneous LE and BR/EDR to Same Device Capable (Host): false (0x0)
+            .... 0... = Simultaneous LE and BR/EDR to Same Device Capable (Controller): false (0x0)
+            .... .1.. = BR/EDR Not Supported: true (0x1)
+            .... ..0. = LE General Discoverable Mode: false (0x0)
+            .... ...1 = LE Limited Discoverable Mode: true (0x1)
+        16-bit Service Class UUIDs
+            Length: 3
+            Type: 16-bit Service Class UUIDs (0x03)
+            UUID 16: Human Interface Device (0x1812)
+        Appearance: Generic Remote Control
+            Length: 3
+            Type: Appearance (0x19)
+            Appearance: Generic Remote Control (0x0180)
+        Manufacturer Specific
+            Length: 9
+            Type: Manufacturer Specific (0xff)
+            Company ID: Texas Instruments Inc. (0x000d)
+            Data: 383802000001
+                [Expert Info (Note/Undecoded): Undecoded]
+    RSSI: -52 dBm
+
+
+//pairing request adv scan response
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 35
+    Sub Event: LE Advertising Report (0x02)
+    Num Reports: 1
+    Event Type: Scan Response (0x04)
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Data Length: 23
+    Advertising Data
+        Device Name: XGIMI RC
+            Length: 9
+            Type: Device Name (0x09)
+            Device Name: XGIMI RC
+        Manufacturer Specific
+            Length: 12
+            Type: Manufacturer Specific (0xff)
+            Company ID: Texas Instruments Inc. (0x000d)
+            Data: ffff425256312e3030
+                [Expert Info (Note/Undecoded): Undecoded]
+    RSSI: -52 dBm
+
 
 // On button pressed
+//seems we have two advertisment packetss when on button is pressed the MediaTek and the devide CoD one. the system alternates betwen the two.
+//For the MediaTek adv packet the system does send a scan response that is the same as when it sends a pariing reuest adv packet
 
 Bluetooth HCI Event - LE Meta
     Event Code: LE Meta (0x3e)
@@ -368,5 +449,65 @@ Bluetooth HCI Event - LE Meta
                 .... .... ..0. .... = Major Service Classes: Limited Discoverable Mode: False
                 .... .... ...0 0101 = Major Device Class: Peripheral (HID) (0x05)
     RSSI: -49 dBm
+
+// Also seen on on button pressec
+
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 43
+    Sub Event: LE Advertising Report (0x02)
+    Num Reports: 1
+    Event Type: Connectable Undirected Advertising (0x00)
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Data Length: 31
+    Advertising Data
+        Flags
+            Length: 2
+            Type: Flags (0x01)
+            000. .... = Reserved: 0x0
+            ...0 .... = Simultaneous LE and BR/EDR to Same Device Capable (Host): false (0x0)
+            .... 0... = Simultaneous LE and BR/EDR to Same Device Capable (Controller): false (0x0)
+            .... .1.. = BR/EDR Not Supported: true (0x1)
+            .... ..0. = LE General Discoverable Mode: false (0x0)
+            .... ...1 = LE Limited Discoverable Mode: true (0x1)
+        16-bit Service Class UUIDs
+            Length: 3
+            Type: 16-bit Service Class UUIDs (0x03)
+            UUID 16: Human Interface Device (0x1812)
+        Appearance: Keyboard
+            Length: 3
+            Type: Appearance (0x19)
+            Appearance: Keyboard (0x03c1)
+        Manufacturer Specific
+            Length: 19
+            Type: Manufacturer Specific (0xff)
+            Company ID: MediaTek, Inc. (0x0046)
+            Data: 15fb455ef28680ffffff3043524b544d
+                [Expert Info (Note/Undecoded): Undecoded]
+    RSSI: -51 dBm
+
+// with the scan response to the MediaTek Advertising packet
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 35
+    Sub Event: LE Advertising Report (0x02)
+    Num Reports: 1
+    Event Type: Scan Response (0x04)
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Data Length: 23
+    Advertising Data
+        Device Name: XGIMI RC
+            Length: 9
+            Type: Device Name (0x09)
+            Device Name: XGIMI RC
+        Manufacturer Specific
+            Length: 12
+            Type: Manufacturer Specific (0xff)
+            Company ID: Texas Instruments Inc. (0x000d)
+            Data: ffff425256312e3030
+                [Expert Info (Note/Undecoded): Undecoded]
+    RSSI: -51 dBm
 
 

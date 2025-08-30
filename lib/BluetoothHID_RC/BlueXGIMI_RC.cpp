@@ -1,7 +1,47 @@
-#include <BluetoothHID_RC.h>
+
 #include <Arduino.h>
 #include "UtilityFunctions.h"
 #include "BlueXGIMI_RC.h"
+
+void BlueXGIMI_RC::initOnButtonAdvData()
+{
+
+  // we are doing BLE  non extended 31 byte restricted advertisment
+
+  // set up  the advertisment packet for on button
+  advertisingOnButtonDataType1.setName(ONBTN_HID_DEVICE_SHORT_NAME);
+  advertisingOnButtonDataType1.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
+
+  NimClassOfDeviceType::bluetooth_cod_t cod = NimClassOfDeviceType::encodeClassOfDevice(
+      NimClassOfDeviceType::service_class_t::COD_SERVICE_NA,
+      NimClassOfDeviceType::major_device_class_t::COD_MAJOR_PERIPHERAL,
+      NimClassOfDeviceType::peripheral_pointing_device_t::COD_MINOR_PERIPHERAL_KBD_UNCATEGORIZED);
+
+  advertisingOnButtonDataType1.setCODData(cod);
+  advertisingOnButtonDataType1.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
+}
+
+void BlueXGIMI_RC::initStandardAdvData()
+{
+
+  // we are doing BLE  non extended 31 byte restricted advertisment
+  // advertisingData.setName("");
+  // BLE_HS_ADV_F_DISC_LTD (0x01) - limited discoverability
+  //  BLE_HS_ADV_F_DISC_GEN (0x02) - general discoverability
+  // BLE_HS_ADV_F_BREDR_UNSUP (0x4)- BR/EDR not supported
+
+  advertisingData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
+  advertisingData.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
+  advertisingData.setAppearance(HID_REMOTE);
+  advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
+  // advertisingData.addTxPower(); // this is automatically added as the last byte
+
+  // we create the sacan data that has name etc in there wth extnded manuf data
+  advertisingScanData = NimBLEAdvertisementData();
+  advertisingScanData.setName(HID_DEVICE_NAME);
+  advertisingScanData.setManufacturerData(HID_AD_SACAN_MANUF_DATA);
+  // scanAdvData.addTxPower(); // this is automatically added as the last byte
+}
 
 BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 {
@@ -165,45 +205,11 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
 #ifndef CONFIG_BT_NIMBLE_EXT_ADV
 
-  // we are doing BLE  non extended 31 byte restructed advertisment
-  // order is importamt as that is the same order teh remote sends, and without this order the windows will not see it
+  initStandardAdvData();
+  initOnButtonAdvData();
 
-  // advertisingData.setName("");
-  // BLE_HS_ADV_F_DISC_LTD (0x01) - limited discoverability
-  //  BLE_HS_ADV_F_DISC_GEN (0x02) - general discoverability
-  // BLE_HS_ADV_F_BREDR_UNSUP (0x4)- BR/EDR not supported
-
-  advertisingData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
-  advertisingData.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
-  advertisingData.setAppearance(HID_REMOTE);
-  advertisingData.setManufacturerData(HID_AD_MANUF_DATA);
-  // advertisingData.addTxPower(); // this is automatically added as the last byte
-
-  // we create the sacan data that has name etc in there wth extnded manuf data
-  advertisingScanData = NimBLEAdvertisementData();
-  advertisingScanData.setName(HID_DEVICE_NAME);
-  advertisingScanData.setManufacturerData(HID_AD_SACAN_MANUF_DATA);
-  // scanAdvData.addTxPower(); // this is automatically added as the last byte
-
-  // set up  the advertisment packet for on button
-  advertisingOnButtonData.setName(ONBTN_HID_DEVICE_SHORT_NAME);
-  advertisingOnButtonData.addServiceUUID(NimBLEUUID((uint16_t)0x1812));
-
-  NimClassOfDeviceType::bluetooth_cod_t cod = NimClassOfDeviceType::encodeClassOfDevice(
-      // NimClassOfDeviceType::service_class_t::COD_SERVICE_NA,
-       //NimClassOfDeviceType::service_class_t::COD_SERVICE_RESERVED,
-      NimClassOfDeviceType::service_class_t::COD_SERVICE_TELEPHONY,
-      NimClassOfDeviceType::major_device_class_t::COD_MAJOR_MISCELLANEOUS,
-      0);
-  //    NimClassOfDeviceType::major_device_class_t::COD_MAJOR_PERIPHERAL,
-  //    NimClassOfDeviceType::peripheral_pointing_device_t::COD_MINOR_PERIPHERAL_KBD_UNCATEGORIZED);
-
-  advertisingOnButtonData.setCODData(cod);
-  advertisingOnButtonData.setFlags(BLE_HS_ADV_F_BREDR_UNSUP | BLE_HS_ADV_F_DISC_LTD);
-
-  advertising->setAdvertisementData(advertisingOnButtonData);
-  // advertising->setAdvertisementData(advertisingData);
-  // advertising->setScanResponseData(advertisingScanData);
+  advertising->setAdvertisementData(advertisingData);
+  advertising->setScanResponseData(advertisingScanData);
 
   /**
    * * BLE_GAP_CONN_MODE_NON    (0) - not connectable advertising
@@ -211,16 +217,8 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
    * * BLE_GAP_CONN_MODE_UND    (2) - undirected connectable advertising
    */
   advertising->setConnectableMode(BLE_GAP_CONN_MODE_UND);
-
-  /**
-   * * BLE_GAP_DISC_MODE_NON    (0) - non-discoverable
-   * * BLE_GAP_DISC_MODE_LTD    (1) - limited discoverable
-   * * BLE_GAP_DISC_MODE_GEN    (2) - general discoverable
-   */
-  advertising->setDiscoverableMode(BLE_GAP_DISC_MODE_LTD);
-  
-  //advertising->enableScanResponse(true);
-  //advertising->start();
+  advertising->enableScanResponse(true);
+  advertising->start();
 #else
   // we are doing BLE 5.0 non extended  byte  advertisment
   NimBLEExtAdvertising *advertising = server->getAdvertising();
@@ -247,7 +245,7 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   uint8_t batteryLevel = 100;    // battery lvel can only be set AFTER advitsment and server start
   setBatteryLevel(batteryLevel); // set initial battery level to 100%
 
-  UtilityFunctions::debugLog("Advertising started!");
+  UtilityFunctions::debugLog("Standard Advertising started!");
 }
 
 void BlueXGIMI_RC::startServices()

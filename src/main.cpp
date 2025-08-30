@@ -4,8 +4,10 @@
 #include <WiFiManager.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <freertos/ringbuf.h>
 #include "Master.h"
 #include "Slave.h"
+#include "BlueRC.h"
 #include "UtilityFunctions.h"
 #include "thingProperties.h"
 #include "magicEnum/magic_enum.hpp"
@@ -25,22 +27,8 @@ Master m;
 Slave s;
 TaskHandle_t Task0;
 TaskHandle_t Task1;
+RingbufHandle_t buf_handle;
 
-void onNetworkConnect()
-{
-  m.onNetworkConnect();
-}
-
-void onNetworkDisconnect()
-{
-
-  m.onNetworkDisconnect();
-}
-
-void onNetworkError()
-{
-  m.onNetworkError();
-}
 
 void Task1code(void *pvParameters)
 {
@@ -62,27 +50,27 @@ void Task1code(void *pvParameters)
     // Defined in thingProperties.h for AIot cloud
 
     initProperties();
-    //when we get here we should have wi fi connected to the internet
+    ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
+    // when we get here we should have wi fi connected to the internet
 
-     /*
-       The following function allows you to obtain more information
-       related to the state of network and IoT Cloud connection and errors
-       the higher number the more granular information you’ll get.
-       The default is 0 (only errors).
-       Maximum is 4
-   */
+    /*
+      The following function allows you to obtain more information
+      related to the state of network and IoT Cloud connection and errors
+      the higher number the more granular information you’ll get.
+      The default is 0 (only errors).
+      Maximum is 4
+  */
     setDebugMessageLevel(ArduinoCloudDebugLevel);
     ArduinoCloud.printDebugInfo();
     // Connect to Arduino IoT Cloud
     // initialize the WiFiConnectionHandler pointer
     iot_connector = new WiFiConnectionHandler(m.getSSID().c_str(), m.getPSK().c_str());
-    //iot_connector->addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
-    //iot_connector->addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
-    //iot_connector->addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
+    // iot_connector->addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
+    // iot_connector->addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
+    // iot_connector->addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
 
     ArduinoCloud.begin(*iot_connector);
 
-   
 #endif
   }
   else
@@ -118,9 +106,7 @@ void Task0code(void *pvParameters)
   UtilityFunctions::debugLog("Task0 BLE SERVER started ... ");
   for (;;) // infinite loop
   {
-    UtilityFunctions::ledStop();
-    UtilityFunctions::delay(1000);
-    UtilityFunctions::ledBlue();
+    UtilityFunctions::ledBlinkBlue();
   }
 }
 
@@ -130,23 +116,37 @@ void Task0code(void *pvParameters)
 */
 void onProjectorChange()
 {
-  // Add your code here to act upon Projector change
-  UtilityFunctions::debugLog("update received from cloud");
-  UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
-  UtilityFunctions::debugLog("Projector switch changed to: " + String(projector.getSwitch()));
-  UtilityFunctions::debugLogf("Projector volume changed to: %i\n", projector.getVolume());
-  UtilityFunctions::debugLogf("Projector channel changed to: %i\n", projector.getChannel());
-  UtilityFunctions::debugLog("Projector Mute changed to: " + String(projector.getMute()));
-  String cmd = String((magic_enum::enum_name(projector.getPlaybackCommand())).data());
-  UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd);
-  UtilityFunctions::delay(30);
-  UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+  m.onProjectorChange(projector);
+}
+void onNetworkConnect()
+{
+  m.onNetworkConnect();
+}
+
+void onNetworkDisconnect()
+{
+
+  m.onNetworkDisconnect();
+}
+
+void onNetworkError()
+{
+  m.onNetworkError();
 }
 
 void setup()
 {
 
-  // btStart(); // need to init BT stack before anything else on core 0
+  // Create a ring buffer of 16 bytes with no-split type
+  buf_handle = xRingbufferCreate(16, RINGBUF_TYPE_NOSPLIT);
+  m = Master(buf_handle);
+  s = Slave(buf_handle);
+
+  if (buf_handle == NULL)
+  {
+    UtilityFunctions::debugLog("Failed to create ring buffer\n");
+  }
   xTaskCreatePinnedToCore(
       Task0code,    /* Task function. */
       "BLE Core 0", /* name of task. */

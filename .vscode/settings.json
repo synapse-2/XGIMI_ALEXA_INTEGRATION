@@ -72,5 +72,8 @@
         "stop_token": "cpp",
         "text_encoding": "cpp",
         "variant": "cpp"
-    }
+    },
+    "platformio-ide.autoPreloadEnvTasks": true,
+    "platformio-ide.customPATH": "",
+    "extensions.experimental.deferredStartupFinishedActivation": false
 }

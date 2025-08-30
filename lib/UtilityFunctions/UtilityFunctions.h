@@ -24,6 +24,11 @@ namespace UtilityFunctions {
     void delay(long waitMills);
     void waitTillInitComplete();
 
+    void ledBlinkGreen();
+    void ledBlinkBlue();
+    void ledBlinkGreenLong();
+    void ledBlinkRedLong();
+
     void debugLog(String message);
     void debugLog();
     void debugLogf(const char *format, ...);

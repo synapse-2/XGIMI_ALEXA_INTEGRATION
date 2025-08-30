@@ -1,7 +1,7 @@
 #pragma once
 #include "defaults.h"
 #include "UtilityFunctions.h"
-#include "BluetoothHID_RC.h"
+#include "BlueRC.h"
 
 #define HID_DEVICE_NAME "XGIMI BH"
 #define HID_MANUFACTURER_NAME "Realtek BT"
@@ -299,7 +299,7 @@ descriptor (typ) for above, uuid 0x2902 - client characteristics config, readonl
 
 */
 
-class BlueXGIMI_RC : public BluetoothHID_RC
+class BlueXGIMI_RC : public BlueRC::BluetoothHID_RC
 {
 public:
     BlueXGIMI_RC(BLEServer *server);
@@ -316,7 +316,9 @@ public:
 protected:
     bool connected = false;
 
-    NimBLEAdvertisementData advertisingOnButtonData;
+    NimBLEAdvertisementData advertisingOnButtonDataType1;
+    NimBLEAdvertisementData advertisingOnButtonDataType2;
+    NimBLEAdvertisementData advertisingOnButtonDataScanDataType1;
 
     BLECharacteristic *keyboardInput_01;      // one byte input, one byte const; 48 bits for keys input for num pad
     BLECharacteristic *keyboardOutput_01;     // onbyte output, 5 bits for LEDs, 3 bits for padding
@@ -383,6 +385,10 @@ protected:
     BLEService *m_CustomService3;              // uuid 00006287-3C17-D293-8E48-14FE2E4DA212
     BLECharacteristic *m_0x6287Characteristic; // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
     BLECharacteristic *m_0x6387Characteristic; // uuid 00006487-3C17-D293-8E48-14FE2E4DA212
+
+    void initOnButtonAdvData();
+    void initStandardAdvData();
+
 
     // BLEServerCallbacks
     virtual void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) override;

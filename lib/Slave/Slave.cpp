@@ -2,10 +2,18 @@
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 #include <UtilityFunctions.h> // Custom utility functions
 #include "Slave.h"
-#include "BluetoothHID_RC.h" // Slave class for I2C Slave functionality
+#include "BlueXGIMI_RC.h" // Slave class for I2C Slave functionality
 #include "UtilityFunctions.h" // Utility functions for LED control and other utilities
 
-Slave::Slave() {}
+RingbufHandle_t Slave::ringBufHandle;
+
+Slave::Slave(RingbufHandle_t buf) {
+
+    ringBufHandle = buf;
+}
+
+Slave::Slave() : Slave(NULL){
+}
 
 void Slave::start()
 {

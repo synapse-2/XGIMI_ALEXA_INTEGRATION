@@ -1,16 +1,18 @@
 #pragma once
 
 #include "defaults.h"
-#include <WiFiManager.h>
+#include <freertos/ringbuf.h>
 #include "BlueXGIMI_RC.h"
 
 
 class Slave {
 public:
-    Slave();
+    Slave(); 
+    Slave(RingbufHandle_t buf);
     void start();
 
 
-private:
+protected:
      BlueXGIMI_RC* rcHID;
+     static RingbufHandle_t ringBufHandle;
 };

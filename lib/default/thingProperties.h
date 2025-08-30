@@ -23,7 +23,7 @@ void initProperties()
 
     ArduinoCloud.setBoardId(DEVICE_LOGIN_NAME);
     ArduinoCloud.setSecretDeviceKey(DEVICE_KEY);
-    ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
+    
 }
 
 

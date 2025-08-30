@@ -1,9 +1,8 @@
 #include "UtilityFunctions.h"
-#include "BlueXGIMI_RC.h"
-// #include "ble_svc_gap.h"
+#include "BlueRC.h"
 #include "services/gap/ble_svc_gap.h"
 
-BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server) : NimBLEHIDDevice(server)
+BlueRC::BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server) : NimBLEHIDDevice(server)
 {
 
   UtilityFunctions::debugLog("In Virtual HID startup!");
@@ -15,13 +14,13 @@ BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server) : NimBLEHIDDevice(server)
   advertising->stop();
 }
 
-void BluetoothHID_RC::setDeviceAppreance(uint16_t appearance)
+void BlueRC::BluetoothHID_RC::setDeviceAppreance(uint16_t appearance)
 {
 
   ble_svc_gap_device_appearance_set(appearance);
 }
 
-BluetoothHID_RC::~BluetoothHID_RC()
+BlueRC::BluetoothHID_RC::~BluetoothHID_RC()
 {
 
   // Cleanup resources if needed
@@ -34,7 +33,7 @@ BluetoothHID_RC::~BluetoothHID_RC()
   UtilityFunctions::debugLog("BluetoothHID_RC destroyed");
 }
 
-void BluetoothHID_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
+void BlueRC::BluetoothHID_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
 {
   connected = true;
   UtilityFunctions::debugLog("Bluetooth Client connected");
@@ -47,7 +46,7 @@ void BluetoothHID_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
   }
 }
 
-void BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason)
+void BlueRC::BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason)
 {
   connected = false;
 
@@ -59,7 +58,7 @@ void BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connIn
   }
 }
 
-void BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
-void BluetoothHID_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {};
-void BluetoothHID_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code) {};
-void BluetoothHID_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {};
+void BlueRC::BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
+void BlueRC::BluetoothHID_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {};
+void BlueRC::BluetoothHID_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code) {};
+void BlueRC::BluetoothHID_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {};
