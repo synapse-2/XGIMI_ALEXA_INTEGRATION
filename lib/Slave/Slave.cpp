@@ -42,7 +42,7 @@ void Slave::dequeueCmd()
     cmd = (BlueRC::Remote_Cmd*)xRingbufferReceive(ringBufHandle, &received_len, 50);
     if (cmd != NULL)
     {
-        std::string s_cmd =  std::string((magic_enum::enum_name((BlueRC::RC_Cmd_Action) cmd->cmds.cmd)));
+        std::string s_cmd =  std::string((magic_enum::enum_name((BlueRC::RC_Cmd_Action) cmd->cmds.cmd))); 
         UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
         // free up the buffer

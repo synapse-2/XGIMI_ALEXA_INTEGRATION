@@ -146,7 +146,7 @@ void setup()
   UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
 
   // Create a ring buffer of 16 bytes with no-split type
-  buf_handle = xRingbufferCreate(256, RINGBUF_TYPE_NOSPLIT);
+  buf_handle = xRingbufferCreate(32, RINGBUF_TYPE_NOSPLIT);
   m = Master(buf_handle);
   s = Slave(buf_handle);
 
