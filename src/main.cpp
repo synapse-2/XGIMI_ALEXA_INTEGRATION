@@ -29,12 +29,10 @@ TaskHandle_t Task0;
 TaskHandle_t Task1;
 RingbufHandle_t buf_handle;
 
-
 void Task1code(void *pvParameters)
 {
-  UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
 
-  UtilityFunctions::debugLog("Running...");
+  UtilityFunctions::debugLog("TASK 1 Running...");
 
   UtilityFunctions::ledRed(); // Turn on the LED to indicate setup is complete
 
@@ -107,6 +105,8 @@ void Task0code(void *pvParameters)
   for (;;) // infinite loop
   {
     UtilityFunctions::ledBlinkBlue();
+    s.dequeueCmd(); // see if we have a commmand
+    UtilityFunctions::delay(AIOT_POLL_TIME);
   }
 }
 
@@ -138,14 +138,25 @@ void onNetworkError()
 void setup()
 {
 
+  Serial.begin(115200);
+  while (!Serial)
+    ; // wait for serial attach
+  Serial.setDebugOutput(true);
+  UtilityFunctions::debugLog("Initializing ALEXA XIGIMI...");
+  UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
+
   // Create a ring buffer of 16 bytes with no-split type
-  buf_handle = xRingbufferCreate(16, RINGBUF_TYPE_NOSPLIT);
+  buf_handle = xRingbufferCreate(256, RINGBUF_TYPE_NOSPLIT);
   m = Master(buf_handle);
   s = Slave(buf_handle);
 
   if (buf_handle == NULL)
   {
     UtilityFunctions::debugLog("Failed to create ring buffer\n");
+  }
+  else
+  {
+    UtilityFunctions::debugLog("SUCESScreate ring buffer\n");
   }
   xTaskCreatePinnedToCore(
       Task0code,    /* Task function. */

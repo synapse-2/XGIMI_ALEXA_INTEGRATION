@@ -4,6 +4,8 @@
 #include "Slave.h"
 #include "BlueXGIMI_RC.h" // Slave class for I2C Slave functionality
 #include "UtilityFunctions.h" // Utility functions for LED control and other utilities
+#include <freertos/ringbuf.h>
+
 
 RingbufHandle_t Slave::ringBufHandle;
 
@@ -31,4 +33,19 @@ void Slave::start()
 
      // if you get here you have connected to the WiFi
     UtilityFunctions::debugLog("Bluetooth started...yeey :)");
+}
+
+void Slave::dequeueCmd()
+{
+    BlueRC::Remote_Cmd* cmd;
+    size_t received_len;
+    cmd = (BlueRC::Remote_Cmd*)xRingbufferReceive(ringBufHandle, &received_len, 50);
+    if (cmd != NULL)
+    {
+        std::string s_cmd =  std::string((magic_enum::enum_name((BlueRC::RC_Cmd_Action) cmd->cmds.cmd)));
+        UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
+
+        // free up the buffer
+        vRingbufferReturnItem(ringBufHandle, (void *)cmd);
+    }
 }

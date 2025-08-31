@@ -1,6 +1,8 @@
 #include "UtilityFunctions.h"
 #include "BlueRC.h"
 #include "services/gap/ble_svc_gap.h"
+#include "magicEnum/magic_enum.hpp"
+
 
 BlueRC::BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server) : NimBLEHIDDevice(server)
 {
@@ -37,7 +39,8 @@ void BlueRC::BluetoothHID_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &c
 {
   connected = true;
   UtilityFunctions::debugLog("Bluetooth Client connected");
-  if (advertising !=NULL) { 
+  if (advertising != NULL)
+  {
     UtilityFunctions::debugLogf("State of advertising is %i\n", advertising->isAdvertising());
   }
   if ((advertising != NULL) && (advertising->isAdvertising()))
@@ -58,7 +61,8 @@ void BlueRC::BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo
   }
 }
 
+void BlueRC::BluetoothHID_RC::sendButtonPress(BlueRC::Remote_Cmd command) {}
 void BlueRC::BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
-void BlueRC::BluetoothHID_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {};
-void BlueRC::BluetoothHID_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code) {};
-void BlueRC::BluetoothHID_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {};
+void BlueRC::BluetoothHID_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
+void BlueRC::BluetoothHID_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code) {}
+void BlueRC::BluetoothHID_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {}

@@ -66,7 +66,7 @@
 #undef XIGIMI_DEBUG_WIFI_OFF
 
 //set to log debug messgaes for led state change
-// #define UTILFUNC_DEBUG_LED_ON
+//#define UTILFUNC_DEBUG_LED_ON
 #undef UTILFUNC_DEBUG_LED_ON
 
 #define AIOT_POLL_TIME 3000 //milis for arduino poll any less(faster) and blutooth is not able to connecet

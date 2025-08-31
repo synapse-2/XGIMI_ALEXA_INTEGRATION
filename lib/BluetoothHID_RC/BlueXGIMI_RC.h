@@ -303,7 +303,7 @@ class BlueXGIMI_RC : public BlueRC::BluetoothHID_RC
 {
 public:
     BlueXGIMI_RC(BLEServer *server);
-    void sendButtonPress(uint8_t command);
+    void sendButtonPress(BlueRC::Remote_Cmd command) override;
     void startServices();
     virtual ~BlueXGIMI_RC();
 

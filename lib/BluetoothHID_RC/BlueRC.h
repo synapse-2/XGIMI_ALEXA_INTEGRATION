@@ -1,11 +1,12 @@
 #pragma once
 #include "defaults.h"
 #include <HEXBuilder.h>
-
+#include "magicEnum/magic_enum.hpp"
 #include <nimconfig.h>
 #include <NimBLEDevice.h>
 #include <NimBLEHIDDevice.h>
 #include <HIDTypes.h>
+
 
 // appearance of the device and the advertisment
 #define HID_REMOTE 0x0180
@@ -34,6 +35,7 @@ namespace BlueRC
         None = 255
     } RC_Cmd_Action;
 
+   
     typedef union
     {
         struct
@@ -93,7 +95,7 @@ namespace BlueRC
 
         // we donot have these in NibmeBLE NimBLEDevice so we need to ADD !!!
         void setDeviceAppreance(uint16_t appearance);
-        void sendButtonPress(uint8_t command);
+        virtual void sendButtonPress(BlueRC::Remote_Cmd command);
         void startServices();
         virtual ~BluetoothHID_RC();
 
@@ -118,3 +120,12 @@ namespace BlueRC
     };
 
 }
+
+
+template <>
+struct magic_enum::customize::enum_range<BlueRC::RC_Cmd_Action>
+{
+  static constexpr int min = 0;
+  static constexpr int max = 255;
+  // (max - min) must be less than UINT16_MAX.
+};

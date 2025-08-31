@@ -16,10 +16,11 @@ Master::Master(RingbufHandle_t buf)
 
 void Master::enQueueCmd(BlueRC::Remote_Cmd cmd)
 {
-     UBaseType_t res = xRingbufferSend(ringBufHandle, (void *)&cmd, sizeof(cmd), 0);
+    size_t sizefree = xRingbufferGetCurFreeSize(ringBufHandle);
+     UBaseType_t res = xRingbufferSend(ringBufHandle, (void *)&cmd, sizeof(cmd), 100);
     if (res != pdTRUE)
     {
-        UtilityFunctions::debugLog("Failed to enqueue RC cmd SKIPPING \n");
+        UtilityFunctions::debugLogf("Failed to enqueue RC cmd SKIPPING free size in ring buffer %i \n",sizefree);
     }
 }
 
@@ -136,6 +137,7 @@ void Master::onNetworkError()
 void Master::onProjectorChange(CloudTelevision newPrj)
 {
     BlueRC::Remote_Cmd rcCmd;
+    bool enQueuedCmd = false;
 
     if (!firstCloudSyncHasHappened)
     {
@@ -143,7 +145,6 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         oldProjector_value = newPrj;
         firstCloudSyncHasHappened = true;
         UtilityFunctions::debugLog("update received from cloud but this is the FIRST sync no action taken");
-
         return;
     }
     UtilityFunctions::debugLogf(" firstCloudSyncHasHappened %i \n", firstCloudSyncHasHappened);
@@ -155,6 +156,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         // for the switch change event in ring buffer
         rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::On_OFF;
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLog("Projector switch changed to: " + String(newPrj.getSwitch()));
     }
 
@@ -166,6 +168,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         rcCmd.cmds.fromVal = oldProjector_value.getVolume();
         rcCmd.cmds.toVal = newPrj.getVolume();
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLogf("Projector volume changed to: %i\n", newPrj.getVolume());
     }
 
@@ -177,6 +180,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         rcCmd.cmds.fromVal = oldProjector_value.getChannel();
         rcCmd.cmds.toVal = newPrj.getChannel();
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLogf("Projector channel changed to: %i\n", newPrj.getChannel());
     }
 
@@ -186,6 +190,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         // for the mute change event in ring buffer
         rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Mute;
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLog("Projector Mute changed to: " + String(newPrj.getMute()));
     }
 
@@ -197,6 +202,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::ChangeInput;
         rcCmd.cmds.toVal = (uint8_t)newPrj.getInputValue();
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLogf("Projector Input command changed to: %s\n", cmd);
     }
 
@@ -207,8 +213,13 @@ void Master::onProjectorChange(CloudTelevision newPrj)
         String cmd = String((magic_enum::enum_name(newPrj.getPlaybackCommand())).data());
         rcCmd.cmds.cmd = (BlueRC::RC_Cmd_Action)newPrj.getPlaybackCommand();
         enQueueCmd(rcCmd);
+        enQueuedCmd = true;
         UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd);
     }
 
     oldProjector_value = newPrj; // set the old to current value
+
+    if (!enQueuedCmd) {
+        UtilityFunctions::debugLog("Command received from AIOT but no change in old vs new cloud variable");
+    }
 }

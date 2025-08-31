@@ -123,7 +123,7 @@ namespace UtilityFunctions
 
     void ledBlinkBlue()
     {
-        UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
+        UtilityFunctions::ledBlue(); // Turn on the LED to indicate a change has been received
         UtilityFunctions::delay(30);
         UtilityFunctions::ledStop(); // Turn off the LED after processing the change
     }
@@ -210,11 +210,7 @@ namespace UtilityFunctions
         {
             return;
         }
-        Serial.begin(115200);
-        while (!Serial)
-            ; // wait for serial attach
-        Serial.setDebugOutput(true);
-        debugLog("Initializing...");
+    
 
         FastLED.addLeds<RGBCHIP, LED_BUILTINIO, RGB_DATA_ORDER>(leds, NUMPIXELS);
         // Initialize the LED array to off (black)

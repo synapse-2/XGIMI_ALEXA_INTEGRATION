@@ -9,6 +9,7 @@ class Slave {
 public:
     Slave(); 
     Slave(RingbufHandle_t buf);
+    void dequeueCmd();
     void start();
 
 

@@ -1,7 +1,9 @@
 
 #include <Arduino.h>
 #include "UtilityFunctions.h"
+#include "BlueRC.h"
 #include "BlueXGIMI_RC.h"
+#include "magicEnum/magic_enum.hpp"
 
 void BlueXGIMI_RC::initOnButtonAdvData()
 {
@@ -256,8 +258,9 @@ void BlueXGIMI_RC::startServices()
   m_CustomService3->start();
 }
 
-void BlueXGIMI_RC::sendButtonPress(uint8_t command)
+void BlueXGIMI_RC::sendButtonPress(BlueRC::Remote_Cmd command) 
 {
+    UtilityFunctions::debugLogf("XIGIMI Remote receied command %s\n",(magic_enum::enum_name((BlueRC::RC_Cmd_Action)command.cmds.cmd).data()));
 }
 
 // generic handlers
