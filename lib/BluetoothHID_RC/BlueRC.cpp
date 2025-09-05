@@ -3,7 +3,6 @@
 #include "services/gap/ble_svc_gap.h"
 #include "magicEnum/magic_enum.hpp"
 
-
 BlueRC::BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server) : NimBLEHIDDevice(server)
 {
 
@@ -61,7 +60,9 @@ void BlueRC::BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo
   }
 }
 
+// the infamous entry in vtables :)
 void BlueRC::BluetoothHID_RC::sendButtonPress(BlueRC::Remote_Cmd command) {}
+bool canHandleButtonPress(BlueRC::Remote_Cmd command) {}
 void BlueRC::BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
 void BlueRC::BluetoothHID_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}
 void BlueRC::BluetoothHID_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code) {}

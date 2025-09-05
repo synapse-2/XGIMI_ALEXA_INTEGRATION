@@ -45,6 +45,16 @@ void Slave::dequeueCmd()
         std::string s_cmd =  std::string((magic_enum::enum_name((BlueRC::RC_Cmd_Action) cmd->cmds.cmd))); 
         UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
+        bool cmdhandled = false;
+        if ((rcHID != NULL) && (rcHID->canHandleButtonPress(*cmd))){
+                rcHID->sendButtonPress(*cmd);
+                cmdhandled = true;
+        }
+
+        // debug log if the cmd was not handled as not all remotes handle all commands
+        if (!cmdhandled){
+            UtilityFunctions::debugLogf("Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );   
+        }
         // free up the buffer
         vRingbufferReturnItem(ringBufHandle, (void *)cmd);
     }

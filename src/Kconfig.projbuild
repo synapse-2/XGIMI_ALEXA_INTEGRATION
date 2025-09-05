@@ -133,6 +133,7 @@ menu "NIMBLE Log Override Colors"
     endchoice #NIMBLE_CPP_LOG_OVERRIDE_COLOR_DEBUG
 endmenu
 
+
 config NIMBLE_USE_MAGIC_ENUM
     bool "use MAGIC_ENUM for text in debug log at info level."
     default "n"
@@ -222,6 +223,10 @@ config NIMBLE_CPP_FREERTOS_TASK_BLOCK_BIT
     help
         Configure the bit to set in the task notification value when a task is blocked waiting for an event.
         This should be set to a bit that is not used by other notifications in the system.
+
+config NIMBLE_CPP_IDF
+    bool
+    default BT_NIMBLE_ENABLED
 
 #
 # BT config

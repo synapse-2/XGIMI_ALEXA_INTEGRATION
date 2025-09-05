@@ -2,7 +2,6 @@
 #include "defaults.h"
 #include <HEXBuilder.h>
 #include "magicEnum/magic_enum.hpp"
-#include <nimconfig.h>
 #include <NimBLEDevice.h>
 #include <NimBLEHIDDevice.h>
 #include <HIDTypes.h>
@@ -96,6 +95,7 @@ namespace BlueRC
         // we donot have these in NibmeBLE NimBLEDevice so we need to ADD !!!
         void setDeviceAppreance(uint16_t appearance);
         virtual void sendButtonPress(BlueRC::Remote_Cmd command);
+        virtual bool canHandleButtonPress(BlueRC::Remote_Cmd command);
         void startServices();
         virtual ~BluetoothHID_RC();
 

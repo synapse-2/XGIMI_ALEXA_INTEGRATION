@@ -258,9 +258,51 @@ void BlueXGIMI_RC::startServices()
   m_CustomService3->start();
 }
 
+void BlueXGIMI_RC::doCMD_ON_OFF(){
+
+  if (BLE_server->getConnectedCount() > 0 ) {
+    // ok we are connedted to the projector so the projector must me ON we send the off conmmand
+  } else{
+    // we are not connected to the projector so we need to send the on command
+     
+  }
+}
+
+bool BlueXGIMI_RC::canHandleButtonPress(BlueRC::Remote_Cmd command) 
+{
+  
+    switch (command.cmds.cmd){
+      case BlueRC::RC_Cmd_Action::On_OFF:{
+          return true;
+      }
+
+    }
+
+    return false;
+ 
+}
+
+
 void BlueXGIMI_RC::sendButtonPress(BlueRC::Remote_Cmd command) 
 {
-    UtilityFunctions::debugLogf("XIGIMI Remote receied command %s\n",(magic_enum::enum_name((BlueRC::RC_Cmd_Action)command.cmds.cmd).data()));
+  std::string s_cmd =  std::string(magic_enum::enum_name((BlueRC::RC_Cmd_Action)command.cmds.cmd)); 
+
+    UtilityFunctions::debugLogf("XIGIMI Remote receied command %s\n",command.cmds.cmd);
+    bool cmdExecuted = false; 
+    switch (command.cmds.cmd){
+      case BlueRC::RC_Cmd_Action::On_OFF:{
+
+        doCMD_ON_OFF();
+        cmdExecuted = true;
+        break;
+      }
+
+    }
+
+
+    
+    UtilityFunctions::debugLogf("XIGIMI Remote receied command %s and exeutin was %i\n",command.cmds.cmd, cmdExecuted);
+
 }
 
 // generic handlers
