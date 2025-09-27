@@ -1,5 +1,5 @@
 #include "defaults.h"
-#include <Wire.h>
+//#include <Wire.h>
 #include <Arduino.h>
 #include <FastLED.h>
 #include <esp_chip_info.h>
@@ -270,14 +270,14 @@ namespace UtilityFunctions
 
         UtilityFunctions::delay(lastByte);
 
-        debugLog("Initializing I2C...");
-        bool masterSuccess = Wire1.begin(I2C_SDA, I2C_SCLK, I2C_FREQ); // Initialize I2C with specified pins and frequency
+        // debugLog("Initializing I2C...");
+        // bool masterSuccess = Wire1.begin(I2C_SDA, I2C_SCLK, I2C_FREQ); // Initialize I2C with specified pins and frequency
 
-        debugLog(String("We are master: ") + (masterSuccess ? "true" : "false"));
+        // debugLog(String("We are master: ") + (masterSuccess ? "true" : "false"));
 
-        masterMode = masterSuccess; // Set the mode based on the success of Wire1.begin
+        masterMode = true; // Set the mode based on the success of Wire1.begin
 
-        if (masterSuccess)
+        if (masterMode)
         {
             // if we are mastwer we need the boot button to reset the saved WIFI info
             pinMode(buttonReset.PIN, INPUT_PULLUP);
@@ -286,8 +286,8 @@ namespace UtilityFunctions
         else
         {
             // we are in slave mode
-            Wire1.begin(I2C_SLAVE_ADDR, I2C_SDA, I2C_SCLK, I2C_FREQ);
-            debugLog(String("were slave: ") + (masterSuccess ? "false" : "true")); // opposite of master
+            // Wire1.begin(I2C_SLAVE_ADDR, I2C_SDA, I2C_SCLK, I2C_FREQ);
+            debugLog(String("were slave: ") + (masterMode ? "false" : "true")); // opposite of master
         }
 
         // set init was cmpleted ok
@@ -299,54 +299,54 @@ namespace UtilityFunctions
         return masterMode;
     }
 
-    int findI2cOtherAddress()
-    {
+    // int findI2cOtherAddress()
+    // {
 
-        byte error, address;
-        byte lowestDevADDR;
+    //     byte error, address;
+    //     byte lowestDevADDR;
 
-        Serial.println("Scanning...");
+    //     Serial.println("Scanning...");
 
-        lowestDevADDR = 0;
-        for (address = 1; address < 127; address++)
-        {
-            // The i2c_scanner uses the return value of
-            // the Write.endTransmisstion to see if
-            // a device did acknowledge to the address.
-            Wire1.beginTransmission(address);
-            error = Wire1.endTransmission();
+    //     lowestDevADDR = 0;
+    //     for (address = 1; address < 127; address++)
+    //     {
+    //         // The i2c_scanner uses the return value of
+    //         // the Write.endTransmisstion to see if
+    //         // a device did acknowledge to the address.
+    //         Wire1.beginTransmission(address);
+    //         error = Wire1.endTransmission();
 
-            if (error == 0)
-            {
-                Serial.print("I2C device found at address 0x");
-                if (address < 16)
-                    Serial.print("0");
-                Serial.print(address, HEX);
-                Serial.println("  !");
+    //         if (error == 0)
+    //         {
+    //             Serial.print("I2C device found at address 0x");
+    //             if (address < 16)
+    //                 Serial.print("0");
+    //             Serial.print(address, HEX);
+    //             Serial.println("  !");
 
-                if (lowestDevADDR == 0)
-                {
-                    lowestDevADDR = address; // Store the first found address
-                }
-                if (address < lowestDevADDR)
-                {
-                    lowestDevADDR = address; // Store the lowest address found
-                    Serial.print("Lowest address found so far: 0x");
-                    Serial.println(lowestDevADDR, HEX);
-                }
-            }
-            else if (error == 4)
-            {
-                Serial.print("Unknown error at address 0x");
-                if (address < 16)
-                    Serial.print("0");
-                Serial.println(address, HEX);
-            }
-        }
+    //             if (lowestDevADDR == 0)
+    //             {
+    //                 lowestDevADDR = address; // Store the first found address
+    //             }
+    //             if (address < lowestDevADDR)
+    //             {
+    //                 lowestDevADDR = address; // Store the lowest address found
+    //                 Serial.print("Lowest address found so far: 0x");
+    //                 Serial.println(lowestDevADDR, HEX);
+    //             }
+    //         }
+    //         else if (error == 4)
+    //         {
+    //             Serial.print("Unknown error at address 0x");
+    //             if (address < 16)
+    //                 Serial.print("0");
+    //             Serial.println(address, HEX);
+    //         }
+    //     }
 
-        Serial.println("done\n");
-        return lowestDevADDR;
-    }
+    //     Serial.println("done\n");
+    //     return lowestDevADDR;
+    // }
 
     void debugLog()
     {

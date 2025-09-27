@@ -12,13 +12,37 @@
 #define HID_SOFTWARE_REVISION "B981C_HG2_CY_V1.0.9"
 static uint8_t HID_SYSTEM_ID[] = {0x00, 0x01, 0x02, 0x00, 0x00, 0x03, 0x04, 0x05};
 #define HID_IEE11073_CERT "RTKBeeIEEEDatalist"
+#define HID_ADV_STD_ID 0
+#define HID_ADV_ONDATA1_ID 1
+#define HID_ADV_ONDATA2_ID 1
+#define HID_ADV_ONDATA3_ID 1
 
 #define ONBTN_HID_DEVICE_SHORT_NAME "BLuetooth 4.0 RC"
 
-//  cannou use the esp32 BLE lib as the advertisment takes string and it cannot have nulls in it so we made out own BleNEW
-static std::vector<uint8_t> HID_AD_SACAN_MANUF_DATA = {0x0D, 0x00, 0xff, 0xff, 0x42, 0x52, 0x56, 0x31, 0x2e, 0x30, 0x30};
+//  Cannot use the esp32 BLE lib as the advertisment takes string and it cannot have nulls in it so we use nimbleESP stack
+// Manufacturer Specific (Adv scan response)
+//     Length: 12
+//     Type: Manufacturer Specific (0xff)
+//     Company ID: Texas Instruments Inc. (0x000d)
+//     Data: ffff425256312e3030
+static std::vector<uint8_t> HID_AD_SCAN_MANUF_DATA = {0x0D, 0x00, 0xff, 0xff, 0x42, 0x52, 0x56, 0x31, 0x2e, 0x30, 0x30};
+
+// Manufacturer Specific (adv std message report)
+//     Length: 9
+//     Type: Manufacturer Specific (0xff)
+//     Company ID: Texas Instruments Inc. (0x000d)
+//     Data: 383802000001
 static std::vector<uint8_t> HID_AD_MANUF_DATA = {0x0D, 0x00, 0x38, 0x38, 0x02, 0x00, 0x00, 0x01};
-// static String HID_AD_MANUF_DATA = "\x38\x38\x02\x00\x00\x01\xff\xff\x42\x52\x56\x31\x2e\x30\x30";
+
+// Manufacturer Specific
+//     Length: 19
+//     Type: Manufacturer Specific (0xff)
+//     Company ID: MediaTek, Inc. (0x0046)
+//     Data: 15,fb,45,5e,f2,86,80,ff,ff,ff,30,43,52,4b,54,4d
+//     data: 01 7e 7d b6 a2 2f 1c ff ff ff 30 43 52 4b 54 4d
+
+//static std::vector<uint8_t> HID_AD2_MANUF_DATA =  {0x46, 0x00, 0x15, 0xfb, 0x45, 0x5e, 0xf2, 0x86, 0x80, 0xff, 0xff, 0xff, 0x30, 0x43, 0x52, 0x4b, 0x54, 0x4d};
+static std::vector<uint8_t> HID_AD2_MANUF_DATA =    {0x46, 0x00, 0x01 ,0x7e ,0x7d ,0xb6 ,0xa2 ,0x2f ,0x1c, 0xff, 0xff, 0xff, 0x30, 0x43, 0x52, 0x4b, 0x54, 0x4d};
 
 static uint8_t HID_uuid_0xffd2[] = {0x1c, 0xf3, 0x02, 0xa8, 0x96, 0xdc};
 static uint8_t HID_uuid_0xffd3[] = {0x01, 0xa0, 0x10, 0x28};
@@ -294,10 +318,50 @@ D) Customm service uuid 0000D0FF-3C17-D293-8E48-14FE2E4DA212 primary has
 
 E) Customm service uuid 00006287-3C17-D293-8E48-14FE2E4DA212 primary has
 1) uuid 00006387-3C17-D293-8E48-14FE2E4DA212, write no response
-2) uuid 00006487-3C17-D293-8E48-14FE2E4DA212, write, nitify
+2) uuid 00006487-3C17-D293-8E48-14FE2E4DA212, write, notify
 descriptor (typ) for above, uuid 0x2902 - client characteristics config, readonly
 
 */
+
+// button commands
+// Key delay
+static uint8_t HID_KEY_DELAY = 100; // 50 mills
+
+// rport 30
+// Back button pressed
+static uint8_t HID_REP03_BACK_CMD[] = {0x24, 0x02};
+// OK_btn = 237
+static uint8_t HID_REP03_OK_CMD[] = {0x41, 0x00};
+// Up_Btn = 238
+static uint8_t HID_REP03_UP_CMD[] = {0x42, 0x0};
+// Right_Btn = 239,
+static uint8_t HID_REP03_RIGHT_CMD[] = {0x45, 0x0};
+// Left_Btn = 240,
+static uint8_t HID_REP03_LEFT_CMD[] = {0x44, 0x0};
+// Down_Btn = 241,
+static uint8_t HID_REP03_DOWN_CMD[] = {0x43, 0x0};
+// Vol_Up_Btn = 242,
+static uint8_t HID_REP03_VOL_UP_CMD[] = {0xe9, 0x0};
+// Vol_Dn_Btn = 243,
+static uint8_t HID_REP03_VOL_DOWN_CMD[] = {0xea, 0x0};
+
+// Home_Btn = 246,
+static uint8_t HID_REP03_HOME_CMD[] = {0x23, 0x02};
+// Options_Btn = 247,
+static uint8_t HID_REP03_OPTIONS_CMD[] = {0x50, 0x0};
+
+// NUll cmd
+static uint8_t HID_REP03_NULL_CMD[] = {0x00, 0x00};
+// report 01
+// OFF commmand 00,00,66,00,00,00,00,00
+static uint8_t HID_REP01_OFF_CMD[] = {0x00, 0x00, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00};
+// Projector_Setting_Btn = 244,
+static uint8_t HID_REP01_PROJ_SET_CMD[] = {0x00, 0x00, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00};
+// Settings_Btn = 245,
+static uint8_t HID_REP01_SETTING_CMD[] = {0x00, 0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+// NUll command
+static uint8_t HID_REP01_NULL_CMD[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 class BlueXGIMI_RC : public BlueRC::BluetoothHID_RC
 {
@@ -305,8 +369,10 @@ public:
     BlueXGIMI_RC(BLEServer *server);
     void sendButtonPress(BlueRC::Remote_Cmd command) override;
     bool canHandleButtonPress(BlueRC::Remote_Cmd command) override;
+    void initStandardAdvData() override;
     void startServices();
     void doCMD_ON_OFF();
+    void doButtons(BlueRC::Remote_Cmd command);
     virtual ~BlueXGIMI_RC();
 
     friend class Callback_handler_Rep_Inp_01;
@@ -317,10 +383,19 @@ public:
 
 protected:
     bool connected = false;
+#ifdef XGIMI_USE_EXT_ADV
 
+    NimBLEExtAdvertisement advertisingOnButtonDataType1;
+    NimBLEExtAdvertisement advertisingOnButtonDataScanDataType1;
+    NimBLEExtAdvertisement advertisingOnButtonDataType2;
+    NimBLEExtAdvertisement advertisingOnButtonDataScanDataType2;
+    NimBLEExtAdvertisement advertisingOnButtonDataType3;
+    NimBLEExtAdvertisement advertisingOnButtonDataScanDataType3;
+#else
     NimBLEAdvertisementData advertisingOnButtonDataType1;
     NimBLEAdvertisementData advertisingOnButtonDataType2;
-    NimBLEAdvertisementData advertisingOnButtonDataScanDataType1;
+    NimBLEAdvertisementData advertisingOnButtonDataScanDataType1And2;
+#endif
 
     BLECharacteristic *keyboardInput_01;      // one byte input, one byte const; 48 bits for keys input for num pad
     BLECharacteristic *keyboardOutput_01;     // onbyte output, 5 bits for LEDs, 3 bits for padding
@@ -389,8 +464,7 @@ protected:
     BLECharacteristic *m_0x6387Characteristic; // uuid 00006487-3C17-D293-8E48-14FE2E4DA212
 
     void initOnButtonAdvData();
-    void initStandardAdvData();
-
+    void startStandardAdv();
 
     // BLEServerCallbacks
     virtual void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) override;
@@ -611,7 +685,6 @@ class Callback_handler_Rep_Out_01 : public BLECharacteristicCallbacks
 private:
     BlueXGIMI_RC *parent;
 
-
 public:
     Callback_handler_Rep_Out_01(BlueXGIMI_RC *p) { parent = p; }
 
@@ -667,7 +740,6 @@ class Callback_handler_Rep_Out_30 : public BLECharacteristicCallbacks
 
 private:
     BlueXGIMI_RC *parent;
-
 
 public:
     Callback_handler_Rep_Out_30(BlueXGIMI_RC *p) { parent = p; }

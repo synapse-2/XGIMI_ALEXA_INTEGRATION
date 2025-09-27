@@ -1,14 +1,33 @@
 #pragma once
 #include "defaults.h"
-#include <HEXBuilder.h>
 #include "magicEnum/magic_enum.hpp"
 #include <NimBLEDevice.h>
 #include <NimBLEHIDDevice.h>
 #include <HIDTypes.h>
-
+#ifdef XGIMI_USE_EXT_ADV
+#include <NimBLEExtAdvertising.h>
+#endif
 
 // appearance of the device and the advertisment
-#define HID_REMOTE 0x0180
+#define HID_REMOTE_APPEARANCE 0x0180
+#define HID_KEYBORAD_APPEARANCE 0x03c1
+
+static constexpr uint16_t deviceInfoSvcUuid = 0x180a;
+static constexpr uint16_t hidSvcUuid        = 0x1812;
+static constexpr uint16_t batterySvcUuid    = 0x180f;
+
+static constexpr uint16_t pnpCharUuid           = 0x2a50;
+static constexpr uint16_t hidInfoCharUuid       = 0x2a4a;
+static constexpr uint16_t reportMapCharUuid     = 0x2a4b;
+static constexpr uint16_t hidControlCharUuid    = 0x2a4c;
+static constexpr uint16_t inputReportChrUuid    = 0x2a4d;
+static constexpr uint16_t protocolModeCharUuid  = 0x2a4e;
+static constexpr uint16_t batteryLevelCharUuid  = 0x2a19;
+static constexpr uint16_t batteryLevelDscUuid   = 0x2904;
+static constexpr uint16_t featureReportDscUuid  = 0x2908;
+static constexpr uint16_t m_manufacturerChrUuid = 0x2a29;
+static constexpr uint16_t bootInputChrUuid      = 0x2a22;
+static constexpr uint16_t bootOutputChrUuid     = 0x2a32;
 
 // define the command set
 namespace BlueRC
@@ -24,9 +43,20 @@ namespace BlueRC
         StartOver = 6,
         Stop = 7,
 
+        Ok_Btn = 237,
+        Up_Btn = 238,
+        Right_Btn = 239,
+        Left_Btn = 240,
+        Down_Btn = 241,
+        Vol_Up_Btn = 242,
+        Vol_Dn_Btn = 243,
+        Projector_Setting_Btn = 244,
+        Settings_Btn = 245,
+        Home_Btn = 246,
+        Options_Btn = 247,
         Pairing_On = 248,
         Pairing_Off = 249,
-        On_OFF = 250,
+        On_OFF_Btn = 250,
         Volume = 251,
         Channel = 252,
         Mute = 253,
@@ -34,7 +64,6 @@ namespace BlueRC
         None = 255
     } RC_Cmd_Action;
 
-   
     typedef union
     {
         struct
@@ -54,7 +83,7 @@ namespace BlueRC
 
     /*
     Define the Prefered prepheripral config params for the device in sdkconfig.defaults
-    this is all done by defines in NimbleBLE - ESP32 so we have to put them in the platform.ini
+    this is done bu defines in the menuconfig or defines in sdk defualts.h
     uint16_t connIntervalMin;    // !< Minimum connection interval. In 1.25 ms unit
     uint16_t connIntervalMax;    // !< Maximum connection interval. In 1.25 ms unit
     uint16_t connLatency;        // !< Slave latency.
@@ -75,7 +104,7 @@ namespace BlueRC
     #endif
 
     #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO
-    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO (500)  // 500
+    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO (300)  // 300
     #endif
 
 
@@ -87,7 +116,7 @@ namespace BlueRC
     #endif
     */
 
-    class BluetoothHID_RC : public NimBLEHIDDevice, public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks
+    class BluetoothHID_RC : public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks
     {
     public:
         BluetoothHID_RC(BLEServer *server);
@@ -96,15 +125,56 @@ namespace BlueRC
         void setDeviceAppreance(uint16_t appearance);
         virtual void sendButtonPress(BlueRC::Remote_Cmd command);
         virtual bool canHandleButtonPress(BlueRC::Remote_Cmd command);
+        virtual void startStandardAdv();
+        virtual void initStandardAdvData();
         void startServices();
         virtual ~BluetoothHID_RC();
+        void setReportMap(uint8_t *map, uint16_t);
+        bool setManufacturer(const std::string &name);
+        void setPnp(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version);
+        void setHidInfo(uint8_t country, uint8_t flags);
+        void setBatteryLevel(uint8_t level, bool notify = false);
+        NimBLECharacteristic *getBatteryLevel();
+        NimBLECharacteristic *getReportMap();
+        NimBLECharacteristic *getHidControl();
+        NimBLECharacteristic *getInputReport(uint8_t reportId);
+        NimBLECharacteristic *getOutputReport(uint8_t reportId);
+        NimBLECharacteristic *getFeatureReport(uint8_t reportId);
+        NimBLECharacteristic *getProtocolMode();
+        NimBLECharacteristic *getBootInput();
+        NimBLECharacteristic *getBootOutput();
+        NimBLECharacteristic *getPnp();
+        NimBLECharacteristic *getHidInfo();
+        NimBLEService *getDeviceInfoService();
+        NimBLEService *getHidService();
+        NimBLEService *getBatteryService();
 
     protected:
         NimBLEServer *BLE_server;
+        NimBLEService *m_deviceInfoSvc{nullptr}; // 0x180a
+        NimBLEService *m_hidSvc{nullptr};        // 0x1812
+        NimBLEService *m_batterySvc{nullptr};    // 0x180f
+
+        NimBLECharacteristic *m_manufacturerChr{nullptr}; // 0x2a29
+        NimBLECharacteristic *m_pnpChr{nullptr};          // 0x2a50
+        NimBLECharacteristic *m_hidInfoChr{nullptr};      // 0x2a4a
+        NimBLECharacteristic *m_reportMapChr{nullptr};    // 0x2a4b
+        NimBLECharacteristic *m_hidControlChr{nullptr};   // 0x2a4c
+        NimBLECharacteristic *m_protocolModeChr{nullptr}; // 0x2a4e
+        NimBLECharacteristic *m_batteryLevelChr{nullptr}; // 0x2a19
+
+        NimBLECharacteristic *locateReportCharacteristicByIdAndType(uint8_t reportId, uint8_t reportType);
+
+#ifdef XGIMI_USE_EXT_ADV
+        NimBLEExtAdvertising *advertising;
+        NimBLEExtAdvertisement advertisingData;
+        NimBLEExtAdvertisement advertisingScanData;
+#else
 
         NimBLEAdvertising *advertising;
         NimBLEAdvertisementData advertisingData;
         NimBLEAdvertisementData advertisingScanData;
+#endif
 
         NimBLECharacteristic *manufData;
         bool connected = false;
@@ -121,11 +191,10 @@ namespace BlueRC
 
 }
 
-
 template <>
 struct magic_enum::customize::enum_range<BlueRC::RC_Cmd_Action>
 {
-  static constexpr int min = 0;
-  static constexpr int max = 255;
-  // (max - min) must be less than UINT16_MAX.
+    static constexpr int min = 0;
+    static constexpr int max = 255;
+    // (max - min) must be less than UINT16_MAX.
 };

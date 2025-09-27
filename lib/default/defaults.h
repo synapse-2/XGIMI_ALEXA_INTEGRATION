@@ -47,7 +47,7 @@
 //incompatability with ArduinoIoT so we created our own NewNimBle-esp32 stack
 
 
-
+//specific to our ESP32S3 chip
 #define RGBCHIP WS2812B
 #define LED_BUILTINIO GPIO_NUM_48
 #define RGB_DATA_ORDER GRB
@@ -64,6 +64,9 @@
 //set to not start the wifi and aIoT connection, only blutooth wwill be turned on for debugging
 // #define XIGIMI_DEBUG_WIFI_OFF
 #undef XIGIMI_DEBUG_WIFI_OFF
+
+// use BLE 5.0 adv
+#define XGIMI_USE_EXT_ADV
 
 //set to log debug messgaes for led state change
 //#define UTILFUNC_DEBUG_LED_ON

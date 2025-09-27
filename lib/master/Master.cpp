@@ -154,7 +154,7 @@ void Master::onProjectorChange(CloudTelevision newPrj)
     {
         // switch value has changed
         // for the switch change event in ring buffer
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::On_OFF;
+        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::On_OFF_Btn;
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
         UtilityFunctions::debugLog("Projector switch changed to: " + String(newPrj.getSwitch()));

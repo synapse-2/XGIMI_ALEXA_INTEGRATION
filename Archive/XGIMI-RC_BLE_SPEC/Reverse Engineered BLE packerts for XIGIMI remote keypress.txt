@@ -1,3 +1,93 @@
+//BLE 5.0 extended adv for inital pariing wheen the arrow and home button is pressed simultaneously 
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 47
+    Sub Event: LE Extended Advertising Report (0x0d)
+    Num Reports: 1
+    Event Type: 0x0013, Connectable, Scannable, Legacy, Data Status: Complete
+        .... .... .... ...1 = Connectable: True
+        .... .... .... ..1. = Scannable: True
+        .... .... .... .0.. = Directed: False
+        .... .... .... 0... = Scan Response: False
+        .... .... ...1 .... = Legacy: True
+        .... .... .00. .... = Data Status: Complete (0x0)
+        0000 0000 0... .... = Reserved: 0x000
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Primary PHY: LE 1M (0x01)
+    Secondary PHY: No packets on the secondary advertising channel (0x00)
+    Advertising SID: 0xff (not available)
+    TX Power: 127 dBm (not available)
+    RSSI: -42 dBm
+    Periodic Advertising Interval: 0x0000 (no periodic advertising)
+    Direct Address Type: Public Device Address (0x00)
+    Direct BD_ADDR: 00:00:00_00:00:00 (00:00:00:00:00:00)
+    Data Length: 21
+    Advertising Data
+        Flags
+            Length: 2
+            Type: Flags (0x01)
+            000. .... = Reserved: 0x0
+            ...0 .... = Simultaneous LE and BR/EDR to Same Device Capable (Host): false (0x0)
+            .... 0... = Simultaneous LE and BR/EDR to Same Device Capable (Controller): false (0x0)
+            .... .1.. = BR/EDR Not Supported: true (0x1)
+            .... ..0. = LE General Discoverable Mode: false (0x0)
+            .... ...1 = LE Limited Discoverable Mode: true (0x1)
+        16-bit Service Class UUIDs
+            Length: 3
+            Type: 16-bit Service Class UUIDs (0x03)
+            UUID 16: Human Interface Device (0x1812)
+        Appearance: Generic Remote Control
+            Length: 3
+            Type: Appearance (0x19)
+            Appearance: Generic Remote Control (0x0180)
+        Manufacturer Specific
+            Length: 9
+            Type: Manufacturer Specific (0xff)
+            Company ID: Texas Instruments Inc. (0x000d)
+            Data: 383802000001
+
+
+// ble 5.0 adv san response
+
+Bluetooth HCI Event - LE Meta
+    Event Code: LE Meta (0x3e)
+    Parameter Total Length: 49
+    Sub Event: LE Extended Advertising Report (0x0d)
+    Num Reports: 1
+    Event Type: 0x001b, Connectable, Scannable, Scan Response, Legacy, Data Status: Complete
+        .... .... .... ...1 = Connectable: True
+        .... .... .... ..1. = Scannable: True
+        .... .... .... .0.. = Directed: False
+        .... .... .... 1... = Scan Response: True
+        .... .... ...1 .... = Legacy: True
+        .... .... .00. .... = Data Status: Complete (0x0)
+        0000 0000 0... .... = Reserved: 0x000
+    Peer Address Type: Public Device Address (0x00)
+    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Primary PHY: LE 1M (0x01)
+    Secondary PHY: No packets on the secondary advertising channel (0x00)
+    Advertising SID: 0xff (not available)
+    TX Power: 127 dBm (not available)
+    RSSI: -42 dBm
+    Periodic Advertising Interval: 0x0000 (no periodic advertising)
+    Direct Address Type: Public Device Address (0x00)
+    Direct BD_ADDR: 00:00:00_00:00:00 (00:00:00:00:00:00)
+    Data Length: 23
+    Advertising Data
+        Device Name: XGIMI RC
+            Length: 9
+            Type: Device Name (0x09)
+            Device Name: XGIMI RC
+        Manufacturer Specific
+            Length: 12
+            Type: Manufacturer Specific (0xff)
+            Company ID: Texas Instruments Inc. (0x000d)
+            Data: ffff425256312e3030
+
+
+
+
 
 //settings button pressed
 
@@ -399,18 +489,58 @@ Bluetooth HCI Event - LE Meta
 
 
 // On button pressed
-//seems we have two advertisment packetss when on button is pressed the MediaTek and the devide CoD one. the system alternates betwen the two.
-//For the MediaTek adv packet the system does send a scan response that is the same as when it sends a pariing reuest adv packet
+// There are three packets used Type 1 for 1 sec, then tree times type 2 and type 3 adv packets are sent. 
+// note the type 2 packet seems to have WOL code in mfg data as Data: 017e7db6a22f1c ffffff3043524b544d
+// the first code seems to be the WOL code for XIGIMI   horizon ultra others have been reported as at https://stackoverflow.com/questions/69921353/how-can-i-clone-a-non-paired-ble-signal-from-a-remote-to-trigger-a-device/75551013#75551013
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x38B4640F35F278 FFFFFF3043524B544D Service UUID: 0x1812
 
-Bluetooth HCI Event - LE Meta
-    Event Code: LE Meta (0x3e)
-    Parameter Total Length: 42
-    Sub Event: LE Advertising Report (0x02)
-    Num Reports: 1
-    Event Type: Connectable Undirected Advertising (0x00)
-    Peer Address Type: Public Device Address (0x00)
-    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
-    Data Length: 30
+We now also know the parameters for XGIMI Z6X projector, thanks to manymuch:
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x12D7C7899B9F80 FFFFFF3043524B544D Service UUID: 0x1812
+
+And for XGIMI Horizon Pro 4K projector, thanks to uni-uni-77:
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x1A7E0C743AEF18 FFFFFF3043524B544D Service UUID: 0x1812
+
+And for XGIMI H3 projector, thanks to netweaver1970:
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0xD1497DBDA42360 FFFFFF3043524B544D Service UUID: 0x1812
+
+And for XGIMI H3S projector, thanks to mayongze
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x39BCA0F7A3ADB4 FFFFFF3043524B544D Service UUID: 0x1812
+
+and/or (thanks to Anbercube)
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x35548a967abddc ffffff3043524b544d Service UUID: 0x1812
+
+And for XGIMI H5 projector, thanks to rabdalov
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x4d4b17d86c27e0 ffffff3043524b544d Service UUID: 0x1812
+
+And for XGIMI H1S projector, thanks to FenixJun
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x0ed8822f811cbcf fffff3043524b544d Service UUID: 0x1812
+
+And for XGIMI Z4Air projector, thanks to Hosiang1026
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x0917B18FCB2222 FFFFFF3043524b544D Service UUID: 0x1812
+
+And for XGIMI Horizon projector, thanks to jack-webb:
+
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x33D731E3B22440 FFFFFF3043524B544D Service UUID: 0x1812
+
+Type 1 adv packet and response 
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x1100 (PDU Type: ADV_IND, ChSel: #1, TxAdd: Public)
+        .... 0000 = PDU Type: 0x0 ADV_IND
+        ...0 .... = Reserved: 0
+        ..0. .... = Channel Selection Algorithm: #1
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 17
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
     Advertising Data
         Flags
             Length: 2
@@ -421,46 +551,64 @@ Bluetooth HCI Event - LE Meta
             .... .1.. = BR/EDR Not Supported: true (0x1)
             .... ..0. = LE General Discoverable Mode: false (0x0)
             .... ...1 = LE Limited Discoverable Mode: true (0x1)
-        Device Name (shortened): BLuetooth 4.0 RC
-            Length: 17
-            Type: Device Name (shortened) (0x08)
-            Device Name: BLuetooth 4.0 RC
         16-bit Service Class UUIDs
             Length: 3
             Type: 16-bit Service Class UUIDs (0x03)
             UUID 16: Human Interface Device (0x1812)
-        Class Of Device
-            Length: 4
-            Type: Class Of Device (0x0d)
-            Class of Device: 0x000540 (Peripheral (HID):Unknown - services:)
-                01.. .... = Minor Device Class: Keyboard (0x1)
-                ..00 00.. = Minor Device Class: Uncategorized device (0x0)
-                .... ..00 = Format Type: 0x0
-                0... .... .... .... = Major Service Classes: Information: False
-                .0.. .... .... .... = Major Service Classes: Telephony: False
-                ..0. .... .... .... = Major Service Classes: Audio: False
-                ...0 .... .... .... = Major Service Classes: Object Transfer: False
-                .... 0... .... .... = Major Service Classes: Capturing: False
-                .... .0.. .... .... = Major Service Classes: Rendering: False
-                .... ..0. .... .... = Major Service Classes: Networking: False
-                .... ...0 .... .... = Major Service Classes: Positioning: False
-                .... .... 0... .... = Major Service Classes: Reserved: 0x0
-                .... .... .0.. .... = Major Service Classes: LE Audio: 0x0
-                .... .... ..0. .... = Major Service Classes: Limited Discoverable Mode: False
-                .... .... ...0 0101 = Major Device Class: Peripheral (HID) (0x05)
-    RSSI: -49 dBm
+        Appearance: Generic Remote Control
+            Length: 3
+            Type: Appearance (0x19)
+            Appearance: Generic Remote Control (0x0180)
+    CRC: 0xb9353c
 
-// Also seen on on button pressec
+type 1 adv response
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x0a04 (PDU Type: SCAN_RSP, TxAdd: Public)
+        .... 0100 = PDU Type: 0x4 SCAN_RSP
+        ...0 .... = Reserved: 0
+        ..0. .... = Reserved: 0
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 10
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Scan Response Data: 03198001
+        Advertising Data
+            Appearance: Generic Remote Control
+                Length: 3
+                Type: Appearance (0x19)
+                Appearance: Generic Remote Control (0x0180)
+    CRC: 0x800ed7
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x0a04 (PDU Type: SCAN_RSP, TxAdd: Public)
+        .... 0100 = PDU Type: 0x4 SCAN_RSP
+        ...0 .... = Reserved: 0
+        ..0. .... = Reserved: 0
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 10
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Scan Response Data: 03198001
+        Advertising Data
+            Appearance: Generic Remote Control
+                Length: 3
+                Type: Appearance (0x19)
+                Appearance: Generic Remote Control (0x0180)
+    CRC: 0x800ed7
 
-Bluetooth HCI Event - LE Meta
-    Event Code: LE Meta (0x3e)
-    Parameter Total Length: 43
-    Sub Event: LE Advertising Report (0x02)
-    Num Reports: 1
-    Event Type: Connectable Undirected Advertising (0x00)
-    Peer Address Type: Public Device Address (0x00)
-    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
-    Data Length: 31
+
+type 2 adv packet and response
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x2500 (PDU Type: ADV_IND, ChSel: #1, TxAdd: Public)
+        .... 0000 = PDU Type: 0x0 ADV_IND
+        ...0 .... = Reserved: 0
+        ..0. .... = Channel Selection Algorithm: #1
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 37
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
     Advertising Data
         Flags
             Length: 2
@@ -483,31 +631,91 @@ Bluetooth HCI Event - LE Meta
             Length: 19
             Type: Manufacturer Specific (0xff)
             Company ID: MediaTek, Inc. (0x0046)
-            Data: 15fb455ef28680ffffff3043524b544d
-                [Expert Info (Note/Undecoded): Undecoded]
-    RSSI: -51 dBm
+            Data: 017e7db6a22f1cffffff3043524b544d
+    CRC: 0x85def5
 
-// with the scan response to the MediaTek Advertising packet
-Bluetooth HCI Event - LE Meta
-    Event Code: LE Meta (0x3e)
-    Parameter Total Length: 35
-    Sub Event: LE Advertising Report (0x02)
-    Num Reports: 1
-    Event Type: Scan Response (0x04)
-    Peer Address Type: Public Device Address (0x00)
-    BD_ADDR: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
-    Data Length: 23
-    Advertising Data
-        Device Name: XGIMI RC
-            Length: 9
-            Type: Device Name (0x09)
+type 2 response 
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x1d04 (PDU Type: SCAN_RSP, TxAdd: Public)
+        .... 0100 = PDU Type: 0x4 SCAN_RSP
+        ...0 .... = Reserved: 0
+        ..0. .... = Reserved: 0
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 29
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Scan Response Data: 09095847494d492052430cff0d00ffff425256312e3030
+        Advertising Data
             Device Name: XGIMI RC
-        Manufacturer Specific
-            Length: 12
-            Type: Manufacturer Specific (0xff)
-            Company ID: Texas Instruments Inc. (0x000d)
-            Data: ffff425256312e3030
-                [Expert Info (Note/Undecoded): Undecoded]
-    RSSI: -51 dBm
+                Length: 9
+                Type: Device Name (0x09)
+                Device Name: XGIMI RC
+            Manufacturer Specific
+                Length: 12
+                Type: Manufacturer Specific (0xff)
+                Company ID: Texas Instruments Inc. (0x000d)
+                Data: ffff425256312e3030
+    CRC: 0xeafd96
+
+type 3 adv packet 
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x2400 (PDU Type: ADV_IND, ChSel: #1, TxAdd: Public)
+        .... 0000 = PDU Type: 0x0 ADV_IND
+        ...0 .... = Reserved: 0
+        ..0. .... = Channel Selection Algorithm: #1
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 36
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Advertising Data
+        Flags
+            Length: 2
+            Type: Flags (0x01)
+            000. .... = Reserved: 0x0
+            ...0 .... = Simultaneous LE and BR/EDR to Same Device Capable (Host): false (0x0)
+            .... 0... = Simultaneous LE and BR/EDR to Same Device Capable (Controller): false (0x0)
+            .... .1.. = BR/EDR Not Supported: true (0x1)
+            .... ..0. = LE General Discoverable Mode: false (0x0)
+            .... ...1 = LE Limited Discoverable Mode: true (0x1)
+        Device Name (shortened): BLuetooth 4.0 RC
+            Length: 17
+            Type: Device Name (shortened) (0x08)
+            Device Name: BLuetooth 4.0 RC
+        16-bit Service Class UUIDs
+            Length: 3
+            Type: 16-bit Service Class UUIDs (0x03)
+            UUID 16: Human Interface Device (0x1812)
+        Class Of Device
+            Length: 4
+            Type: Class Of Device (0x0d)
+            Class of Device: 0x000540 (Peripheral (HID):Unknown - services:)
+    CRC: 0xbf123d
+
+type 3 dv response
+Bluetooth Low Energy Link Layer
+    Access Address: 0x8e89bed6
+    Packet Header: 0x1d04 (PDU Type: SCAN_RSP, TxAdd: Public)
+        .... 0100 = PDU Type: 0x4 SCAN_RSP
+        ...0 .... = Reserved: 0
+        ..0. .... = Reserved: 0
+        .0.. .... = Tx Address: Public
+        0... .... = Reserved: 0
+        Length: 29
+    Advertising Address: 1c:f3:02:a8:96:dc (1c:f3:02:a8:96:dc)
+    Scan Response Data: 09095847494d492052430cff0d00ffff425256312e3030
+        Advertising Data
+            Device Name: XGIMI RC
+                Length: 9
+                Type: Device Name (0x09)
+                Device Name: XGIMI RC
+            Manufacturer Specific
+                Length: 12
+                Type: Manufacturer Specific (0xff)
+                Company ID: Texas Instruments Inc. (0x000d)
+                Data: ffff425256312e3030
+    CRC: 0xeafd96
+
 
 

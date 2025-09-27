@@ -1,4 +1,16 @@
-menu "NewNimBLE-esp32 configuration"
+menu "ESP-NimBLE-CPP configuration"
+
+config NIMBLE_USING_ARDUINO_IOT
+    bool "Renames the enums READ and WRITE that conflit with the Arduino IoT lib"
+    default "n"
+    help
+        Enabling this option will change the enum NIMBLE_PROPERTY:READ to NIMBLE_PROPERTY:BLE_READ and NIMBLE_PROPERTY:WRITE to NIMBLE_PROPERTY:BLE_WRITE
+
+config NIMBLE_USE_MAGIC_ENUM
+    bool "Enable if magic enum lib is set to get detailed text for Class of device property"
+    default "n"
+    help
+        Enable if magic enum lib is set to get detailed text for Class of device property
 
 choice NIMBLE_CPP_LOG_LEVEL
     prompt "NimBLE CPP log verbosity"
@@ -132,26 +144,6 @@ menu "NIMBLE Log Override Colors"
             bool "Cyan"
     endchoice #NIMBLE_CPP_LOG_OVERRIDE_COLOR_DEBUG
 endmenu
-
-
-config NIMBLE_USE_MAGIC_ENUM
-    bool "use MAGIC_ENUM for text in debug log at info level."
-    default "n"
-    help
-        Enabling this option will display return code values as text
-        messages in the debug log at innfo level. But you need to have the 
-        MAGIC_ENUM included from the link https://github.com/Neargye/magic_enum
-        and have the and enable it by adding 
-        "#include <magicEnum/magic_enum.hpp>"
-        "#include <magicEnum/magic_enum_iostream.hpp>"
-
-        template <typename E> 
-        auto to_integer(magic_enum::Enum<E> value) -> int
-        {
-            // magic_enum::Enum<E> - C++17 Concept for enum type.
-            return static_cast<magic_enum::underlying_type_t<E>>(value);
-        }  in one of the source files.
-
 
 config NIMBLE_CPP_ENABLE_RETURN_CODE_TEXT
     bool "Show NimBLE return codes as text in debug log."

@@ -1,12 +1,12 @@
 
 #include "defaults.h"
 #include <Arduino.h>
-#include <WiFiManager.h>
+#include "WiFiManager.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/ringbuf.h>
 #include "Master.h"
-#include "Slave.h"
+#include "BLE_Remote_Decoder.h"
 #include "BlueRC.h"
 #include "UtilityFunctions.h"
 #include "thingProperties.h"
@@ -24,7 +24,7 @@ auto to_integer(magic_enum::Enum<E> value) -> int
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
 
 Master m;
-Slave s;
+BLE_Remote_Decoder s;
 TaskHandle_t Task0;
 TaskHandle_t Task1;
 RingbufHandle_t buf_handle;
@@ -73,7 +73,7 @@ void Task1code(void *pvParameters)
   }
   else
   {
-    UtilityFunctions::debugLog("Device is in Slave mode.");
+    UtilityFunctions::debugLog("Device is in BLE_Remote_Decoder mode.");
     return; // exit this task as we are not the master
   }
 
@@ -148,7 +148,7 @@ void setup()
   // Create a ring buffer of 16 bytes with no-split type
   buf_handle = xRingbufferCreate(32, RINGBUF_TYPE_NOSPLIT);
   m = Master(buf_handle);
-  s = Slave(buf_handle);
+  s = BLE_Remote_Decoder(buf_handle);
 
   if (buf_handle == NULL)
   {

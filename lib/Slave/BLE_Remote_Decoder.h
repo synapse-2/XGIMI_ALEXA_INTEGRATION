@@ -5,10 +5,10 @@
 #include "BlueXGIMI_RC.h"
 
 
-class Slave {
+class BLE_Remote_Decoder {
 public:
-    Slave(); 
-    Slave(RingbufHandle_t buf);
+    BLE_Remote_Decoder(); 
+    BLE_Remote_Decoder(RingbufHandle_t buf);
     void dequeueCmd();
     void start();
 

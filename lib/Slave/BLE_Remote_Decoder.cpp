@@ -1,41 +1,41 @@
 
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 #include <UtilityFunctions.h> // Custom utility functions
-#include "Slave.h"
+#include "BLE_Remote_Decoder.h"
 #include "BlueXGIMI_RC.h" // Slave class for I2C Slave functionality
 #include "UtilityFunctions.h" // Utility functions for LED control and other utilities
 #include <freertos/ringbuf.h>
 
 
-RingbufHandle_t Slave::ringBufHandle;
+RingbufHandle_t BLE_Remote_Decoder::ringBufHandle;
 
-Slave::Slave(RingbufHandle_t buf) {
+BLE_Remote_Decoder::BLE_Remote_Decoder(RingbufHandle_t buf) {
 
     ringBufHandle = buf;
 }
 
-Slave::Slave() : Slave(NULL){
+BLE_Remote_Decoder::BLE_Remote_Decoder() : BLE_Remote_Decoder(NULL){
 }
 
-void Slave::start()
+void BLE_Remote_Decoder::start()
 {
     // need to make the Bluetooth client
 
     UtilityFunctions::ledBlue();
-    BLEDevice::init(HID_DEVICE_NAME);
-    BLEServer *pServer = BLEDevice::createServer();
+    NimBLEDevice::init(HID_DEVICE_NAME);
+    NimBLEServer *pServer = NimBLEDevice::createServer();
     if (pServer == NULL){
         UtilityFunctions::debugLog("Null BLE devide server created stopping BLE ");
         return;
     }
      UtilityFunctions::debugLog("BLE server created");
-    rcHID = new BlueXGIMI_RC(pServer);
+    rcHID = new BlueXGIMI_RC(pServer); 
 
      // if you get here you have connected to the WiFi
     UtilityFunctions::debugLog("Bluetooth started...yeey :)");
 }
 
-void Slave::dequeueCmd()
+void BLE_Remote_Decoder::dequeueCmd()
 {
     BlueRC::Remote_Cmd* cmd;
     size_t received_len;
