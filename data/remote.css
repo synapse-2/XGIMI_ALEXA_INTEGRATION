@@ -1,0 +1,478 @@
+/* -- Global Styles -- */
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+
+/* -- Status Bar -- */
+.status-bar {
+    grid-column: 1 / 4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+}
+
+.status-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: #555;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Base styles for the icon */
+    /* Base styles for the icon */
+  .wifi-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+  }
+  .wifi-icon svg path {
+    fill: #ccc; /* Default color for all bars (greyed out) */
+  }
+  
+  /* High signal: all bars are fully opaque */
+  .wifi-icon.wifi-high svg .bar-1,
+  .wifi-icon.wifi-high svg .bar-2,
+  .wifi-icon.wifi-high svg .bar-3,
+  .wifi-icon.wifi-high svg .bar-4 {
+    fill: #4CAF50; /* Green for high signal */
+    opacity: 1;
+  }
+  
+  /* Medium signal: show three bars */
+  .wifi-icon.wifi-medium svg .bar-1,
+  .wifi-icon.wifi-medium svg .bar-2,
+  .wifi-icon.wifi-medium svg .bar-3 {
+    fill: #FFC107; /* Amber for medium signal */
+    opacity: 1;
+  }
+  .wifi-icon.wifi-medium svg .bar-4 {
+    opacity: 0.3;
+  }
+
+  /* Low signal: show two bars */
+  .wifi-icon.wifi-low svg .bar-1,
+  .wifi-icon.wifi-low svg .bar-2 {
+    fill: #F44336; /* Red for low signal */
+    opacity: 1;
+  }
+  .wifi-icon.wifi-low svg .bar-3,
+  .wifi-icon.wifi-low svg .bar-4 {
+    opacity: 0.3;
+  }
+
+  /* No signal: show only the lowest dot */
+  .wifi-icon.wifi-none svg .bar-1 {
+    fill: #F44336; /* Red for no signal */
+    opacity: 1;
+  }
+  .wifi-icon.wifi-none svg .bar-2,
+  .wifi-icon.wifi-none svg .bar-3,
+  .wifi-icon.wifi-none svg .bar-4 {
+    opacity: 0.3;
+  }
+
+/* Bluetooth Icon States (Updated for line art SVG) */
+#bluetooth-icon {
+    transform: rotate(0deg);
+}
+
+
+.bt-connected {
+    fill: #007bff; /* Blue */
+}
+.bt-advertising {
+    fill: #ffee00; /* yelllow */
+}
+
+
+/* -- Remote Container -- */
+.remote-container {
+    background-color: #2c2c2c;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    animation: fade-in 0.5s ease-in-out;
+}
+
+h1 {
+    font-size: 1.8em;
+    font-weight: 500;
+    color: #f5f5f5;
+    margin-bottom: 25px;
+}
+
+/* -- Buttons and Grid -- */
+.remote-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.remote-button {
+    background-color: #3f3f3f;
+    border: none;
+    color: #f5f5f5;
+    padding: 18px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.remote-button:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.remote-button:active {
+    background-color: #007bff;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* -- Specific button styles -- */
+
+
+.remote-button-group {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+/* -- D-pad Section -- */
+.nav-dpad {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-areas:
+        ". up ."
+        "left ok right"
+        ". down .";
+    gap: 0; /* Remove gap between grid items for a unified look */
+    margin: 15px 0;
+    
+    /* Create a unified background for the D-pad area */
+    background-color: #3f3f3f;
+    border-radius: 50%;
+    width: fit-content; /* Adjust size as needed */
+    height: fit-content ;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the buttons within the D-pad */
+.nav-dpad .remote-button {
+    background-color: transparent; /* Make buttons transparent to see the unified background */
+    box-shadow: none; /* Remove individual button shadows */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    padding: 25px; /* Adjust padding for visual balance */
+}
+
+/* Custom button shapes for a cleaner, unified D-pad */
+.nav-dpad .button-up { 
+    grid-area: up; 
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom: none;
+}
+.nav-dpad .button-down { 
+    grid-area: down; 
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-top: none;
+}
+.nav-dpad .button-left { 
+    grid-area: left; 
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-right: none;
+}
+.nav-dpad .button-right { 
+    grid-area: right; 
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-left: none;
+}
+
+.nav-dpad .button-ok {
+    grid-area: ok;
+    background-color: #007bff; /* Keep a distinct color for the central button */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+/* Hover effects for the integrated D-pad */
+.nav-dpad .remote-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: none; /* Disable individual translation */
+}
+
+.nav-dpad .button-ok:hover {
+    background-color: #0069d9;
+    transform: none;
+}
+
+.dpad-filler {
+    visibility: hidden;
+}
+
+.media-controls {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 10px;
+}
+
+
+.settings-button {
+    background-color: #3f3f3f;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%; /* Makes the button perfectly round */
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the SVG icon */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
+}
+
+.settings-button:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.settings-button:active {
+    background-color: #007bff;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gear-icon {
+    width: 24px;
+    height: 24px;
+    color: #e0e0e0; /* Sets the icon color to a light gray */
+    transition: color 0.2s ease-in-out;
+}
+
+/* Change icon color on hover */
+.settings-button:hover .gear-icon {
+    color: #f5f5f5;
+}
+
+
+
+/* -- Specific button styles -- */
+.button-power {
+    grid-column: 2 / 3;
+    background-color: #dc3545;
+    font-size: 1.2em;
+    padding: 0; /* Remove padding */
+    width: 50px; /* 20% of the original button's approximate width */
+    height: 50px; /* 20% of the original button's approximate height */
+    border-radius: 50%;
+}
+
+.button-power:hover {
+    background-color: #c82333;
+}
+
+.button-power:active {
+    background-color: #bd2130;
+}
+
+.power-icon {
+    width: 20px; /* Reduced icon size to match button */
+    height: 20px;
+    fill: currentColor;
+    color: #fff;
+}
+
+.remote-button-group {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+
+/* Updated back button style */
+.back-button {
+    padding: 10px; /* Reduce padding for smaller size */
+}
+
+.back-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+/* Updated back button style */
+.back-button {
+    padding: 10px; /* Reduce padding for smaller size */
+}
+
+.back-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+
+
+/* Menu button style */
+.menu-button .menu-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+
+/* Home button style */
+.home-button .home-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+
+
+/* --- Positioning for power and settings buttons --- */
+.power-settings-group {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between the buttons */
+}
+
+
+
+.media-controls {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 10px;
+}
+
+
+
+/* -- Channel/Volume Group (Updated for alignment) -- */
+.channel-volume-group {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Defines three columns, with the middle one being very narrow for spacing */
+    grid-template-areas: 
+        "ch-up . vol-up"
+        "ch-down . vol-down";
+    gap: 18px;
+    margin-top: 10px;
+    align-items: center; /* Centers items vertically within their rows */
+}
+
+/* Assign grid areas to the buttons */
+.channel-volume-group .remote-button:nth-child(1) {
+    grid-area: ch-up;
+}
+
+.channel-volume-group .remote-button:nth-child(3) {
+    grid-area: vol-up;
+}
+
+.channel-volume-group .remote-button:nth-child(2) {
+    grid-area: ch-down;
+}
+
+.channel-volume-group .remote-button:nth-child(4) {
+    grid-area: vol-down;
+}
+
+/* Hide the placeholder for the middle column */
+.empty-cell {
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+/* Volume button icons */
+.volume-icon {
+    width: 1.1em; /* Matches font size of text buttons */
+    height: 1.1em;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+
+/* Volume button icons */
+.channel-icon {
+    width: 1.1em; /* Matches font size of text buttons */
+    height: 1.1em;
+    fill: currentColor;
+    color: #f5f5f5;
+}
+/* -- Footer Navigation -- */
+.footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+}
+
+.footer a {
+    color: #99ccff;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: color 0.2s ease;
+}
+
+.footer a:hover {
+    color: #66b0ff;
+    text-decoration: underline;
+}
+
+/* -- Animations -- */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

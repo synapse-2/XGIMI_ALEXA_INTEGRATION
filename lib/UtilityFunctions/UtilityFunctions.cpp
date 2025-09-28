@@ -1,5 +1,5 @@
 #include "defaults.h"
-//#include <Wire.h>
+// #include <Wire.h>
 #include <Arduino.h>
 #include <FastLED.h>
 #include <esp_chip_info.h>
@@ -82,7 +82,7 @@ namespace UtilityFunctions
 #ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED yellow");
 #endif
-        leds[0] = CRGB::Yellow;
+        leds[0] = CRGB::Yellow4;
         FastLED.show();
     }
 
@@ -116,21 +116,56 @@ namespace UtilityFunctions
 
     void ledBlinkGreen()
     {
+        CRGB currColor = leds[0];
+
         UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has been received
         UtilityFunctions::delay(30);
         UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
+    }
+
+    void ledBlinkRed()
+    {
+        CRGB currColor = leds[0];
+
+        UtilityFunctions::ledRed(); // Turn on the LED to indicate a change has been received
+        UtilityFunctions::delay(30);
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
+    }
+
+    void ledBlinkYellow()
+    {
+        CRGB currColor = leds[0];
+
+        UtilityFunctions::ledYellow(); // Turn on the LED to indicate a change has been received
+        UtilityFunctions::delay(30);
+        UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
     }
 
     void ledBlinkBlue()
     {
+        CRGB currColor = leds[0];
+
         UtilityFunctions::ledBlue(); // Turn on the LED to indicate a change has been received
         UtilityFunctions::delay(30);
         UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
     }
 
-    
     void ledBlinkGreenLong()
     {
+        CRGB currColor = leds[0];
+
         for (int i = 0; i < 10; i++)
         {
             UtilityFunctions::ledGreen();
@@ -139,10 +174,15 @@ namespace UtilityFunctions
             UtilityFunctions::delay(30);
         }
         UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
     }
 
-     void ledBlinkRedLong()
+    void ledBlinkRedLong()
     {
+        CRGB currColor = leds[0];
+
         for (int i = 0; i < 10; i++)
         {
             UtilityFunctions::ledRed();
@@ -151,6 +191,9 @@ namespace UtilityFunctions
             UtilityFunctions::delay(30);
         }
         UtilityFunctions::ledStop(); // Turn off the LED after processing the change
+
+        leds[0] = currColor;
+        FastLED.show();
     }
 
     void IRAM_ATTR isr()
@@ -210,7 +253,6 @@ namespace UtilityFunctions
         {
             return;
         }
-    
 
         FastLED.addLeds<RGBCHIP, LED_BUILTINIO, RGB_DATA_ORDER>(leds, NUMPIXELS);
         // Initialize the LED array to off (black)

@@ -1,10 +1,10 @@
 // filepath: d:\Documents\XGIMI_ALEXA_INTEGRATION\src\UtilityFunctions.h
 #pragma once
 #include "defaults.h"
-#include <FastLED.h> 
+#include <FastLED.h>
 
-
-namespace UtilityFunctions {
+namespace UtilityFunctions
+{
 
     extern CRGB leds[NUMPIXELS];
 
@@ -26,6 +26,8 @@ namespace UtilityFunctions {
 
     void ledBlinkGreen();
     void ledBlinkBlue();
+    void ledBlinkRed();
+    void ledBlinkYellow();
     void ledBlinkGreenLong();
     void ledBlinkRedLong();
 
@@ -33,5 +35,4 @@ namespace UtilityFunctions {
     void debugLog();
     void debugLogf(const char *format, ...);
 
-    
 }

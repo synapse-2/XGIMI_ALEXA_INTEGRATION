@@ -24,7 +24,7 @@ You can also build this using the native new fork of platoformio called # PIOArd
 
 
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
-Apprently coexistance works but barely in my testing read more at https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
+Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
 For coexistance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
 The task loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
@@ -37,16 +37,6 @@ If you want to use the old platfromm code then refactor the code to NOT use "mag
 
 If you want to change the sdkconfig options then use the "pio run -t menuconfig" command in the PlatfromCIO Core CLI window. 
 
-You can also usue two Esp32 chips with I2C bus on two pins
-The Arduinos communicate with each other via the I2C bus, with one acting as the master and the other as the slave.
-<code>
-Pins for I2C defined by in the defaults.h (NOT TESTED)
-#define I2C_SCLK GPIO_NUM_12
-#define I2C_SDA GPIO_NUM_21
-</code>
-
-you connect each pin 12 on together on ESP32 and pin 21 on each esp32 together. 
-You fash the same code on the ESP32. They will figure out who the master and slave is determistically every time.
 
 CLI for flashing: pio pkg exec -p "tool-esptoolpy" -- esptool.py --help
 cli for commands avaliable:pio run --list-targets

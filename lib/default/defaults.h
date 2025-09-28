@@ -78,6 +78,11 @@
 #define HOHSTNAME_Local "ALEXA_ESP32.local"
 #define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
+#define NVRAM_PERFS "registry"
+#define NVRAM_PERFS_ADMIN_PASS_PROP "adminPass"
+#define NVRAM_PERFS_ADMIN_PASS_DEFAULT "admin"
+#define NVRAM_PERFS_ADMIN_NAME "admin"
+
 
 #define ResetButton GPIO_NUM_0 // the boot button on the ESP32
 
@@ -88,3 +93,6 @@
 // dc175b6d-0190-4d72-9445-980a76e7f872
 // Secret Key
 // #e0num8EJjkWIVZCv5Avp0RmO
+
+const char DEVICE_LOGIN_NAME[] = "dc175b6d-0190-4d72-9445-980a76e7f872";
+const char DEVICE_KEY[] = "#e0num8EJjkWIVZCv5Avp0RmO"; // Secret device password
