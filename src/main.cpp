@@ -13,6 +13,7 @@
 #include "CmdRingBuffer.h"
 #include "magicEnum/magic_enum.hpp"
 #include "magicEnum/magic_enum_iostream.hpp"
+#include "RC_Webinterface.h"
 
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
@@ -230,6 +231,9 @@ void setup()
       UtilityFunctions::ledYellow();
     }
 #endif
+    // create wenserver
+    RC_WebInterface rc_web;
+    rc_web.begin();
 
     // Create decoder task
     m = AcloudIOT_Decoder();

@@ -13,7 +13,7 @@ struct WebCommand {
 
 class RC_WebInterface {
 public:
-    RC_WebInterface(RingbufHandle_t* ringbuffer);
+    RC_WebInterface();
     void begin();
     void handleClient();
     static void commandProcessorTask(void* pvParameters);
@@ -24,8 +24,6 @@ protected:
     const char* _adminUsername = NVRAM_PERFS_ADMIN_NAME;
     String _adminPassword;
     const char* _defaultPassword = NVRAM_PERFS_ADMIN_PASS_DEFAULT;
-
-    RingbufHandle_t* _commandRingBuffer;
 
     void loadAdminPassword();
     void saveAdminPassword(String newPassword);

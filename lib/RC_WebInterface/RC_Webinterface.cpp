@@ -8,10 +8,9 @@
 #include <Preferences.h>
 
 // Constructor
-RC_WebInterface::RC_WebInterface(RingbufHandle_t* ringbuffer)
+RC_WebInterface::RC_WebInterface()
     : _server(80) {
-    // Create a ring buffer for commands
-    _commandRingBuffer = ringbuffer;
+
 }
 
 // Public begin method to start the web interface
@@ -67,10 +66,10 @@ void RC_WebInterface::handleRemotePress() {
         Serial.println("Received guest command: " + action);
         WebCommand cmd = {action};
         
-        if (xRingbufferSend(_commandRingBuffer, (void*)&cmd, sizeof(WebCommand), pdMS_TO_TICKS(10)) != pdTRUE) {
-            _server.send(500, "text/plain", "Failed to send command to buffer.");
-            return;
-        }
+        // if (xRingbufferSend(_commandRingBuffer, (void*)&cmd, sizeof(WebCommand), pdMS_TO_TICKS(10)) != pdTRUE) {
+        //     _server.send(500, "text/plain", "Failed to send command to buffer.");
+        //     return;
+        // }
     }
     _server.send(200, "text/plain", "OK");
 }
@@ -95,7 +94,7 @@ void RC_WebInterface::handleUpdatePassword() {
 void RC_WebInterface::setupRoutes() {
     // Guest remote page
     _server.on("/", HTTP_GET, [this]() {
-        File file = FFat.open("/index.html", "r");
+        File file = FFat.open("/index.htm", "r");
         if (file) {
             _server.streamFile(file, "text/html");
             file.close();
@@ -110,7 +109,7 @@ void RC_WebInterface::setupRoutes() {
     // Admin settings page (requires auth)
     _server.on("/settings", HTTP_GET, [this]() {
         if (!checkAdminAuth()) return;
-        File file = FFat.open("/settings.html", "r");
+        File file = FFat.open("/settings.htm", "r");
         if (file) {
             _server.streamFile(file, "text/html");
             file.close();
