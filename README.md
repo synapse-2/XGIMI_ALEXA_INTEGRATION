@@ -73,3 +73,8 @@ Name                        Flash           RAM             Temp        RAM Spee
  ESP32-S3-WROOM-1-N16R8     16MB(QuadSPI)   8MB(OctalSPI)   –40~65      80Mhz
  ESP32-S3-WROOM-1-N16R16VA8 16MB(QuadSPI)   16MB(OctalSPI)   –40~65
 </code>
+
+if you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
+FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
+list (APPEND app_sources ${app_sources2})
+in the cmakelists.txt in the project root/scr folder
