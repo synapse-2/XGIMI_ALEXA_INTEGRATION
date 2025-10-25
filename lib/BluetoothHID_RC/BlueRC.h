@@ -43,6 +43,9 @@ namespace BlueRC
         StartOver = 6,
         Stop = 7,
 
+        Menu_Btn = 234,
+        Channel_Up_Btn = 235,
+        Channel_Dn_Btn = 236,
         Ok_Btn = 237,
         Up_Btn = 238,
         Right_Btn = 239,
@@ -81,40 +84,6 @@ namespace BlueRC
 
     } __attribute__((packed)) Remote_Cmd;
 
-    /*
-    Define the Prefered prepheripral config params for the device in sdkconfig.defaults
-    this is done bu defines in the menuconfig or defines in sdk defualts.h
-    uint16_t connIntervalMin;    // !< Minimum connection interval. In 1.25 ms unit
-    uint16_t connIntervalMax;    // !< Maximum connection interval. In 1.25 ms unit
-    uint16_t connLatency;        // !< Slave latency.
-    uint16_t supTimeout;         // !< Supervision timeout. In 10 ms unit
-    uint16_t minCeLen;           // !< Minimum CE length. Set to 0
-    uint16_t maxCeLen;           // !< Maximum CE length. Set to 0
-
-    #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL
-    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL (10) // 11.25 ms
-    #endif
-
-    #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL
-    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL (10) // 11.25 ms
-    #endif
-
-    #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SLAVE_LATENCY
-    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SLAVE_LATENCY (50)     // 50 ms
-    #endif
-
-    #ifndef CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO
-    #define CONFIG_BT_NIMBLE_SVC_GAP_PPCP_SUPERVISION_TMO (300)  // 300
-    #endif
-
-
-    define the CENTRAL_ADDRESS_RESOLUTION params for the device
-    this is all done by defines in NimbleBLE - ESP32 so we have to put them in the platform.ini
-
-    #ifndef CONFIG_BT_NIMBLE_SVC_GAP_CENTRAL_ADDRESS_RESOLUTION
-    #define CONFIG_BT_NIMBLE_SVC_GAP_CENTRAL_ADDRESS_RESOLUTION 0
-    #endif
-    */
 
     class BluetoothHID_RC : public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks
     {

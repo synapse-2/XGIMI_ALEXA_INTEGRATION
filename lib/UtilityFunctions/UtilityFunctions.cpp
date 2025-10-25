@@ -6,6 +6,14 @@
 #include <magicEnum/magic_enum.hpp>
 #include <magicEnum/magic_enum_iostream.hpp>
 #include "UtilityFunctions.h"
+#include <Preferences.h>
+#include <format>
+#include <string>
+#include <WiFiManager.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+extern std::vector<projectorWAKE_str> projectorWakeList;
 
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
@@ -82,7 +90,7 @@ namespace UtilityFunctions
 #ifdef UTILFUNC_DEBUG_LED_ON
         debugLog("Turning LED yellow");
 #endif
-        leds[0] = CRGB::Yellow4;
+        leds[0] = CRGB::Yellow3;
         FastLED.show();
     }
 
@@ -246,6 +254,155 @@ namespace UtilityFunctions
         buttonReset.pressed = false;
     }
 
+    String taskInfo()
+    {
+
+        std::string str;
+#ifdef configUSE_TRACE_FACILITY
+        str = "Free RTOS TASKS :\n";
+        // Get the total number of tasks
+        UBaseType_t numberOfTasks = uxTaskGetNumberOfTasks();
+
+        // Allocate memory for the TaskStatus_t array
+        TaskStatus_t *taskStatusArray = new TaskStatus_t[numberOfTasks];
+
+        // Get the system state and fill the array
+
+#ifdef configGENERATE_RUN_TIME_STATS
+
+        configRUN_TIME_COUNTER_TYPE ulTotalRunTime, ulStatsAsPercentage;
+
+        /* For percentage calculations. */
+        ulTotalRunTime = 100;
+        if (uxTaskGetSystemState(taskStatusArray, numberOfTasks, &ulTotalRunTime) > 0)
+#else
+        if (uxTaskGetSystemState(taskStatusArray, numberOfTasks, NULL) > 0)
+#endif
+        {
+
+            str = str + std::format("{: <20}{: <10}{: <10}{: <10}{: <10}\n", "Task Name", "State", "Prio", "Core ID", "% CPU");
+
+            for (int i = 0; i < numberOfTasks; i++)
+            {
+#ifdef configGENERATE_RUN_TIME_STATS
+                /* What percentage of the total run time has the task used?
+                    This will always be rounded down to the nearest integer.
+                ulTotalRunTimeDiv100 has already been divided by 100. */
+                if (ulTotalRunTime != 0)
+                {
+                    ulStatsAsPercentage = (taskStatusArray[i].ulRunTimeCounter / ulTotalRunTime);
+                }
+                else
+                {
+                    ulStatsAsPercentage = taskStatusArray[i].ulRunTimeCounter;
+                }
+#else
+                ulStatsAsPercentage = 0;
+#endif
+
+                const char *taskName = taskStatusArray[i].pcTaskName;
+
+                // Get task state as a readable string
+                const char *state;
+                switch (taskStatusArray[i].eCurrentState)
+                {
+                case eRunning:
+                    state = "Running";
+                    break;
+                case eReady:
+                    state = "Ready";
+                    break;
+                case eBlocked:
+                    state = "Blocked";
+                    break;
+                case eSuspended:
+                    state = "Suspended";
+                    break;
+                case eDeleted:
+                    state = "Deleted";
+                    break;
+                default:
+                    state = "Unknown";
+                    break;
+                }
+
+                UBaseType_t priority = taskStatusArray[i].uxCurrentPriority;
+
+                UBaseType_t coreID = 0;
+#ifdef configTASKLIST_INCLUDE_COREID                  
+                coreID = taskStatusArray[i].xCoreID; // Specific to ESP-IDF
+#endif
+
+                str = str + std::format("{: <20}{: <10}{: <10}{: <10}{: <10}\n", taskName, state, priority,coreID, ulStatsAsPercentage);
+            }
+
+            // Free the dynamically allocated memory
+            delete[] taskStatusArray;
+#else
+        str = "Free RTOS TASKS NOT CONFIGURED :\n";
+#endif
+            return String(str.c_str());
+        }
+    }
+    String chipInfo()
+    {
+        /* Print chip information */
+
+        unsigned major_rev = ESP.getChipRevision() / 100;
+        unsigned minor_rev = ESP.getChipRevision() % 100;
+        uint32_t flash_size = ESP.getFlashChipSize();
+        esp_chip_info_t chip_info;
+        esp_chip_info(&chip_info);
+
+        std::string str = std::format("System {} chip with {} CPU core(s) Clock Feq {} MHz, {}{}{}{}, silicon revision v{}.{}, {} MB {} flash \n",
+                                      ESP.getChipModel(),
+                                      ESP.getChipCores(),
+                                      ESP.getCpuFreqMHz(),
+                                      (chip_info.features & CHIP_FEATURE_WIFI_BGN) ? "WiFi/" : "",
+                                      (chip_info.features & CHIP_FEATURE_BT) ? "BT" : "",
+                                      (chip_info.features & CHIP_FEATURE_BLE) ? "BLE" : "",
+                                      (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "", major_rev, minor_rev, flash_size / (uint32_t)(1024 * 1024),
+                                      (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
+
+        str = str + std::format("Minimum free heap size: {} KB \n", esp_get_minimum_free_heap_size() / 1024);
+        str = str + std::format("Total heap: {} KB \n", ESP.getHeapSize() / 1024);
+        str = str + std::format("Free heap: {} KB \n", ESP.getFreeHeap() / 1024);
+        str = str + std::format("Total Flash Chip Mode: {} \n", magic_enum::enum_name(ESP.getFlashChipMode()));
+        str = str + std::format("Fash Chip Speed {} MHz \n", ESP.getFlashChipSpeed() / (1000 * 1000));
+        str = str + std::format("Total PSRAM: {} KB \n", ESP.getPsramSize() / 1024);
+        str = str + std::format("Free PSRAM: {} KB\n", ESP.getFreePsram() / 1024);
+
+        str = str + std::format("SDK version: {} \n", ESP.getSdkVersion());
+        str = str + std::format("Core version: {} \n", ESP.getCoreVersion());
+
+        str = str + std::format("Sketch Size: {} KB \n", ESP.getSketchSize() / 1024);
+        str = str + std::format("Sketch Free Space: {} KB\n", ESP.getFreeSketchSpace() / 1024);
+
+        uint64_t macID = ESP.getEfuseMac(); // Get the MAC address
+        str = str + std::format("Device MAC Address: {:02X}:{:02X}:{:02X}:{:02X}:{:02X}:{:02X}\n",
+                                (uint16_t)(macID & 0x0000000000FF),
+                                (uint16_t)(macID >> 8) & 0x0000000000FF,
+                                (uint16_t)(macID >> 16) & 0x0000000000FF,
+                                (uint16_t)(macID >> 24) & 0x0000000000FF,
+                                (uint16_t)(macID >> 32) & 0x0000000000FF,
+                                (uint16_t)(macID >> 40) & 0x0000000000FF);
+
+        WiFiManager wm;
+        // can contain gargbage on esp32 if wifi is not ready yet
+        str = str + "[WIFI] WIFI_INFO DEBUG \n";
+        str = str + std::format("[WIFI] MODE: {} \n", wm.getModeString(WiFi.getMode()).c_str());
+        str = str + std::format("[WIFI] SAVED: {} \n", (wm.getWiFiIsSaved() ? "YES" : "NO"));
+        str = str + std::format("[WIFI] SSID: {} \n", wm.getWiFiSSID().c_str());
+        str = str + std::format("[WIFI] CHANNEL: {} \n", WiFi.channel());
+        str = str + std::format("[WIFI] RSSI: {} \n", WiFi.RSSI());
+        str = str + std::format("[WIFI] PASS: {} \n", wm.getWiFiPass().c_str());
+        str = str + std::format("[WIFI] HOSTNAME: {} \n", WiFi.getHostname());
+
+        str = str + "In order to RESET and erase NVRAM press boot key 3 times within 3 seconds";
+
+        return String(str.c_str());
+    }
+
     void UtilityFunctionsInit()
     {
         // only init once
@@ -262,55 +419,17 @@ namespace UtilityFunctions
         }
         FastLED.show();
 
+        // start debug log
         debugLog();
-        /* Print chip information */
 
-        unsigned major_rev = ESP.getChipRevision() / 100;
-        unsigned minor_rev = ESP.getChipRevision() % 100;
-        uint32_t flash_size = ESP.getFlashChipSize();
-        esp_chip_info_t chip_info;
-        esp_chip_info(&chip_info);
-
-        debugLogf("This is %s chip with %d CPU core(s) Clok Feq %i MHz, %s%s%s%s, silicon revision v%d.%d, %" PRIu32 "MB %s flash\n",
-                  ESP.getChipModel(),
-                  ESP.getChipCores(),
-                  ESP.getCpuFreqMHz(),
-                  (chip_info.features & CHIP_FEATURE_WIFI_BGN) ? "WiFi/" : "",
-                  (chip_info.features & CHIP_FEATURE_BT) ? "BT" : "",
-                  (chip_info.features & CHIP_FEATURE_BLE) ? "BLE" : "",
-                  (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "", major_rev, minor_rev, flash_size / (uint32_t)(1024 * 1024),
-                  (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
-
-        debugLogf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size);
-        debugLogf("Total heap: %u\n", ESP.getHeapSize());
-        debugLogf("Free heap: %u\n", ESP.getFreeHeap());
-        debugLogf("Total Flash Chip Mode: %u\n", magic_enum::enum_name(ESP.getFlashChipMode()));
-        debugLogf("Fash Chip Speed %i\n", ESP.getFlashChipSpeed());
-        debugLogf("Total PSRAM: %u\n", ESP.getPsramSize());
-        debugLogf("Free PSRAM: %d\n", ESP.getFreePsram());
-
-        debugLogf("SDK version: %s\n", ESP.getSdkVersion());
-        debugLogf("Core version: %s\n", ESP.getCoreVersion());
-
-        debugLogf("Sketch Size: %i\n", ESP.getSketchSize());
-        debugLogf("Sketch Free Space: %i\n", ESP.getFreeSketchSpace());
-
-        // FastLED.addLeds<NEOPIXEL, LED_BUILTINIO>(leds, NUMPIXELS);
-        uint64_t macID = ESP.getEfuseMac(); // Get the MAC address
-        debugLogf("Device MAC Address: %04X:%04X:%04X:%04X:%04X:%04X\n",
-                  (uint16_t)(macID >> 32),
-                  (uint16_t)(macID >> 16),
-                  (uint16_t)(macID & 0xFFFF),
-                  (uint16_t)(macID >> 48),
-                  (uint16_t)(macID >> 32),
-                  (uint16_t)(macID >> 16));
+        debugLog(chipInfo());
 
         // Extract the last two bytes
-        uint16_t lastByte = (uint16_t)(macID & 0x00FF);
+        // uint16_t lastByte = (uint16_t)(macID & 0x00FF);
 
-        debugLogf("Last Byte: 0x%04X\n", lastByte);
+        // debugLogf("Last Byte: 0x%04X\n", lastByte);
 
-        UtilityFunctions::delay(lastByte);
+        // UtilityFunctions::delay(lastByte);
 
         // debugLog("Initializing I2C...");
         // bool masterSuccess = Wire1.begin(I2C_SDA, I2C_SCLK, I2C_FREQ); // Initialize I2C with specified pins and frequency
@@ -389,6 +508,100 @@ namespace UtilityFunctions
     //     Serial.println("done\n");
     //     return lowestDevADDR;
     // }
+
+    // Load hostname from NVRAM
+    String loadLocalHostname()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        String _localHostname = _preferences.getString(NVRAM_PERFS_HOSTNAME_LOCAL_PROP, NVRAM_PERFS_HOSTNAME_LOCAL_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n", _localHostname.c_str());
+
+        return _localHostname;
+    }
+
+    // Save hostname to NVRAM
+    void saveLocalHostname(String newHostname)
+    {
+        if (!newHostname.isEmpty() && (newHostname.length() < 32) && (!newHostname.endsWith(".local")))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putString(NVRAM_PERFS_HOSTNAME_LOCAL_PROP, newHostname);
+            _preferences.end();
+            UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
+            ESP.restart();
+        }
+        else
+        {
+            UtilityFunctions::debugLog("Invalid hostnname, must be less than 32 chars;not empty; and not .local in the end");
+        }
+    }
+
+    // Load BlueTooth Name from NVRAM
+    String loadBlueToothName()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        String newBlueName = _preferences.getString(NVRAM_PERFS_BLUETOOTH_NAME_PROP, NVRAM_PERFS_BLUETOOTH_NAME_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n", newBlueName.c_str());
+
+        return newBlueName;
+    }
+
+    // Save BlueTooth Name to NVRAM
+    void saveBlueToothName(String newBlueName)
+    {
+        if (!newBlueName.isEmpty() && (newBlueName.length() < 32))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putString(NVRAM_PERFS_BLUETOOTH_NAME_PROP, newBlueName);
+            _preferences.end();
+            UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
+            ESP.restart();
+        }
+        else
+        {
+            UtilityFunctions::debugLog("Invalid BlueTooth Name , must be less than 32 chars;not empty");
+        }
+    }
+
+    // Load wol packet num  from NVRAM
+    int loadWakePacketNum()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        int wolNum = _preferences.getInt(NVRAM_PERFS_WAKE_PACKET_PROP, NVRAM_PERFS_WAKE_PACKET_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded WOL Packet num from NVRAM. %i\n", wolNum);
+
+        return wolNum;
+    }
+
+    // Save  wol packet num  from NVRAM
+    void saveWakePacketNum(int newWolNum)
+    {
+        if ((newWolNum >= 0) && (newWolNum < projectorWakeList.size()))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putInt(NVRAM_PERFS_WAKE_PACKET_PROP, newWolNum);
+            _preferences.end();
+            UtilityFunctions::debugLog("WOl packet num updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Number need to be bterween 0 and  less than %i got %i\n", projectorWakeList.size(), newWolNum);
+        }
+    }
+
+    std::vector<uint8_t> getHID_AD2_MANUF_DATA()
+    {
+        return projectorWakeList[loadWakePacketNum()].manufData;
+    }
 
     void debugLog()
     {

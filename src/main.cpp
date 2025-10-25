@@ -14,6 +14,7 @@
 #include "magicEnum/magic_enum.hpp"
 #include "magicEnum/magic_enum_iostream.hpp"
 #include "RC_Webinterface.h"
+#include "nvs_flash.h"
 
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
@@ -25,27 +26,15 @@ auto to_integer(magic_enum::Enum<E> value) -> int
 // Define the LED_BUILTIN pin for the ESP32
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
 
-AcloudIOT_Decoder m;
+AcloudIOT_Decoder aIOT;
 BLE_Remote_Decoder s;
-TaskHandle_t Task0;
-TaskHandle_t Task1;
+//TaskHandle_t Task0;
+//TaskHandle_t Task1;
 WiFiManager wm;
+RC_WebInterface *rc_web;
 
 String getSSID() { return wm.getWiFiSSID(); }
 String getPSK() { return wm.getWiFiPass(); }
-
-void LogWifiDebugInfo()
-{
-  // can contain gargbage on esp32 if wifi is not ready yet
-  UtilityFunctions::debugLog("[WIFI] WIFI_INFO DEBUG");
-  UtilityFunctions::debugLog("[WIFI] MODE: " + (String)(wm.getModeString(WiFi.getMode())));
-  UtilityFunctions::debugLog("[WIFI] SAVED: " + (String)(wm.getWiFiIsSaved() ? "YES" : "NO"));
-  UtilityFunctions::debugLog("[WIFI] SSID: " + (String)wm.getWiFiSSID());
-  UtilityFunctions::debugLog("[WIFI] CHANNEL: " + (String)(wm.getModeString(WiFi.channel())));
-  UtilityFunctions::debugLog("[WIFI] RSSI: " + (String)(wm.getModeString(WiFi.RSSI())));
-  UtilityFunctions::debugLog("[WIFI] PASS: " + (String)wm.getWiFiPass());
-  UtilityFunctions::debugLog("[WIFI] HOSTNAME: " + (String)WiFi.getHostname());
-}
 
 void checkResetPressed()
 {
@@ -64,7 +53,8 @@ void checkResetPressed()
       }
 
       wm.resetSettings(); // Reset WiFi settings
-      UtilityFunctions::debugLog("Resetting WiFi settings...");
+      nvs_flash_erase();
+      UtilityFunctions::debugLog("Resetting ALL NVRAM settings...");
       for (int i = 0; i < 5; i++)
       {
         UtilityFunctions::ledYellow();
@@ -86,90 +76,27 @@ void checkResetPressed()
 void onProjectorChange()
 {
 
-  m.onProjectorChange(projector);
+  aIOT.onProjectorChange(projector);
 }
 void onNetworkConnect()
 {
-  m.onNetworkConnect();
+  aIOT.onNetworkConnect();
 }
 
 void onNetworkDisconnect()
 {
 
-  m.onNetworkDisconnect();
+  aIOT.onNetworkDisconnect();
 }
 
 void onNetworkError()
 {
-  m.onNetworkError();
+  aIOT.onNetworkError();
 }
 
+// Arduino IOT task
 void Task1code(void *pvParameters)
 {
-
-  UtilityFunctions::debugLog("TASK 1 Running...");
-
-  // Check if the device is in master or slave mode
-  if (UtilityFunctions::isMaster())
-  {
-    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder mode. Starting MASTER job");
-
-#ifdef XIGIMI_DEBUG_WIFI_OFF
-#else
-    m.setup(getSSID(), getPSK()); // Start the master functionality
-    ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
-    m.addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
-    m.addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
-    m.addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
-    m.start();
-
-#endif
-  }
-  else
-  {
-    UtilityFunctions::debugLog("Device is in BLE_Remote_Decoder mode.");
-    return; // exit this task as we are not the master
-  }
-
-  // this will only run if we are the master
-  UtilityFunctions::debugLog("we are in the MAIN LOOP");
-  for (;;) // infinite loop
-  {
-    UtilityFunctions::delay(AIOT_POLL_TIME);
-
-    // If in master mode, update the properties
-#ifdef XIGIMI_DEBUG_WIFI_OFF
-    UtilityFunctions::debugLog("WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
-#else
-    checkResetPressed(); // Check if the reset button has been pressed
-    ArduinoCloud.update();
-    if (m.hasFirstCloudSyncHasHappened())
-    {
-      UtilityFunctions::ledBlinkGreen();
-    }
-    else
-    {
-      UtilityFunctions::ledBlinkYellow();
-    }
-#endif
-  }
-}
-
-// Task0code: bluetooth server only
-void Task0code(void *pvParameters)
-{
-
-  UtilityFunctions::waitTillInitComplete(); // master core will do the init we wait till then
-  UtilityFunctions::debugLog("Task0 Init COMPLETE ");
-
-  s.start();
-  UtilityFunctions::debugLog("Task0 BLE SERVER started ... ");
-  for (;;) // infinite loop
-  {
-    UtilityFunctions::ledBlinkBlue();
-    s.dequeueCmd(); // see if we have a commmand
-    UtilityFunctions::delay(AIOT_POLL_TIME);
-  }
 }
 
 void setup()
@@ -188,10 +115,12 @@ void setup()
   // Check if the device is in master or slave mode
   if (UtilityFunctions::isMaster())
   {
-    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder WIFI mode. Starting MASTER job if WIFI connect");
 
 #ifdef XIGIMI_DEBUG_WIFI_OFF
+    UtilityFunctions::debugLog("WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
 #else
+
+    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder WIFI mode. Starting MASTER job if WIFI connect");
     // reset settings - wipe stored credentials for testing
     //  these are stored by the esp library
     //  wm.resetSettings();
@@ -207,7 +136,7 @@ void setup()
     UtilityFunctions::debugLog("Starting WiFiManager...");
     wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
-    wm.setHostname(HOHSTNAME_Local);
+    wm.setHostname(UtilityFunctions::loadLocalHostname());
     wm.setConfigPortalTimeout(AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
 
     // AcloudIOT_Decoder::LogWifiDebugInfo();
@@ -226,42 +155,106 @@ void setup()
     {
       // if you get here you have connected to the WiFi
       UtilityFunctions::debugLog("connected to WIFI Network...yeey :)");
-      LogWifiDebugInfo();
       UtilityFunctions::ledBlinkGreenLong();
       UtilityFunctions::ledYellow();
     }
-#endif
-    // create wenserver
-    RC_WebInterface rc_web;
-    rc_web.begin();
+
+    // create webserver
+    rc_web = new RC_WebInterface();
+    rc_web->begin();
 
     // Create decoder task
-    m = AcloudIOT_Decoder();
-    xTaskCreatePinnedToCore(
-        Task0code,    /* Task function. */
-        "BLE Core 0", /* name of task. */
-        10000,        /* Stack size of task */
-        NULL,         /* parameter of the task */
-        1,            /* priority of the task */
-        &Task0,       /* Task handle to keep track of created task */
-        0);           /* pin task to core 0 */
+    aIOT = AcloudIOT_Decoder();
+    // xTaskCreatePinnedToCore(
+    //     Task1code,          /* Task function. */
+    //     "Wifi AIoT Core 1", /* name of task. */
+    //     10000,              /* Stack size of task */
+    //     NULL,               /* parameter of the task */
+    //     1,                  /* priority of the task */
+    //     &Task1,             /* Task handle to keep track of created task */
+    //     1);                 /* pin task to core 1 */
+
+#endif
   }
 
-  s = BLE_Remote_Decoder();
-  // create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
-  xTaskCreatePinnedToCore(
-      Task1code,          /* Task function. */
-      "Wifi AIoT Core 1", /* name of task. */
-      10000,              /* Stack size of task */
-      NULL,               /* parameter of the task */
-      1,                  /* priority of the task */
-      &Task1,             /* Task handle to keep track of created task */
-      1);                 /* pin task to core 1 */
+  // xTaskCreatePinnedToCore(
+  //     Task0code,    /* Task function. */
+  //     "BLE Core 0", /* name of task. */
+  //     10000,        /* Stack size of task */
+  //     NULL,         /* parameter of the task */
+  //     1,            /* priority of the task */
+  //     &Task0,       /* Task handle to keep track of created task */
+  //     0);           /* pin task to core 0 */
 }
 
 // this shoud run on core 1
 void loop()
 {
-  yield(); // for the watchdog timer on core 0
-  UtilityFunctions::delay(1000);
+  // yield(); // for the watchdog timer on core 0
+  // UtilityFunctions::delay(1000);
+
+  UtilityFunctions::debugLog("LOOP TASK Running...");
+
+  // Check if the device is in master or slave mode
+  if (UtilityFunctions::isMaster())
+  {
+    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder mode. Starting AIT WIFI Connext ");
+
+#ifdef XIGIMI_DEBUG_WIFI_OFF
+#else
+    aIOT.setup(getSSID(), getPSK()); // Start the master functionality
+    ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
+    aIOT.addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
+    aIOT.addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
+    aIOT.addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
+    aIOT.start();
+
+#endif
+  }
+  else
+  {
+    UtilityFunctions::debugLog("Device is in BLE_Remote_Decoder mode.");
+  }
+
+  UtilityFunctions::waitTillInitComplete(); // master core will do the init we wait till then
+  UtilityFunctions::debugLog("BLE Init COMPLETE ");
+
+  s = BLE_Remote_Decoder();
+  s.start();
+  UtilityFunctions::debugLog("BLE SERVER started ... ");
+  for (;;) // infinite loop
+  {
+    /// blutooth handle
+    UtilityFunctions::debugLog("WAIT");
+    UtilityFunctions::delay(AIOT_POLL_TIME);
+    UtilityFunctions::debugLog("BLE HANDLE");
+    UtilityFunctions::ledBlinkBlue();
+    s.dequeueCmd(); // see if we have a commmand
+
+    /// TCp handle
+    // If in master mode, update the properties
+#ifdef XIGIMI_DEBUG_WIFI_OFF
+    UtilityFunctions::debugLog("WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
+#else
+    UtilityFunctions::debugLog("WAIT");
+    UtilityFunctions::delay(AIOT_POLL_TIME);
+    UtilityFunctions::debugLog("TCP HANDLE");
+    checkResetPressed(); // Check if the reset button has been pressed
+    ArduinoCloud.update();
+    if (rc_web != NULL)
+    {
+      rc_web->handleClient(); // do the web serv tasks
+    }
+    if (aIOT.hasFirstCloudSyncHasHappened())
+    {
+      UtilityFunctions::ledBlinkGreen();
+    }
+    else
+    {
+      UtilityFunctions::ledBlinkYellow();
+    }
+
+#endif
+    
+  }
 }

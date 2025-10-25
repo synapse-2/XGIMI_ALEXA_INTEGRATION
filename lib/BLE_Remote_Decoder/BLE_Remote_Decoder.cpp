@@ -16,7 +16,7 @@ void BLE_Remote_Decoder::start()
     // need to make the Bluetooth client
 
     
-    NimBLEDevice::init(HID_DEVICE_NAME);
+    NimBLEDevice::init(std::string (UtilityFunctions::loadBlueToothName().c_str()));
     NimBLEServer *pServer = NimBLEDevice::createServer();
     if (pServer == NULL){
         UtilityFunctions::debugLog("Null BLE devide server created stopping BLE ");

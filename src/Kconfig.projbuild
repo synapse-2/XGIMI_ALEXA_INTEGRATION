@@ -268,3 +268,4 @@ if IDF_TARGET_ESP32P4
 endif
 
 endmenu
+

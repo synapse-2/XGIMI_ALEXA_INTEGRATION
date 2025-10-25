@@ -35,4 +35,30 @@ namespace UtilityFunctions
     void debugLog();
     void debugLogf(const char *format, ...);
 
+    String chipInfo();
+    String taskInfo();
+
+    // Load the mDNS hostname from NVRAM
+    String loadLocalHostname();
+
+
+    //save 
+    void saveLocalHostname(String newHostname);
+
+    // Load wol packet num  from NVRAM
+    int loadWakePacketNum();
+
+    // Save  wol packet num  from NVRAM
+    void saveWakePacketNum(int newWolNum);
+
+
+    // Load BlueTooth Name from NVRAM
+    String loadBlueToothName();
+    
+    // Save BlueTooth Name to NVRAM
+    void saveBlueToothName(String newBlueName);
+
+    ///get the actual ad bytes
+    std::vector<uint8_t> getHID_AD2_MANUF_DATA();
+
 }

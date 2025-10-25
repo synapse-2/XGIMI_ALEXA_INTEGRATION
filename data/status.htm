@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Load the file with globals first as a classic script -->
+<script src="/globals.js"></script>
+
+<!-- Load the main script as a module so it can access the globals -->
+<script type="module" src="/script.js"></script>
+
+<style>
+    .flex-container {
+        display: flex;
+        justify-content: center;
+        /* Aligns child items horizontally to the center */
+    }
+
+    .flex-item {
+        /* The child div's content is left-justified by default */
+        padding: 20px;
+        text-align: left;
+        font-family: monospace; 
+        white-space: pre-wrap;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexa - Blutooth TV Remote</title>
+
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="/remote.css">
+
+</head>
+
+<body>
+    <div class="remote-container">
+        <!-- New status bar for icons -->
+        <div class="status-bar">
+            <div></div>
+            <span class="status-text">
+                <h1 id="main-heading">Status</h1>
+            </span>
+            <script>
+                const mainHeadingElement = document.getElementById("main-heading");
+                mainHeadingElement.textContent = "ESP32 Status : " + headingTxt;
+            </script>
+            <div id="Wifi-icon" class="wifi-icon wifi-low">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <!-- Separate paths with space between each bar -->
+                    <!-- Smallest bar (dot) -->
+                    <path class="bar-1" fill="#000000" d="M12 19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    <!-- Second bar -->
+                    <path class="bar-2" fill="#000000"
+                        d="M12 15c-3.31 0-6 2.69-6 6h2c0-2.21 1.79-4 4-4s4 1.79 4 4h2c0-3.31-2.69-6-6-6z" />
+                    <!-- Third bar -->
+                    <path class="bar-3 fill=" #000000"
+                        d="M12 11c-5.52 0-10 4.48-10 10h2c0-4.41 3.59-8 8-8s8 3.59 8 8h2c0-5.52-4.48-10-10-10z" />
+                    <!-- Largest bar -->
+                    <path class="bar-4" fill="#000000"
+                        d="M12 7c-7.73 0-14 6.27-14 14h2c0-6.63 5.37-12 12-12s12 5.37 12 12h2c0-7.73-6.27-14-14-14z" />
+                    <title id="wifi-title">Arduino IOT connected</title>
+                </svg>
+            </div>
+            <svg id="bluetooth-icon" class="status-icon bt-advertising" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <title>Blue = Connected; Yellow = Advertising</title>
+                <path d="M7 7l10 10-5 5V2l5 5L7 17" />
+            </svg>
+        </div>
+
+        <div class="flex-container">
+            <div class="flex-item" id="statusTXT">
+       
+                This div is centered by its flex parent.
+                    This div is centered by its flex parent.
+                This div is centered by its flex parent.
+               
+                
+            </div>
+        </div>
+
+
+        <script>
+            const statusElement = document.getElementById("statusTXT");
+            statusElement.innerHTML = statusTxt; 
+        </script>
+        <div class="footer">
+            <a href="/">Home</a>
+            <a href="/settings.htm">Settings</a>
+            <a href="/status.htm">Status</a>
+        </div>
+</body>
+
+</html>

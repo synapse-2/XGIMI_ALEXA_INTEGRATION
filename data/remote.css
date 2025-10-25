@@ -15,14 +15,15 @@ body {
 
 
 
-/* -- Status Bar -- */
 .status-bar {
-    grid-column: 1 / 4;
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 24px  auto 24px 24px; /* Creates three columns */
     align-items: center;
-    gap: 10px;
-    padding-bottom: 10px;
+    gap: 0px;
+    padding-bottom:0px;
+}
+.status-bar .status-text {
+    text-align: center; /* Centers the text within its column */
 }
 
 .status-icon {

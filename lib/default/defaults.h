@@ -3,6 +3,8 @@
 #pragma once
 
 #include <sdkconfig.h>
+#include <vector>
+#include <string>
 
 
 /* defined in sdkconfig.defaults
@@ -31,7 +33,7 @@
 
 #define WIFIDEBUG WM_DEBUG_VERBOSE
 
-#define WM_MDNS //enable mdns for the name resolution
+#define WM_MDNS  1 //enable mdns for the name resolution
 
 /*
      The following function allows you to obtain more information
@@ -62,7 +64,7 @@
 
 
 //set to not start the wifi and aIoT connection, only blutooth wwill be turned on for debugging
-// #define XIGIMI_DEBUG_WIFI_OFF
+//#define XIGIMI_DEBUG_WIFI_OFF
 #undef XIGIMI_DEBUG_WIFI_OFF
 
 // use BLE 5.0 adv
@@ -72,17 +74,25 @@
 //#define UTILFUNC_DEBUG_LED_ON
 #undef UTILFUNC_DEBUG_LED_ON
 
-#define AIOT_POLL_TIME 3000 //milis for arduino poll any less(faster) and blutooth is not able to connecet
+#define AIOT_POLL_TIME 250 //milis for arduino poll any less(faster) and blutooth is not able to connecet
+//#define WEBSERVER_POLL_TIME 3000 //milis for how fast to check for new to web request
 
 
-#define HOHSTNAME_Local "ALEXA_ESP32.local"
+
 #define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
 #define NVRAM_PERFS "registry"
 #define NVRAM_PERFS_ADMIN_PASS_PROP "adminPass"
 #define NVRAM_PERFS_ADMIN_PASS_DEFAULT "admin"
 #define NVRAM_PERFS_ADMIN_NAME "admin"
+#define NVRAM_PERFS_HOSTNAME_LOCAL_PROP "hostname"
+#define NVRAM_PERFS_HOSTNAME_LOCAL_DEFAULT "xigimi-alexa"  //only use nuber alphabets and - and dot . NO .local It is added automtically
 
+#define NVRAM_PERFS_BLUETOOTH_NAME_PROP "bluename"
+#define NVRAM_PERFS_BLUETOOTH_NAME_DEFAULT "XGIMI BH"  //only use nuber alphabets and - and dot . NO .local It is added automtically
+
+#define NVRAM_PERFS_WAKE_PACKET_PROP "WOLnum"
+#define NVRAM_PERFS_WAKE_PACKET_DEFAULT 0  
 
 #define ResetButton GPIO_NUM_0 // the boot button on the ESP32
 
@@ -94,5 +104,15 @@
 // Secret Key
 // #e0num8EJjkWIVZCv5Avp0RmO
 
+
+#define NVRAM_PERFS_DEVICE_LOGIN_PROP "AIOTdeviceLoginName"
+#define NVRAM_PERFS_DEVICE_KEY "AIOTdeviceKey"
 const char DEVICE_LOGIN_NAME[] = "dc175b6d-0190-4d72-9445-980a76e7f872";
 const char DEVICE_KEY[] = "#e0num8EJjkWIVZCv5Avp0RmO"; // Secret device password
+
+
+struct projectorWAKE_str
+{
+    std::string projName;
+    std::vector<uint8_t> manufData;
+};

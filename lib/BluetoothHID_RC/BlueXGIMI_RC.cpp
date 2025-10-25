@@ -42,7 +42,7 @@ void BlueXGIMI_RC::initOnButtonAdvData()
   advertisingOnButtonDataType2.setAppearance(HID_KEYBORAD_APPEARANCE);
   advertisingOnButtonDataType2.setManufacturerData(HID_AD2_MANUF_DATA);
 
-  advertisingOnButtonDataScanDataType2.setName(HID_DEVICE_NAME);
+  advertisingOnButtonDataScanDataType2.setName(std::string(UtilityFunctions::loadBlueToothName().c_str()));
   advertisingOnButtonDataScanDataType2.setManufacturerData(HID_AD_SCAN_MANUF_DATA);
 
   // set up  the advertisment packet for on button
@@ -63,7 +63,7 @@ void BlueXGIMI_RC::initOnButtonAdvData()
 
   advertisingOnButtonDataType3.setCODData(cod);
 
-  advertisingOnButtonDataScanDataType3.setName(HID_DEVICE_NAME);
+  advertisingOnButtonDataScanDataType3.setName(std::string(UtilityFunctions::loadBlueToothName().c_str()));
   advertisingOnButtonDataScanDataType3.setManufacturerData(HID_AD_SCAN_MANUF_DATA);
 
 #ifdef XGIMI_USE_EXT_ADV
@@ -97,7 +97,7 @@ void BlueXGIMI_RC::initStandardAdvData()
 
   // we create the sacan data that has name etc in there wth extnded manuf data
   // advertisingScanData = NimBLEAdvertisementData();
-  advertisingScanData.setName(HID_DEVICE_NAME);
+  advertisingScanData.setName(std::string(UtilityFunctions::loadBlueToothName().c_str()));
   advertisingScanData.setManufacturerData(HID_AD_SCAN_MANUF_DATA);
   // scanAdvData.addTxPower(); // this is automatically added as the last byte
 }
@@ -167,9 +167,9 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
   UtilityFunctions::debugLog("In XIGIMI RC HID startup!");
 
-  NimBLEDevice::setDeviceName(HID_DEVICE_NAME);
+  NimBLEDevice::setDeviceName(std::string(UtilityFunctions::loadBlueToothName().c_str()));
 
-  // seems this is bu default what xgimi listens on
+  // seems this is by default what xgimi listens on
   NimBLEDevice::setDefaultPhy(BLE_GAP_LE_PHY_1M_MASK, BLE_GAP_LE_PHY_1M_MASK);
 
   m_CustomService1 = server->createService(BLEUUID("0000D1FF-3C17-D293-8E48-14FE2E4DA212")); // uuid 0000D1FF-3C17-D293-8E48-14FE2E4DA212
@@ -194,8 +194,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   secondDeviceInput_30->setCallbacks(new Callback_handler_Rep_Inp_30(this));
   secondDeviceOutput_30->setCallbacks(new Callback_handler_Rep_Out_30(this));
   thirdDeviceInput_03->setCallbacks(new Callback_handler_Rep_Inp_03(this));
-
-  UtilityFunctions::debugLog("In XIGIMI RC HID startup callback registered level 1");
 
   // format is not shown in xigimi rc remote so overridethe descriptor set by the BLE HID Class
   // BLEDescriptor *batteryLevelDescriptor = new BLEDescriptor(BLEUUID((uint16_t)0x2904));
@@ -227,8 +225,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
                                                                                                                                    // set the devide PNP information
   setPnp(VENDORID_SIG, VENDORID_MANUF, PRODUCTID, VERSION);
 
-  UtilityFunctions::debugLog("In XIGIMI RC HID startup callback registered level 1 chars creaetd");
-
   m_modelNumberCharacteristic->setValue(HID_MODEL_NUMBER);
   m_SerialNumberCharacteristic->setValue(HID_SERIAL_NUMBER);
   m_hardwarRevisionStrCharacteristic->setValue(HID_HARDWARE_REVISION);
@@ -240,8 +236,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   // set the HID countrt and flags information
   setHidInfo(HID_COUNTRY, HID_FLAGS);
   // set the battery level characteristic
-
-  UtilityFunctions::debugLog("In XIGIMI RC HID startup info set level 2");
 
   /* C) Customm service uuid 0000D1FF-3C17-D293-8E48-14FE2E4DA212 primary has
    1) uuid 0xa001, custom characteristic, write, no response, notify,
@@ -307,9 +301,9 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
   // set the report map
   setReportMap((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR));
-  UtilityFunctions::debugLogf("Set HID report map %s\n", NimBLEUtils::dataToHexString((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR)).c_str());
+  // UtilityFunctions::debugLogf("Set HID report map %s\n", NimBLEUtils::dataToHexString((uint8_t *)HID_REPORT_DESCRIPTOR, sizeof(HID_REPORT_DESCRIPTOR)).c_str());
 
-  UtilityFunctions::debugLog("IN XGIMI HID Security startup!");
+  // UtilityFunctions::debugLog("IN XGIMI HID Security startup!");
 
   // BLE_SM_PAIR_AUTHREQ_BOND  - bond yes
   // BLE_SM_PAIR_AUTHREQ_MITM  - man in middle NO
@@ -330,27 +324,27 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   initStandardAdvData();
   initOnButtonAdvData();
 
-  UtilityFunctions::debugLog("Before std ADV start");
+  // UtilityFunctions::debugLog("Before std ADV start");
   startStandardAdv();
-  UtilityFunctions::debugLog("After std ADV start");
+  // UtilityFunctions::debugLog("After std ADV start");
 
   uint8_t batteryLevel = 100;    // battery lvel can only be set AFTER advitsment and server start
   setBatteryLevel(batteryLevel); // set initial battery level to 100%
 
-  UtilityFunctions::debugLog("Standard Advertising started!");
+  UtilityFunctions::debugLog("Advertising started!");
 }
 
 void BlueXGIMI_RC::startServices()
 {
-  UtilityFunctions::debugLogf("BLE server dump %s\n", BLE_server->toString().c_str());
+  // UtilityFunctions::debugLogf("BLE server dump %s\n", BLE_server->toString().c_str());
   BlueRC::BluetoothHID_RC::startServices();
   m_CustomService1->start();
   m_CustomService2->start();
   m_CustomService3->start();
 
-  UtilityFunctions::debugLog("Services satrted GATT serice dump start ->");
-  // UtilityFunctions::debugLogf("Services count in GATT%i/n",BLE_server->m_svcVec.size());
-  UtilityFunctions::debugLog("Services satrted GATT serice dump end:");
+  // UtilityFunctions::debugLog("Services satrted GATT serice dump start ->");
+  //  UtilityFunctions::debugLogf("Services count in GATT%i/n",BLE_server->m_svcVec.size());
+  // UtilityFunctions::debugLog("Services satrted GATT serice dump end:");
 }
 
 void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
@@ -562,7 +556,7 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
       UtilityFunctions::debugLog("On off button Notify failed");
     }
 
-    //now send ok button 
+    // now send ok button
     BlueRC::Remote_Cmd command;
     command.cmds.cmd = BlueRC::RC_Cmd_Action::Ok_Btn;
     UtilityFunctions::delay(HID_KEY_DELAY);
@@ -639,7 +633,7 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-      UtilityFunctions::debugLogf("Cycle num:%i - On button type 2 advertisment started\n",f);
+      UtilityFunctions::debugLogf("Cycle num:%i - On button type 2 advertisment started\n", f);
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA2_ID))
@@ -671,7 +665,7 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-      UtilityFunctions::debugLogf("Cycle num:%i - On button type 3 advertisment started",f);
+      UtilityFunctions::debugLogf("Cycle num:%i - On button type 3 advertisment started", f);
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA3_ID))
@@ -679,12 +673,11 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
         advertising->stop(HID_ADV_ONDATA3_ID);
         UtilityFunctions::delay(1000);
       }
-    } // end for 
+    } // end for
 
     UtilityFunctions::debugLog("On button advertisment COMPLETE");
 
-
-    // we wait for 5 secs for projector to connect back 
+    // we wait for 5 secs for projector to connect back
     UtilityFunctions::delay(5000);
 
     if (wasAdvertisingSTDpkt)
@@ -695,13 +688,30 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
   }
 }
 
-
 bool BlueXGIMI_RC::canHandleButtonPress(BlueRC::Remote_Cmd command)
 {
 
   switch (command.cmds.cmd)
   {
   case BlueRC::RC_Cmd_Action::On_OFF_Btn:
+  case BlueRC::RC_Cmd_Action::Channel_Dn_Btn:
+  case BlueRC::RC_Cmd_Action::Channel_Up_Btn:
+  case BlueRC::RC_Cmd_Action::Down_Btn:
+  case BlueRC::RC_Cmd_Action::Home_Btn:
+  case BlueRC::RC_Cmd_Action::Left_Btn:
+  case BlueRC::RC_Cmd_Action::Ok_Btn:
+  case BlueRC::RC_Cmd_Action::Options_Btn:
+  case BlueRC::RC_Cmd_Action::Pairing_On:
+  case BlueRC::RC_Cmd_Action::Pairing_Off:
+  case BlueRC::RC_Cmd_Action::Projector_Setting_Btn:
+  case BlueRC::RC_Cmd_Action::Previous:
+  case BlueRC::RC_Cmd_Action::Right_Btn:
+  case BlueRC::RC_Cmd_Action::Settings_Btn:
+  case BlueRC::RC_Cmd_Action::Up_Btn:
+  case BlueRC::RC_Cmd_Action::Vol_Dn_Btn:
+  case BlueRC::RC_Cmd_Action::Vol_Up_Btn:
+  case BlueRC::RC_Cmd_Action::Volume:
+  case BlueRC::RC_Cmd_Action::Channel:
 
     return true;
   }

@@ -3,13 +3,9 @@
 
 #include <WebServer.h>
 #include "defaults.h"
-#include <freertos/ringbuf.h>
 #include <Preferences.h>
-
-// Struct to hold command data
-struct WebCommand {
-    String command;
-};
+#include "BlueRC.h"
+#include "CmdRingBuffer.h"
 
 class RC_WebInterface {
 public:
@@ -21,9 +17,8 @@ public:
 protected:
     WebServer _server;
     Preferences _preferences;
-    const char* _adminUsername = NVRAM_PERFS_ADMIN_NAME;
     String _adminPassword;
-    const char* _defaultPassword = NVRAM_PERFS_ADMIN_PASS_DEFAULT;
+    String globalJS;
 
     void loadAdminPassword();
     void saveAdminPassword(String newPassword);
@@ -31,6 +26,10 @@ protected:
     void setupRoutes();
     void handleRemotePress();
     void handleUpdatePassword();
+
+    void refreshGlobalJS();
+    String wifiSignalStrengthDecoder(int8_t rssi);
+    void enQueueCmd(BlueRC::Remote_Cmd cmd);
 };
 
 #endif

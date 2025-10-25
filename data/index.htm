@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Load the file with globals first as a classic script -->
+<script src="/globals.js"></script>
+
+<!-- Load the main script as a module so it can access the globals -->
+<script type="module" src="/script.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexa - Blutooth TV Remote</title>
 
     <!-- Link to the external CSS file -->
-    <link rel="stylesheet" href="remote.css">
+    <link rel="stylesheet" href="/remote.css">
 
 </head>
 
 <body>
-
     <div class="remote-container">
-
         <!-- New status bar for icons -->
         <div class="status-bar">
-            <div class="wifi-icon wifi-low">
+            <div></div>
+            <span class="status-text">
+                <h1 id="main-heading">TV Remote</h1>
+            </span>
+            <script>
+                const mainHeadingElement = document.getElementById("main-heading");
+                mainHeadingElement.textContent = "TV Remote : " + headingTxt;
+            </script>
+            <div id="Wifi-icon" class="wifi-icon wifi-low">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <!-- Separate paths with space between each bar -->
                     <!-- Smallest bar (dot) -->
@@ -31,7 +43,7 @@
                     <!-- Largest bar -->
                     <path class="bar-4" fill="#000000"
                         d="M12 7c-7.73 0-14 6.27-14 14h2c0-6.63 5.37-12 12-12s12 5.37 12 12h2c0-7.73-6.27-14-14-14z" />
-                    <title>Arduino IOT connected</title>
+                    <title id="wifi-title">Arduino IOT connected</title>
                 </svg>
             </div>
             <svg id="bluetooth-icon" class="status-icon bt-advertising" xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +53,6 @@
                 <path d="M7 7l10 10-5 5V2l5 5L7 17" />
             </svg>
         </div>
-        <h1>Remote</h1>
         <div class="remote-grid">
             <div class="power-settings-group">
                 <button class="remote-button button-power" onclick="sendCommand('power')" aria-label="power">
@@ -51,7 +62,7 @@
                         <title>Power</title>
                     </svg>
                 </button>
-                <button class="settings-button" onclick="window.location.href='/settings.html'" aria-label="Settings">
+                <button class="settings-button" onclick="sendCommand('setting')" aria-label="Settings">
                     <svg class="gear-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -89,7 +100,18 @@
                         <title>Channel Down</title>
                     </svg>
                 </button>
-                <span class="empty-cell"></span>
+               <!--  <span class="empty-cell"></span> -->
+		
+    <button class="remote-button projector-button" onclick="sendCommand('projector_settings')" aria-label="Projector Settings">
+        <svg class="projector-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Box shape -->
+            <path d="M5 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5zm0 2h14v14H5V5z" />
+            <!-- Plus sign -->
+            <path d="M11 7h2v4h4v2h-4v4h-2v-4H7v-2h4z" />
+        </svg>
+        <title>Projector Settings</title>
+    </button>
+
                 <button class="remote-button" onclick="sendCommand('volume_up')" aria-label="Volume Up">
                     <svg class="volume-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path
@@ -134,8 +156,8 @@
         </div>
 
         <div class="footer">
-            <a href="/settings.html">Settings</a>
-            <a href="/status.html">Status</a>
+            <a href="/settings.htm">Settings</a>
+            <a href="/status.htm">Status</a>
         </div>
         <div id="error-message" style="color: red; font-weight: bold;"></div>
 
@@ -146,17 +168,29 @@
              */
             function sendCommand(command) {
 
-                try {
-                    const response = fetch(`/remote-action?cmd=${command}`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const data = response.text();
-                    console.log(`Command '${command}' sent successfully.`);
-                } catch (error) {
-                    console.error('Fetch failed:', error);
-                    document.getElementById('error-message').textContent = '⚠️ Failed to send command. ERROR:' + error.textContent;
-                }
+
+                fetch(`./remote-action?cmd=${command}`, {
+                    signal: AbortSignal.timeout(5000)
+                })
+                    .then((response) => {
+                        if (!response.ok) { // Don't forget this part!
+                            throw new Error(`HTTP error ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then((responseData) => {
+                        console.log("txt:", responseData);
+                        const answer = JSON.parse(responseData);
+                        if (answer.success == false) {
+                            document.getElementById('error-message').textContent = answer.message;
+                        } else {
+                            document.getElementById('error-message').textContent = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Failed to fetch:', error);
+                        document.getElementById('error-message').textContent = '⚠️ Failed to send command. ERROR:' + error.textContent;
+                    });
             }
 
 

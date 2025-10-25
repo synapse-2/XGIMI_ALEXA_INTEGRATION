@@ -427,7 +427,7 @@ Bluetooth Attribute Protocol
     Handle: 0x003d (Unknown)
     Value: 0000
 
-// paring request advertisement packet
+// pairing request advertisement packet
 Bluetooth HCI Event - LE Meta
     Event Code: LE Meta (0x3e)
     Parameter Total Length: 33
@@ -492,6 +492,9 @@ Bluetooth HCI Event - LE Meta
 // There are three packets used Type 1 for 1 sec, then tree times type 2 and type 3 adv packets are sent. 
 // note the type 2 packet seems to have WOL code in mfg data as Data: 017e7db6a22f1c ffffff3043524b544d
 // the first code seems to be the WOL code for XIGIMI   horizon ultra others have been reported as at https://stackoverflow.com/questions/69921353/how-can-i-clone-a-non-paired-ble-signal-from-a-remote-to-trigger-a-device/75551013#75551013
+
+ XGIMI Elfin projector:
+
 Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x38B4640F35F278 FFFFFF3043524B544D Service UUID: 0x1812
 
 We now also know the parameters for XGIMI Z6X projector, thanks to manymuch:
@@ -520,7 +523,7 @@ Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x4d4b1
 
 And for XGIMI H1S projector, thanks to FenixJun
 
-Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x0ed8822f811cbcf fffff3043524b544d Service UUID: 0x1812
+Flags: GeneralDiscoverable, [Device specific] Manufacturer data: 0×0046 0x0ed8822f811cbc ffffff3043524b544d Service UUID: 0x1812
 
 And for XGIMI Z4Air projector, thanks to Hosiang1026
 
@@ -598,7 +601,7 @@ Bluetooth Low Energy Link Layer
     CRC: 0x800ed7
 
 
-type 2 adv packet and response
+type 2 adv packet and response (Wake on Packet)
 Bluetooth Low Energy Link Layer
     Access Address: 0x8e89bed6
     Packet Header: 0x2500 (PDU Type: ADV_IND, ChSel: #1, TxAdd: Public)
