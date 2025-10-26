@@ -349,7 +349,7 @@ void BlueXGIMI_RC::startServices()
 
 void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 {
-  bool btnPressed = false;
+  int btnPressedType = 0;
   if (BLE_server->getConnectedCount() > 0)
   {
     switch (command.cmds.cmd)
@@ -382,7 +382,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending back button");
       thirdDeviceInput_03->setValue(HID_REP03_BACK_CMD, sizeof(HID_REP03_BACK_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -395,7 +395,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending OK button");
       thirdDeviceInput_03->setValue(HID_REP03_OK_CMD, sizeof(HID_REP03_OK_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -408,7 +408,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending up button");
       thirdDeviceInput_03->setValue(HID_REP03_UP_CMD, sizeof(HID_REP03_UP_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -421,7 +421,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending right button");
       thirdDeviceInput_03->setValue(HID_REP03_RIGHT_CMD, sizeof(HID_REP03_RIGHT_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -434,7 +434,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending left button");
       thirdDeviceInput_03->setValue(HID_REP03_LEFT_CMD, sizeof(HID_REP03_LEFT_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -447,7 +447,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending down button");
       thirdDeviceInput_03->setValue(HID_REP03_DOWN_CMD, sizeof(HID_REP03_DOWN_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -461,7 +461,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending vol up  button");
       thirdDeviceInput_03->setValue(HID_REP03_VOL_UP_CMD, sizeof(HID_REP03_VOL_UP_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -474,7 +474,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending vol down button");
       thirdDeviceInput_03->setValue(HID_REP03_VOL_DOWN_CMD, sizeof(HID_REP03_VOL_DOWN_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -487,7 +487,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending home button");
       thirdDeviceInput_03->setValue(HID_REP03_HOME_CMD, sizeof(HID_REP03_HOME_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -500,7 +500,7 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
 
       UtilityFunctions::debugLog("Sending options button");
       thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_OPTIONS_CMD));
-      btnPressed = true;
+      btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
@@ -508,9 +508,57 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
       }
       break;
 
+      // Channel_Up_Btn
+    case BlueRC::RC_Cmd_Action::Channel_Up_Btn:
+      UtilityFunctions::debugLog("Sending ch up as vol up button");
+      thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_VOL_UP_CMD));
+      btnPressedType = 3;
+      // tell value has changed
+      if (!thirdDeviceInput_03->notify())
+      {
+        UtilityFunctions::debugLog("Options Notify failed");
+      }
+      break;
+
+      // Channel_dn_Btn
+    case BlueRC::RC_Cmd_Action::Channel_Dn_Btn:
+      UtilityFunctions::debugLog("Sending ch dn as vol dn button");
+      thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_VOL_DOWN_CMD));
+      btnPressedType = 3;
+      // tell value has changed
+      if (!thirdDeviceInput_03->notify())
+      {
+        UtilityFunctions::debugLog("Options Notify failed");
+      }
+      break;
+
+      // projector settings button
+    case BlueRC::RC_Cmd_Action::Projector_Setting_Btn:
+      UtilityFunctions::debugLog("Sending prrojector settings button");
+      keyboardInput_01->setValue(HID_REP01_PROJ_SET_CMD, sizeof(HID_REP01_PROJ_SET_CMD));
+      btnPressedType = 1;
+      // tell value has changed
+      if (!keyboardInput_01->notify())
+      {
+        UtilityFunctions::debugLog("Options Notify failed");
+      }
+      break;
+
+      // settings button
+    case BlueRC::RC_Cmd_Action::Settings_Btn:
+      UtilityFunctions::debugLog("Sending settings button");
+      keyboardInput_01->setValue(HID_REP01_SETTING_CMD, sizeof(HID_REP01_SETTING_CMD));
+      btnPressedType = 1;
+      // tell value has changed
+      if (!keyboardInput_01->notify())
+      {
+        UtilityFunctions::debugLog("Options Notify failed");
+      }
+      break;
+
     } // end of case
 
-    if (btnPressed)
+    if (btnPressedType == 3)
     {
       UtilityFunctions::delay(HID_KEY_DELAY);
       UtilityFunctions::debugLog("Sending button null");
@@ -521,6 +569,20 @@ void BlueXGIMI_RC::doButtons(BlueRC::Remote_Cmd command)
         UtilityFunctions::debugLog("On off button Notify failed");
       }
     }
+
+    if (btnPressedType == 1)
+    {
+      UtilityFunctions::delay(HID_KEY_DELAY);
+      UtilityFunctions::debugLog("Sending button null");
+      keyboardInput_01->setValue(HID_REP01_NULL_CMD, sizeof(HID_REP01_NULL_CMD));
+      // tell value has changed
+      if (!keyboardInput_01->notify())
+      {
+        UtilityFunctions::debugLog("On off button Notify failed");
+      }
+    }
+  }else{
+    UtilityFunctions::debugLog("BLE NOT conneccted ignoring button push");
   }
 }
 void BlueXGIMI_RC::doCMD_ON_OFF()
@@ -723,12 +785,58 @@ void BlueXGIMI_RC::sendButtonPress(BlueRC::Remote_Cmd command)
 {
   std::string s_cmd = std::string(magic_enum::enum_name((BlueRC::RC_Cmd_Action)command.cmds.cmd));
 
-  UtilityFunctions::debugLogf("XIGIMI Remote receied command %s amd in int %i\n", s_cmd.c_str(), command.cmds.cmd);
+  UtilityFunctions::debugLogf("XIGIMI Remote received command %s amd in int %i\n", s_cmd.c_str(), command.cmds.cmd);
   bool cmdExecuted = false;
   switch (command.cmds.cmd)
   {
   case BlueRC::RC_Cmd_Action::On_OFF_Btn:
     doCMD_ON_OFF();
+    cmdExecuted = true;
+    break;
+
+  case BlueRC::RC_Cmd_Action::Channel_Dn_Btn:
+  case BlueRC::RC_Cmd_Action::Channel_Up_Btn:
+  case BlueRC::RC_Cmd_Action::Down_Btn:
+  case BlueRC::RC_Cmd_Action::Home_Btn:
+  case BlueRC::RC_Cmd_Action::Left_Btn:
+  case BlueRC::RC_Cmd_Action::Ok_Btn:
+  case BlueRC::RC_Cmd_Action::Options_Btn:
+  case BlueRC::RC_Cmd_Action::Projector_Setting_Btn:
+  case BlueRC::RC_Cmd_Action::Previous:
+  case BlueRC::RC_Cmd_Action::Right_Btn:
+  case BlueRC::RC_Cmd_Action::Settings_Btn:
+  case BlueRC::RC_Cmd_Action::Up_Btn:
+  case BlueRC::RC_Cmd_Action::Vol_Dn_Btn:
+  case BlueRC::RC_Cmd_Action::Vol_Up_Btn:
+    doButtons(command);
+    cmdExecuted = true;
+    break;
+
+  case BlueRC::RC_Cmd_Action::Volume:
+  case BlueRC::RC_Cmd_Action::Channel:
+
+    int steps = command.cmds.toVal - command.cmds.fromVal;
+    
+    if (steps == 0)
+      break;
+    steps = (steps < 0) ? -steps : steps;
+    UtilityFunctions::debugLogf("XIGIMI Remote step function of steps %i \n", steps);
+    while (steps > 0)
+    {
+      BlueRC::Remote_Cmd newCMD;
+      if ((command.cmds.toVal - command.cmds.fromVal) < 0)
+      {
+        newCMD.cmds.cmd = (command.cmds.cmd == BlueRC::RC_Cmd_Action::Volume) ? BlueRC::RC_Cmd_Action::Vol_Dn_Btn : BlueRC::RC_Cmd_Action::Channel_Dn_Btn;
+      }
+      else
+      {
+
+        newCMD.cmds.cmd = (command.cmds.cmd == BlueRC::RC_Cmd_Action::Volume) ? BlueRC::RC_Cmd_Action::Vol_Up_Btn : BlueRC::RC_Cmd_Action::Channel_Up_Btn;
+      }
+      UtilityFunctions::debugLogf("XIGIMI Remote while function of steps %i \n", steps);
+      doButtons(newCMD);
+      steps--;
+    }
     cmdExecuted = true;
     break;
   }

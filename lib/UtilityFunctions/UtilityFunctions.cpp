@@ -13,7 +13,11 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#define STRINGIFY_IMPL(x) #x
+#define STRINGIFY(x) STRINGIFY_IMPL(x)
+
 extern std::vector<projectorWAKE_str> projectorWakeList;
+
 
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
@@ -280,60 +284,67 @@ namespace UtilityFunctions
 #endif
         {
 
-            str = str + std::format("{: <20}{: <10}{: <10}{: <10}{: <10}\n", "Task Name", "State", "Prio", "Core ID", "% CPU");
+            str = str + std::format("{: <" STRINGIFY(CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <10}{: <10}{: <10}\n", "Task Name", "State", "Prio", "Core ID", "% CPU");
 
-            for (int i = 0; i < numberOfTasks; i++)
+            for (int pri = ESP_TASK_PRIO_MAX - 1; pri >= ESP_TASK_PRIO_MIN; pri = pri - 1)
             {
+                for (int i = 0; i < numberOfTasks; i++)
+                {
+
+                    if (taskStatusArray[i].uxCurrentPriority == pri)
+                    {
 #ifdef configGENERATE_RUN_TIME_STATS
-                /* What percentage of the total run time has the task used?
-                    This will always be rounded down to the nearest integer.
-                ulTotalRunTimeDiv100 has already been divided by 100. */
-                if (ulTotalRunTime != 0)
-                {
-                    ulStatsAsPercentage = (taskStatusArray[i].ulRunTimeCounter / ulTotalRunTime);
-                }
-                else
-                {
-                    ulStatsAsPercentage = taskStatusArray[i].ulRunTimeCounter;
-                }
+                        /* What percentage of the total run time has the task used?
+                            This will always be rounded down to the nearest integer.
+                        ulTotalRunTimeDiv100 has already been divided by 100. */
+                        if (ulTotalRunTime != 0)
+                        {
+                            ulStatsAsPercentage = (taskStatusArray[i].ulRunTimeCounter / ulTotalRunTime);
+                        }
+                        else
+                        {
+                            ulStatsAsPercentage = taskStatusArray[i].ulRunTimeCounter;
+                        }
 #else
-                ulStatsAsPercentage = 0;
+                        ulStatsAsPercentage = 0;
 #endif
 
-                const char *taskName = taskStatusArray[i].pcTaskName;
+                        const char *taskName = taskStatusArray[i].pcTaskName;
 
-                // Get task state as a readable string
-                const char *state;
-                switch (taskStatusArray[i].eCurrentState)
-                {
-                case eRunning:
-                    state = "Running";
-                    break;
-                case eReady:
-                    state = "Ready";
-                    break;
-                case eBlocked:
-                    state = "Blocked";
-                    break;
-                case eSuspended:
-                    state = "Suspended";
-                    break;
-                case eDeleted:
-                    state = "Deleted";
-                    break;
-                default:
-                    state = "Unknown";
-                    break;
+                        // Get task state as a readable string
+                        const char *state;
+                        switch (taskStatusArray[i].eCurrentState)
+                        {
+                        case eRunning:
+                            state = "Running";
+                            break;
+                        case eReady:
+                            state = "Ready";
+                            break;
+                        case eBlocked:
+                            state = "Blocked";
+                            break;
+                        case eSuspended:
+                            state = "Suspended";
+                            break;
+                        case eDeleted:
+                            state = "Deleted";
+                            break;
+                        default:
+                            state = "Unknown";
+                            break;
+                        }
+
+                        UBaseType_t priority = taskStatusArray[i].uxCurrentPriority;
+
+                        UBaseType_t coreID = 0;
+#ifdef configTASKLIST_INCLUDE_COREID
+                        coreID = taskStatusArray[i].xCoreID; // Specific to ESP-IDF
+#endif
+
+                        str = str + std::format("{: <" STRINGIFY(CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <10}{: <10}{: <10}\n", taskName, state, priority, coreID, ulStatsAsPercentage);
+                    }
                 }
-
-                UBaseType_t priority = taskStatusArray[i].uxCurrentPriority;
-
-                UBaseType_t coreID = 0;
-#ifdef configTASKLIST_INCLUDE_COREID                  
-                coreID = taskStatusArray[i].xCoreID; // Specific to ESP-IDF
-#endif
-
-                str = str + std::format("{: <20}{: <10}{: <10}{: <10}{: <10}\n", taskName, state, priority,coreID, ulStatsAsPercentage);
             }
 
             // Free the dynamically allocated memory
@@ -521,6 +532,7 @@ namespace UtilityFunctions
         return _localHostname;
     }
 
+  
     // Save hostname to NVRAM
     void saveLocalHostname(String newHostname)
     {

@@ -27,7 +27,7 @@ auto to_integer(magic_enum::Enum<E> value) -> int
 // This is typically GPIO 48 on many ESP32 boards, but can vary by board.
 
 AcloudIOT_Decoder aIOT;
-BLE_Remote_Decoder s;
+inline BLE_Remote_Decoder bleRemoteDecoder;
 //TaskHandle_t Task0;
 //TaskHandle_t Task1;
 WiFiManager wm;
@@ -219,26 +219,22 @@ void loop()
   UtilityFunctions::waitTillInitComplete(); // master core will do the init we wait till then
   UtilityFunctions::debugLog("BLE Init COMPLETE ");
 
-  s = BLE_Remote_Decoder();
-  s.start();
+  bleRemoteDecoder = BLE_Remote_Decoder();
+  bleRemoteDecoder.start();
   UtilityFunctions::debugLog("BLE SERVER started ... ");
   for (;;) // infinite loop
   {
-    /// blutooth handle
-    UtilityFunctions::debugLog("WAIT");
+    /// bluetooth handle
     UtilityFunctions::delay(AIOT_POLL_TIME);
-    UtilityFunctions::debugLog("BLE HANDLE");
     UtilityFunctions::ledBlinkBlue();
-    s.dequeueCmd(); // see if we have a commmand
+    bleRemoteDecoder.dequeueCmd(); // see if we have a commmand
 
     /// TCp handle
     // If in master mode, update the properties
 #ifdef XIGIMI_DEBUG_WIFI_OFF
     UtilityFunctions::debugLog("WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
 #else
-    UtilityFunctions::debugLog("WAIT");
     UtilityFunctions::delay(AIOT_POLL_TIME);
-    UtilityFunctions::debugLog("TCP HANDLE");
     checkResetPressed(); // Check if the reset button has been pressed
     ArduinoCloud.update();
     if (rc_web != NULL)

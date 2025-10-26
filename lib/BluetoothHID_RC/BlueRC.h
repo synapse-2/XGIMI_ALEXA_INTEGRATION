@@ -117,6 +117,7 @@ namespace BlueRC
         NimBLEService *getDeviceInfoService();
         NimBLEService *getHidService();
         NimBLEService *getBatteryService();
+        uint8_t getConnectedCount();
 
     protected:
         NimBLEServer *BLE_server;

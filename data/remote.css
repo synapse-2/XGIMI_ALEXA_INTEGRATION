@@ -17,13 +17,16 @@ body {
 
 .status-bar {
     display: grid;
-    grid-template-columns: 24px  auto 24px 24px; /* Creates three columns */
+    grid-template-columns: 24px auto 24px 24px;
+    /* Creates three columns */
     align-items: center;
     gap: 0px;
-    padding-bottom:0px;
+    padding-bottom: 0px;
 }
+
 .status-bar .status-text {
-    text-align: center; /* Centers the text within its column */
+    text-align: center;
+    /* Centers the text within its column */
 }
 
 .status-icon {
@@ -35,57 +38,66 @@ body {
 }
 
 /* Base styles for the icon */
-    /* Base styles for the icon */
-  .wifi-icon {
+/* Base styles for the icon */
+.wifi-icon {
     width: 24px;
     height: 24px;
     display: inline-block;
-  }
-  .wifi-icon svg path {
-    fill: #ccc; /* Default color for all bars (greyed out) */
-  }
-  
-  /* High signal: all bars are fully opaque */
-  .wifi-icon.wifi-high svg .bar-1,
-  .wifi-icon.wifi-high svg .bar-2,
-  .wifi-icon.wifi-high svg .bar-3,
-  .wifi-icon.wifi-high svg .bar-4 {
-    fill: #4CAF50; /* Green for high signal */
-    opacity: 1;
-  }
-  
-  /* Medium signal: show three bars */
-  .wifi-icon.wifi-medium svg .bar-1,
-  .wifi-icon.wifi-medium svg .bar-2,
-  .wifi-icon.wifi-medium svg .bar-3 {
-    fill: #FFC107; /* Amber for medium signal */
-    opacity: 1;
-  }
-  .wifi-icon.wifi-medium svg .bar-4 {
-    opacity: 0.3;
-  }
+}
 
-  /* Low signal: show two bars */
-  .wifi-icon.wifi-low svg .bar-1,
-  .wifi-icon.wifi-low svg .bar-2 {
-    fill: #F44336; /* Red for low signal */
-    opacity: 1;
-  }
-  .wifi-icon.wifi-low svg .bar-3,
-  .wifi-icon.wifi-low svg .bar-4 {
-    opacity: 0.3;
-  }
+.wifi-icon svg path {
+    fill: #ccc;
+    /* Default color for all bars (greyed out) */
+}
 
-  /* No signal: show only the lowest dot */
-  .wifi-icon.wifi-none svg .bar-1 {
-    fill: #F44336; /* Red for no signal */
+/* High signal: all bars are fully opaque */
+.wifi-icon.wifi-high svg .bar-1,
+.wifi-icon.wifi-high svg .bar-2,
+.wifi-icon.wifi-high svg .bar-3,
+.wifi-icon.wifi-high svg .bar-4 {
+    fill: #4CAF50;
+    /* Green for high signal */
     opacity: 1;
-  }
-  .wifi-icon.wifi-none svg .bar-2,
-  .wifi-icon.wifi-none svg .bar-3,
-  .wifi-icon.wifi-none svg .bar-4 {
+}
+
+/* Medium signal: show three bars */
+.wifi-icon.wifi-medium svg .bar-1,
+.wifi-icon.wifi-medium svg .bar-2,
+.wifi-icon.wifi-medium svg .bar-3 {
+    fill: #FFC107;
+    /* Amber for medium signal */
+    opacity: 1;
+}
+
+.wifi-icon.wifi-medium svg .bar-4 {
     opacity: 0.3;
-  }
+}
+
+/* Low signal: show two bars */
+.wifi-icon.wifi-low svg .bar-1,
+.wifi-icon.wifi-low svg .bar-2 {
+    fill: #F44336;
+    /* Red for low signal */
+    opacity: 1;
+}
+
+.wifi-icon.wifi-low svg .bar-3,
+.wifi-icon.wifi-low svg .bar-4 {
+    opacity: 0.3;
+}
+
+/* No signal: show only the lowest dot */
+.wifi-icon.wifi-none svg .bar-1 {
+    fill: #F44336;
+    /* Red for no signal */
+    opacity: 1;
+}
+
+.wifi-icon.wifi-none svg .bar-2,
+.wifi-icon.wifi-none svg .bar-3,
+.wifi-icon.wifi-none svg .bar-4 {
+    opacity: 0.3;
+}
 
 /* Bluetooth Icon States (Updated for line art SVG) */
 #bluetooth-icon {
@@ -94,10 +106,13 @@ body {
 
 
 .bt-connected {
-    fill: #007bff; /* Blue */
+    fill: #007bff;
+    /* Blue */
 }
+
 .bt-advertising {
-    fill: #ffee00; /* yelllow */
+    fill: #ffee00;
+    /* yelllow */
 }
 
 
@@ -175,14 +190,16 @@ h1 {
         ". up ."
         "left ok right"
         ". down .";
-    gap: 0; /* Remove gap between grid items for a unified look */
+    gap: 0;
+    /* Remove gap between grid items for a unified look */
     margin: 15px 0;
-    
+
     /* Create a unified background for the D-pad area */
     background-color: #3f3f3f;
     border-radius: 50%;
-    width: fit-content; /* Adjust size as needed */
-    height: fit-content ;
+    width: fit-content;
+    /* Adjust size as needed */
+    height: fit-content;
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -191,34 +208,40 @@ h1 {
 
 /* Style the buttons within the D-pad */
 .nav-dpad .remote-button {
-    background-color: transparent; /* Make buttons transparent to see the unified background */
-    box-shadow: none; /* Remove individual button shadows */
+    background-color: transparent;
+    /* Make buttons transparent to see the unified background */
+    box-shadow: none;
+    /* Remove individual button shadows */
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0;
-    padding: 25px; /* Adjust padding for visual balance */
+    padding: 25px;
+    /* Adjust padding for visual balance */
 }
 
 /* Custom button shapes for a cleaner, unified D-pad */
-.nav-dpad .button-up { 
-    grid-area: up; 
+.nav-dpad .button-up {
+    grid-area: up;
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
     border-bottom: none;
 }
-.nav-dpad .button-down { 
-    grid-area: down; 
+
+.nav-dpad .button-down {
+    grid-area: down;
     border-bottom-left-radius: 50px;
     border-bottom-right-radius: 50px;
     border-top: none;
 }
-.nav-dpad .button-left { 
-    grid-area: left; 
+
+.nav-dpad .button-left {
+    grid-area: left;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
     border-right: none;
 }
-.nav-dpad .button-right { 
-    grid-area: right; 
+
+.nav-dpad .button-right {
+    grid-area: right;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     border-left: none;
@@ -226,7 +249,8 @@ h1 {
 
 .nav-dpad .button-ok {
     grid-area: ok;
-    background-color: #007bff; /* Keep a distinct color for the central button */
+    background-color: #007bff;
+    /* Keep a distinct color for the central button */
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border: none;
@@ -235,7 +259,8 @@ h1 {
 /* Hover effects for the integrated D-pad */
 .nav-dpad .remote-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    transform: none; /* Disable individual translation */
+    transform: none;
+    /* Disable individual translation */
 }
 
 .nav-dpad .button-ok:hover {
@@ -260,13 +285,15 @@ h1 {
     background-color: #3f3f3f;
     border: none;
     cursor: pointer;
-    border-radius: 50%; /* Makes the button perfectly round */
+    border-radius: 50%;
+    /* Makes the button perfectly round */
     width: 50px;
     height: 50px;
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centers the SVG icon */
+    justify-content: center;
+    /* Centers the SVG icon */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease-in-out;
 }
@@ -286,7 +313,8 @@ h1 {
 .gear-icon {
     width: 24px;
     height: 24px;
-    color: #e0e0e0; /* Sets the icon color to a light gray */
+    color: #e0e0e0;
+    /* Sets the icon color to a light gray */
     transition: color 0.2s ease-in-out;
 }
 
@@ -302,9 +330,12 @@ h1 {
     grid-column: 2 / 3;
     background-color: #dc3545;
     font-size: 1.2em;
-    padding: 0; /* Remove padding */
-    width: 50px; /* 20% of the original button's approximate width */
-    height: 50px; /* 20% of the original button's approximate height */
+    padding: 0;
+    /* Remove padding */
+    width: 50px;
+    /* 20% of the original button's approximate width */
+    height: 50px;
+    /* 20% of the original button's approximate height */
     border-radius: 50%;
 }
 
@@ -317,7 +348,8 @@ h1 {
 }
 
 .power-icon {
-    width: 20px; /* Reduced icon size to match button */
+    width: 20px;
+    /* Reduced icon size to match button */
     height: 20px;
     fill: currentColor;
     color: #fff;
@@ -333,7 +365,8 @@ h1 {
 
 /* Updated back button style */
 .back-button {
-    padding: 10px; /* Reduce padding for smaller size */
+    padding: 10px;
+    /* Reduce padding for smaller size */
 }
 
 .back-icon {
@@ -342,9 +375,11 @@ h1 {
     fill: currentColor;
     color: #f5f5f5;
 }
+
 /* Updated back button style */
 .back-button {
-    padding: 10px; /* Reduce padding for smaller size */
+    padding: 10px;
+    /* Reduce padding for smaller size */
 }
 
 .back-icon {
@@ -378,7 +413,8 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* Space between the buttons */
+    gap: 10px;
+    /* Space between the buttons */
 }
 
 
@@ -397,13 +433,15 @@ h1 {
 .channel-volume-group {
     grid-column: 1 / 4;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Defines three columns, with the middle one being very narrow for spacing */
-    grid-template-areas: 
+    grid-template-columns: 1fr 1fr 1fr;
+    /* Defines three columns, with the middle one being very narrow for spacing */
+    grid-template-areas:
         "ch-up . vol-up"
-        "ch-down . vol-down";
+        "ch-down prj-btn vol-down";
     gap: 18px;
     margin-top: 10px;
-    align-items: center; /* Centers items vertically within their rows */
+    align-items: center;
+    /* Centers items vertically within their rows */
 }
 
 /* Assign grid areas to the buttons */
@@ -421,6 +459,11 @@ h1 {
 
 .channel-volume-group .remote-button:nth-child(4) {
     grid-area: vol-down;
+
+}
+
+.channel-volume-group .remote-button:nth-child(5) {
+    grid-area: prj-btn;
 }
 
 /* Hide the placeholder for the middle column */
@@ -434,7 +477,8 @@ h1 {
 
 /* Volume button icons */
 .volume-icon {
-    width: 1.1em; /* Matches font size of text buttons */
+    width: 1.1em;
+    /* Matches font size of text buttons */
     height: 1.1em;
     fill: currentColor;
     color: #f5f5f5;
@@ -442,11 +486,13 @@ h1 {
 
 /* Volume button icons */
 .channel-icon {
-    width: 1.1em; /* Matches font size of text buttons */
+    width: 1.1em;
+    /* Matches font size of text buttons */
     height: 1.1em;
     fill: currentColor;
     color: #f5f5f5;
 }
+
 /* -- Footer Navigation -- */
 .footer {
     margin-top: 30px;
@@ -471,9 +517,9 @@ h1 {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-

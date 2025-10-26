@@ -74,7 +74,7 @@
 //#define UTILFUNC_DEBUG_LED_ON
 #undef UTILFUNC_DEBUG_LED_ON
 
-#define AIOT_POLL_TIME 250 //milis for arduino poll any less(faster) and blutooth is not able to connecet
+#define AIOT_POLL_TIME 200 //milis for arduino poll any less(faster) and blutooth is not able to connecet
 //#define WEBSERVER_POLL_TIME 3000 //milis for how fast to check for new to web request
 
 

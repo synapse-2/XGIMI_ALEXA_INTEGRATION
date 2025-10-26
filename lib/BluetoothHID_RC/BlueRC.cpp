@@ -7,6 +7,16 @@
 #include <NimBLEExtAdvertising.h>
 #endif
 
+uint8_t BlueRC::BluetoothHID_RC::getConnectedCount()
+{
+  if (BLE_server != NULL)
+  {
+    return BLE_server->getConnectedCount();
+  }
+
+  return 0;
+}
+
 BlueRC::BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server)
 {
 
@@ -170,14 +180,14 @@ void BlueRC::BluetoothHID_RC::setPnp(uint8_t sig, uint16_t vid, uint16_t pid, ui
 void BlueRC::BluetoothHID_RC::setHidInfo(uint8_t country, uint8_t flags)
 {
 
-    // A typical value for the HID Information characteristic is a 4-byte sequence, as seen in firmware examples. The data can be broken down as follows: 
-    // Byte  Offset    Size      Field	Description
-    // 0-1	  2 bytes   (16 bits) HID Version (BCD)	The version number of the HID Specification, represented in Binary-Coded Decimal (BCD). A value of 0x0111 would mean version 1.11.
-    // 2	    1 byte    (8 bits)	Country Code	Identifies the country of origin for the device's hardware. The value 0x00 is often used to indicate that no country code is supported.
-    // 3      1 byte    (8 bits)	Flags	A bitfield indicating the device's capabilities. A common value, 0x03, is a bitmask of 0x01 | 0x02, which indicates the device supports "Normal Connect" and "Remote Wake".
-  
+  // A typical value for the HID Information characteristic is a 4-byte sequence, as seen in firmware examples. The data can be broken down as follows:
+  // Byte  Offset    Size      Field	Description
+  // 0-1	  2 bytes   (16 bits) HID Version (BCD)	The version number of the HID Specification, represented in Binary-Coded Decimal (BCD). A value of 0x0111 would mean version 1.11.
+  // 2	    1 byte    (8 bits)	Country Code	Identifies the country of origin for the device's hardware. The value 0x00 is often used to indicate that no country code is supported.
+  // 3      1 byte    (8 bits)	Flags	A bitfield indicating the device's capabilities. A common value, 0x03, is a bitmask of 0x01 | 0x02, which indicates the device supports "Normal Connect" and "Remote Wake".
+
   // XGIMI RC has code 00 00 00 01
-uint8_t info[] = {0x00, 0x00, country, flags};
+  uint8_t info[] = {0x00, 0x00, country, flags};
   m_hidInfoChr->setValue(info, sizeof(info));
 } // setHidInfo
 

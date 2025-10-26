@@ -27,7 +27,7 @@ The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth
 Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
 For coexistance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
-The task loops at most can wait for 3000 millis when the radios lose conenction or ESP32S3 core panic's
+We should put all web checks for activity polling functions in one thread, too may tasks and performnce is impacted. Refer to the loop() function
 
 Threre is a ring buffer between the cores for communication.
 

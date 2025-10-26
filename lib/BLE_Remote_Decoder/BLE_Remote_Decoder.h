@@ -3,14 +3,15 @@
 #include <freertos/ringbuf.h>
 #include "BlueXGIMI_RC.h"
 
-
-class BLE_Remote_Decoder {
+class BLE_Remote_Decoder
+{
 public:
-    BLE_Remote_Decoder(); 
+    BLE_Remote_Decoder();
     void dequeueCmd();
     void start();
-
+    uint8_t getConnectedCount();
 
 protected:
-     BlueXGIMI_RC* rcHID;
+    BlueXGIMI_RC *rcHID;
 };
+

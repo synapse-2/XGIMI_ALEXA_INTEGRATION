@@ -10,7 +10,11 @@
 #include <WiFi.h>
 #include <BlueXGIMI_RC.h>
 #include "BlueRC.h"
+#include "BLE_Remote_Decoder.h"
 #include "CmdRingBuffer.h"
+
+extern BLE_Remote_Decoder bleRemoteDecoder;
+
 
 // Constructor
 RC_WebInterface::RC_WebInterface()
@@ -72,7 +76,7 @@ void RC_WebInterface::refreshGlobalJS()
     globalJS = globalJS + "const headingTxt = '" + UtilityFunctions::loadBlueToothName() + "';\n";
     int8_t rssi = WiFi.RSSI();
     globalJS = globalJS + "const wifiStrength =  \"" + wifiSignalStrengthDecoder(rssi) + "\";\n";
-    globalJS = globalJS + "const bluetoothStatus = \"bt-connected\";\n";
+    globalJS = globalJS + "const bluetoothStatus = \"" + ((bleRemoteDecoder.getConnectedCount() != 0) ? "bt-connected" : "bt-advertising") + "\";\n";
     globalJS = globalJS + "const WifiRssi = " + String(rssi) + ";\n";
     globalJS = globalJS + "const projSelected =  " + String(UtilityFunctions::loadWakePacketNum()) + ";\n";
     globalJS = globalJS + "const devHostname =  \"" + UtilityFunctions::loadLocalHostname() + "\";\n";
@@ -84,7 +88,6 @@ void RC_WebInterface::refreshGlobalJS()
     taskInfo.replace("\n", "<br>\\\n");
 
     globalJS = globalJS + "const statusTxt =  \"" + chipInfo + "<br>\\" + taskInfo + "\";\n";
-
 }
 
 // Public begin method to start the web interface
@@ -283,6 +286,15 @@ void RC_WebInterface::handleRemotePress()
 
             // add to the ring buffer
             rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Home_Btn;
+            enQueueCmd(rcCmd);
+            enQueuedCmd = true;
+        }
+
+        if (action.equals("projector_settings"))
+        {
+
+            // add to the ring buffer
+            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Projector_Setting_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
