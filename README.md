@@ -3,9 +3,9 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
-## Project built uisng Visual Stuido Code and PlatformIO extension.
+## Project built uisng Visual Stuido Code and PIOArduino extension.
 
-The code is built on PlatformIO  (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide)  
+The code is built on PIOArduino (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
 
 The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
@@ -26,14 +26,17 @@ You can also build this using the native new fork of platoformio called # PIOArd
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
 Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
-For coexistance to work wifi is run on core 1, Bluetooh on code 0. Arduino is run on code 1 and Rtos oncores 0 and 1
-We should put all web checks for activity polling functions in one thread, too may tasks and performnce is impacted. Refer to the loop() function
+For coexistance to work:
+* Wifi and all apps logic is run on core 1, Bluetooh on code 0. 
+* Arduino is run on code 1 
+* Rtos oncores 0 and 1
+* We should put all web checks for activity polling functions in one thread, too may tasks and performnce is impacted. Refer to the loop() function
 
-Threre is a ring buffer between the cores for communication.
+### Threre is a ring buffer between the cores for communication.
 
 ## THE LIB MUST BE COMPILED with GNU++23 
 You must see "- toolchain-xtensa-esp-elf @ 14.2.0+20241119" or above in the build output
-If you want to use the old platfromm code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
+If you want to use the old platfrom code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
 
 If you want to change the sdkconfig options then use the "pio run -t menuconfig" command in the PlatfromCIO Core CLI window. 
 
@@ -41,7 +44,7 @@ If you want to change the sdkconfig options then use the "pio run -t menuconfig"
 CLI for flashing: pio pkg exec -p "tool-esptoolpy" -- esptool.py --help
 cli for commands avaliable:pio run --list-targets
 
-Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
+### Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
 
 ## How Bluetooh works:
 
