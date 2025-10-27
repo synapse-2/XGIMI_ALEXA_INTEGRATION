@@ -3,7 +3,7 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
-# Project built uisng Visual Stuido Code and PlatformIO extension.
+## Project built uisng Visual Stuido Code and PlatformIO extension.
 
 The code is built on PlatformIO  (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
@@ -31,7 +31,7 @@ We should put all web checks for activity polling functions in one thread, too m
 
 Threre is a ring buffer between the cores for communication.
 
-# THE LIB MUST BE COMPILED with GNU++23 
+## THE LIB MUST BE COMPILED with GNU++23 
 You must see "- toolchain-xtensa-esp-elf @ 14.2.0+20241119" or above in the build output
 If you want to use the old platfromm code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
 
@@ -43,22 +43,22 @@ cli for commands avaliable:pio run --list-targets
 
 Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
 
-# How Bluetooh works:
+## How Bluetooh works:
 
 https://dronebotworkshop.com/esp32-bluetooth/
 https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
 https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
 
-# UID - HID Report decoder/encorder 
+### UID - HID Report decoder/encorder 
 https://eleccelerator.com/usbdescreqparser/
 
-# BLuetooth CoD (Class of device) encoder/decoder
+### BLuetooth CoD (Class of device) encoder/decoder
 https://bluetooth-pentest.narod.ru/software/bluetooth_class_of_device-service_generator.html
 
 Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf 
 
 
-Modules used
+## Modules used
 
 <table>
 <tr> <td>Name</td><td>                       Flash</td><td>           RAM</td><td>             Temp</td><td>        RAM Speed</td> </tr>
