@@ -60,25 +60,26 @@ Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf
 
 Modules used
 
-<code>
-Name                        Flash           RAM             Temp        RAM Speed
- ESP32-S3-WROOM-1-N8        8MB(QuadSPI)    -               –40~85
- ESP32-S3-WROOM-1-N16       16MB(QuadSPI)   -               –40~85
- ESP32-S3-WROOM-1-H4        4MB(QuadSPI)    -               –40~105
- ESP32-S3-WROOM-1-N4R2      4MB(QuadSPI)    2MB(QuadSPI)    –40~85
- ESP32-S3-WROOM-1-N8R2      8MB(QuadSPI)    2MB(QuadSPI)    –40~85
- ESP32-S3-WROOM-1-N16R2     16MB(QuadSPI)   2MB(QuadSPI)    –40~85
- ESP32-S3-WROOM-1-N4R8      4MB(QuadSPI)    8MB(OctalSPI)   –40~65
- ESP32-S3-WROOM-1-N8R8      8MB(QuadSPI)    8MB(OctalSPI)   –40~65
- ESP32-S3-WROOM-1-N16R8     16MB(QuadSPI)   8MB(OctalSPI)   –40~65      80Mhz
- ESP32-S3-WROOM-1-N16R16VA8 16MB(QuadSPI)   16MB(OctalSPI)   –40~65
-</code>
+<table>
+<tr> <td>Name</td><td>                       Flash</td><td>           RAM</td><td>             Temp</td><td>        RAM Speed</td> </tr>
+<tr> <td>ESP32-S3-WROOM-1-N8</td><td>        8MB(QuadSPI)</td><td>    -  </td><td>             –40~85</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N16</td><td>       16MB(QuadSPI)</td><td>   -  </td><td>             –40~85</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-H4</td><td>        4MB(QuadSPI)</td><td>    -  </td><td>             –40~105</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N4R2</td><td>      4MB(QuadSPI)</td><td>    2MB(QuadSPI)</td><td>    –40~85</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N8R2</td><td>      8MB(QuadSPI)</td><td>    2MB(QuadSPI)</td><td>    –40~85</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N16R2</td><td>     16MB(QuadSPI)</td><td>   2MB(QuadSPI)</td><td>    –40~85</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N4R8</td><td>      4MB(QuadSPI)</td><td>    8MB(OctalSPI)</td><td>   –40~65</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N8R8</td><td>      8MB(QuadSPI)</td><td>    8MB(OctalSPI)</td><td>   –40~65</td><td> </td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N16R8</td><td>     16MB(QuadSPI)</td><td>   8MB(OctalSPI)</td><td>   –40~65</td><td>      80Mhz</td></tr>
+<tr> <td>ESP32-S3-WROOM-1-N16R16VA8</td><td> 16MB(QuadSPI)</td><td>   16MB(OctalSPI)</td><td>   –40~65</td><td> </td></tr>
+</table>
+
 NOTE: to get the Manged components to work
-1) add the component you want in the idf_component.yml in the ROOT folder of the project
-2) Run menuconfig command that will PULL the componet in the project from the web, BUILD commnd does not
-3) add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
-4) then compile and it should work
-5) if you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
+1. add the component you want in the idf_component.yml in the ROOT folder of the project
+2. Run menuconfig command that will PULL the componet in the project from the web, BUILD commnd does not
+3. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
+4. then compile and it should work
+5. if you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
 FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
 list (APPEND app_sources ${app_sources2})
 in the cmakelists.txt in the project root/scr folder
@@ -265,7 +266,7 @@ These pins are connected to the integrated SPI flash memory in the ESP32-S3 chip
 
 
 <table>
-<tr><th>GPIO</th><th>FUNCTIONS</th><th>YOU CAN USE IT</th></tr>
+<th>GPIO</th><th>FUNCTIONS</th><th>YOU CAN USE IT</th>
 <tr><td>0</td><td>RTC_GPIO0, GPIO0</td><td>⚠️ STRAPPING<br>Pulled-up</td></tr>
 <tr><td>1</td><td>RTC_GPIO1, GPIO1, TOUCH1, ADC1_CH0</td><td>✔️</td></tr>
 <tr><td>2</td><td>RTC_GPIO2, GPIO2, TOUCH2, ADC1_CH1</td><td>✔️</td></tr><tr>
