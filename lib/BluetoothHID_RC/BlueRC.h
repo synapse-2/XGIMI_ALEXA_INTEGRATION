@@ -7,6 +7,8 @@
 #ifdef XGIMI_USE_EXT_ADV
 #include <NimBLEExtAdvertising.h>
 #endif
+#include "ServerDecoder.h"
+
 
 // appearance of the device and the advertisment
 #define HID_REMOTE_APPEARANCE 0x0180
@@ -32,68 +34,16 @@ static constexpr uint16_t bootOutputChrUuid     = 0x2a32;
 // define the command set
 namespace BlueRC
 {
-    typedef enum : uint8_t
-    {
-        FastForward = 0,
-        Next = 1,
-        Pause = 2,
-        Play = 3,
-        Previous = 4,
-        Rewind = 5,
-        StartOver = 6,
-        Stop = 7,
 
-        Menu_Btn = 234,
-        Channel_Up_Btn = 235,
-        Channel_Dn_Btn = 236,
-        Ok_Btn = 237,
-        Up_Btn = 238,
-        Right_Btn = 239,
-        Left_Btn = 240,
-        Down_Btn = 241,
-        Vol_Up_Btn = 242,
-        Vol_Dn_Btn = 243,
-        Projector_Setting_Btn = 244,
-        Settings_Btn = 245,
-        Home_Btn = 246,
-        Options_Btn = 247,
-        Pairing_On = 248,
-        Pairing_Off = 249,
-        On_OFF_Btn = 250,
-        Volume = 251,
-        Channel = 252,
-        Mute = 253,
-        ChangeInput = 254,
-        None = 255
-    } RC_Cmd_Action;
-
-    typedef union
-    {
-        struct
-        {
-            uint8_t cmd;
-            uint8_t fromVal;
-            uint8_t toVal;
-        } __attribute__((packed)) cmds;
-        struct
-        {
-            uint8_t byte1;
-            uint8_t byte2;
-            uint8_t byte3;
-        } __attribute__((packed)) bytes3;
-
-    } __attribute__((packed)) Remote_Cmd;
-
-
-    class BluetoothHID_RC : public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks
+    class BluetoothHID_RC : public NimBLEServerCallbacks, public NimBLECharacteristicCallbacks, public ServerDecoderBase
     {
     public:
         BluetoothHID_RC(BLEServer *server);
 
         // we donot have these in NibmeBLE NimBLEDevice so we need to ADD !!!
         void setDeviceAppreance(uint16_t appearance);
-        virtual void sendButtonPress(BlueRC::Remote_Cmd command);
-        virtual bool canHandleButtonPress(BlueRC::Remote_Cmd command);
+        virtual void sendButtonPress(ServerDecoder::Remote_Cmd command);
+        virtual bool canHandleButtonPress(ServerDecoder::Remote_Cmd command);
         virtual void startStandardAdv();
         virtual void initStandardAdvData();
         void startServices();
@@ -161,10 +111,3 @@ namespace BlueRC
 
 }
 
-template <>
-struct magic_enum::customize::enum_range<BlueRC::RC_Cmd_Action>
-{
-    static constexpr int min = 0;
-    static constexpr int max = 255;
-    // (max - min) must be less than UINT16_MAX.
-};

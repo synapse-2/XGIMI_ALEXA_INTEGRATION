@@ -7,6 +7,7 @@
 #include <freertos/ringbuf.h>
 #include "AcloudIOT_Decoder.h"
 #include "BLE_Remote_Decoder.h"
+#include "Servo_Decoder.h"
 #include "BlueRC.h"
 #include "UtilityFunctions.h"
 #include "thingProperties.h"
@@ -28,8 +29,7 @@ auto to_integer(magic_enum::Enum<E> value) -> int
 
 AcloudIOT_Decoder aIOT;
 inline BLE_Remote_Decoder bleRemoteDecoder;
-//TaskHandle_t Task0;
-//TaskHandle_t Task1;
+inline Servo_Decoder ServoRemoteDecoder;
 WiFiManager wm;
 RC_WebInterface *rc_web;
 
@@ -87,16 +87,6 @@ void onNetworkDisconnect()
 {
 
   aIOT.onNetworkDisconnect();
-}
-
-void onNetworkError()
-{
-  aIOT.onNetworkError();
-}
-
-// Arduino IOT task
-void Task1code(void *pvParameters)
-{
 }
 
 void setup()
@@ -162,29 +152,10 @@ void setup()
     // create webserver
     rc_web = new RC_WebInterface();
     rc_web->begin();
-
-    // Create decoder task
-    aIOT = AcloudIOT_Decoder();
-    // xTaskCreatePinnedToCore(
-    //     Task1code,          /* Task function. */
-    //     "Wifi AIoT Core 1", /* name of task. */
-    //     10000,              /* Stack size of task */
-    //     NULL,               /* parameter of the task */
-    //     1,                  /* priority of the task */
-    //     &Task1,             /* Task handle to keep track of created task */
-    //     1);                 /* pin task to core 1 */
+    UtilityFunctions::debugLog("Web SERVER started ... ");
 
 #endif
   }
-
-  // xTaskCreatePinnedToCore(
-  //     Task0code,    /* Task function. */
-  //     "BLE Core 0", /* name of task. */
-  //     10000,        /* Stack size of task */
-  //     NULL,         /* parameter of the task */
-  //     1,            /* priority of the task */
-  //     &Task0,       /* Task handle to keep track of created task */
-  //     0);           /* pin task to core 0 */
 }
 
 // this shoud run on core 1
@@ -198,16 +169,19 @@ void loop()
   // Check if the device is in master or slave mode
   if (UtilityFunctions::isMaster())
   {
-    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder mode. Starting AIT WIFI Connext ");
+    UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder mode. Starting AIoT WIFI Connext ");
 
 #ifdef XIGIMI_DEBUG_WIFI_OFF
 #else
+    // Create decoder task
+    aIOT = AcloudIOT_Decoder();
     aIOT.setup(getSSID(), getPSK()); // Start the master functionality
     ArduinoCloud.addProperty(projector, READWRITE, ON_CHANGE, onProjectorChange);
-    aIOT.addCallback(NetworkConnectionEvent::CONNECTED, onNetworkConnect);
-    aIOT.addCallback(NetworkConnectionEvent::DISCONNECTED, onNetworkDisconnect);
-    aIOT.addCallback(NetworkConnectionEvent::ERROR, onNetworkError);
+    ArduinoCloud.addCallback(ArduinoIoTCloudEvent::CONNECT, onNetworkConnect);
+    ArduinoCloud.addCallback(ArduinoIoTCloudEvent::DISCONNECT, onNetworkDisconnect);
+    // ArduinoCloud.addCallback(ArduinoIoTCloudEvent::DISCONNECT, onNetworkError);
     aIOT.start();
+    UtilityFunctions::debugLog("AIoT SERVER started ... ");
 
 #endif
   }
@@ -222,12 +196,27 @@ void loop()
   bleRemoteDecoder = BLE_Remote_Decoder();
   bleRemoteDecoder.start();
   UtilityFunctions::debugLog("BLE SERVER started ... ");
+
+  ServoRemoteDecoder = Servo_Decoder();
+  ServoRemoteDecoder.start();
+  UtilityFunctions::debugLog("Servo SERVER started ... ");
   for (;;) // infinite loop
   {
     /// bluetooth handle
     UtilityFunctions::delay(AIOT_POLL_TIME);
     UtilityFunctions::ledBlinkBlue();
-    bleRemoteDecoder.dequeueCmd(); // see if we have a commmand
+
+    ServerDecoder::Remote_Cmd *cmd;
+    cmd = CmdRingBuffer::peekCmd();
+    if (cmd != NULL)
+    {
+
+      bleRemoteDecoder.doCmd(cmd);
+      ServoRemoteDecoder.doCmd(cmd);
+
+      // free up the memory of the cmd in ring buffer
+      CmdRingBuffer::dequeueCmd(cmd);
+    }
 
     /// TCp handle
     // If in master mode, update the properties
@@ -251,6 +240,5 @@ void loop()
     }
 
 #endif
-    
   }
 }

@@ -12,7 +12,7 @@ AcloudIOT_Decoder::AcloudIOT_Decoder()
 
 bool AcloudIOT_Decoder::hasFirstCloudSyncHasHappened() { return firstCloudSyncHasHappened; }
 
-void AcloudIOT_Decoder::enQueueCmd(BlueRC::Remote_Cmd cmd)
+void AcloudIOT_Decoder::enQueueCmd(ServerDecoder::Remote_Cmd cmd)
 {
     CmdRingBuffer::enQueueCmd(cmd);
 }
@@ -45,10 +45,6 @@ void AcloudIOT_Decoder::start()
     ArduinoCloud.begin(*iot_connector);
 }
 
-void AcloudIOT_Decoder::addCallback(NetworkConnectionEvent const event, OnNetworkEventCallback callback)
-{
-    iot_connector->addCallback(event, callback);
-}
 
 void AcloudIOT_Decoder::onNetworkConnect()
 {
@@ -72,7 +68,7 @@ void AcloudIOT_Decoder::onNetworkError()
 
 void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
 {
-    BlueRC::Remote_Cmd rcCmd;
+    ServerDecoder::Remote_Cmd rcCmd;
     bool enQueuedCmd = false;
 
     if (!firstCloudSyncHasHappened)
@@ -90,7 +86,7 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
     {
         // switch value has changed
         // for the switch change event in ring buffer
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::On_OFF_Btn;
+        rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::On_OFF_Btn;
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
         UtilityFunctions::debugLog("Projector switch changed to: " + String(newPrj.getSwitch()));
@@ -100,31 +96,31 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
     {
         // volume value has changed
         // for the volume change event in ring buffer
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Volume;
+        rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Volume;
         rcCmd.cmds.fromVal = oldProjector_value.getVolume();
         rcCmd.cmds.toVal = newPrj.getVolume();
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
-        UtilityFunctions::debugLogf("Projector volume changed to: %i\n", newPrj.getVolume());
+        UtilityFunctions::debugLogf("Projector volume changed to: %i from %i\n", newPrj.getVolume(), oldProjector_value.getVolume());
     }
 
     if (oldProjector_value.getChannel() != newPrj.getChannel())
     {
         // channel value has changed
         // for the channel change event in ring buffer
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Channel;
+        rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Channel;
         rcCmd.cmds.fromVal = oldProjector_value.getChannel();
         rcCmd.cmds.toVal = newPrj.getChannel();
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
-        UtilityFunctions::debugLogf("Projector channel changed to: %i\n", newPrj.getChannel());
+        UtilityFunctions::debugLogf("Projector channel changed to: %i from old channel %i\n", newPrj.getChannel(),oldProjector_value.getChannel());
     }
 
     if (oldProjector_value.getMute() != newPrj.getMute())
     {
         // Mute value has changed
         // for the mute change event in ring buffer
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Mute;
+        rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Mute;
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
         UtilityFunctions::debugLog("Projector Mute changed to: " + String(newPrj.getMute()));
@@ -135,7 +131,7 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
         // Input value has changed
         // for the Input change event in ring buffer
         String cmd = String((magic_enum::enum_name(newPrj.getInputValue())).data());
-        rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::ChangeInput;
+        rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::ChangeInput;
         rcCmd.cmds.toVal = (uint8_t)newPrj.getInputValue();
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
@@ -147,7 +143,7 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
         // Playback value has changed
         // for the playbac change event in ring buffer
         String cmd = String((magic_enum::enum_name(newPrj.getPlaybackCommand())).data());
-        rcCmd.cmds.cmd = (BlueRC::RC_Cmd_Action)newPrj.getPlaybackCommand();
+        rcCmd.cmds.cmd = (ServerDecoder::RC_Cmd_Action)newPrj.getPlaybackCommand();
         enQueueCmd(rcCmd);
         enQueuedCmd = true;
         UtilityFunctions::debugLogf("Projector Playback command changed to: %s\n", cmd);

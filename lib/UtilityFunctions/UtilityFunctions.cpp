@@ -18,7 +18,6 @@
 
 extern std::vector<projectorWAKE_str> projectorWakeList;
 
-
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
 {
@@ -532,7 +531,6 @@ namespace UtilityFunctions
         return _localHostname;
     }
 
-  
     // Save hostname to NVRAM
     void saveLocalHostname(String newHostname)
     {
@@ -662,5 +660,241 @@ namespace UtilityFunctions
             free(temp);
         }
         return;
+    }
+
+    // Load servoIO pin  num  from NVRAM
+    int loadServoIOPin()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        int servoIOPin = _preferences.getInt(NVRAM_PERFS_SERVO_IO_PROP, NVRAM_PERFS_SERVO_IO_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servoIO pin num from NVRAM. %i\n", servoIOPin);
+
+        return servoIOPin;
+    }
+
+    // Save ServoIO pin num from NVRAM
+    void saveServoIOPin(int newPinIO)
+    {
+
+        // only use gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, gpio.9
+        // gpio.15 ,gpio.16 ,gpio.17 ,gpio.18
+        // gpio.21
+        if (((newPinIO >= 1) && (newPinIO < 2)) || ((newPinIO >= 5) && (newPinIO < 9)) || ((newPinIO >= 15) && (newPinIO < 18)) || (newPinIO == 21))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putInt(NVRAM_PERFS_SERVO_IO_PROP, newPinIO);
+            _preferences.end();
+            UtilityFunctions::debugLog("servoIO pin num updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Only use on ESP32S3 gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got %i\n", newPinIO);
+        }
+    }
+
+    // Load servo PWM MIN Width from NVRAM
+    uint16_t loadServoPWMMinWidth()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t minWidth = _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_PROP, NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo Min Width in us 500 = 0.5 us from NVRAM. %i\n", minWidth);
+
+        return minWidth;
+    }
+
+    // Save servo PWN MIN Width from NVRAM
+    void saveServoPWMMinWidth(uint16_t newMinWidth)
+    {
+        if (((newMinWidth >= 0) && (newMinWidth <= 5000)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_PROP, newMinWidth);
+            _preferences.end();
+            UtilityFunctions::debugLog("servo Min Width updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Must be between 0 and 5000; 500 = 0.5 us got %i\n", newMinWidth);
+        }
+    }
+
+    // Load servo PWM MAX Width from NVRAM
+    uint16_t loadServoPWMMaxWidth()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t maxWidth = _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_PROP, NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo max Width in us 500 = 0.5 us from NVRAM. %i\n", maxWidth);
+
+        return maxWidth;
+    }
+
+    // Save servo PWN MIN Width from NVRAM
+    void saveServoPWMMaxWidth(uint16_t newMaxWidth)
+    {
+        if (((newMaxWidth >= 0) && (newMaxWidth <= 5000)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_PROP, newMaxWidth);
+            _preferences.end();
+            UtilityFunctions::debugLog("servo Max Width updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Must be between 0 and 5000; 2500 = 2.5 us got %i\n", newMaxWidth);
+        }
+    }
+
+    // Load servo PWM Freq from NVRAM
+    uint32_t loadServoPWMFreq()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint32_t freq = _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_FREQ_PROP, NVRAM_PERFS_SERVO_PWM_FREQ_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo freq from NVRAM. %i\n", freq);
+
+        return freq;
+    }
+
+    // Save servo PWN MIN Width from NVRAM
+    void saveServoPWMFreq(uint32_t newFreq)
+    {
+        if (((newFreq >= 1) && (newFreq <= 5000)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_FREQ_PROP, newFreq);
+            _preferences.end();
+            UtilityFunctions::debugLog("Servo Freq updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Must be between 1 and 5000; type 50 hz got %i\n", newFreq);
+        }
+    }
+
+    // Load servo max angle from NVRAM
+    uint16_t loadServoMaxAngle()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_MAX_ANGLE_PROP, NVRAM_PERFS_SERVO_MAX_ANGLE_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo max angle from NVRAM. %i\n", angle);
+
+        return angle;
+    }
+
+    // Save servo max angle  from NVRAM
+    void saveServoMaxAngle(uint16_t newAngle)
+    {
+        if (((newAngle >= 0) && (newAngle <= 200)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_MAX_ANGLE_PROP, newAngle);
+            _preferences.end();
+            UtilityFunctions::debugLog("Servo max angle updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Max angle must be between 0 and 200; got %i\n", newAngle);
+        }
+    }
+
+    // Load servo action angle from NVRAM
+    uint16_t loadServoActionAngle()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_ACTION_ANGLE_PROP, NVRAM_PERFS_SERVO_ACTION_ANGLE_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo action angle from NVRAM. %i\n", angle);
+
+        return angle;
+    }
+
+    // Save servo action angle from NVRAM
+    void saveServoActionAngle(uint16_t newAngle)
+    {
+        if (((newAngle >= 0) && (newAngle <= 200)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_ANGLE_PROP, newAngle);
+            _preferences.end();
+            UtilityFunctions::debugLog("Servo action angle updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Action angle must be between 0 and 200; got %i\n", newAngle);
+        }
+    }
+
+    // Load servo rest angle from NVRAM
+    uint16_t loadServoRestAngle()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_REST_ANGLE_PROP, NVRAM_PERFS_SERVO_REST_ANGLE_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo rest angle from NVRAM. %i\n", angle);
+
+        return angle;
+    }
+
+    // Save servo rest angle from NVRAM
+    void saveServoRestAngle(uint16_t newAngle)
+    {
+        if (((newAngle >= 0) && (newAngle <= 200)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_REST_ANGLE_PROP, newAngle);
+            _preferences.end();
+            UtilityFunctions::debugLog("Servo rest angle updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Rest angle Must be between 0 and 200; got %i\n", newAngle);
+        }
+    }
+
+    // Load servo action hold from NVRAM
+    uint16_t loadServoActionHold()
+    {
+        Preferences _preferences;
+        _preferences.begin(NVRAM_PERFS, false);
+        uint16_t hold = _preferences.getUInt(NVRAM_PERFS_SERVO_ACTION_HOLD_PROP, NVRAM_PERFS_SERVO_ACTION_HOLD_DEFAULT);
+        _preferences.end();
+        UtilityFunctions::debugLogf("loaded servo action hold time in ms from NVRAM. %i\n", hold);
+
+        return hold;
+    }
+
+    // Save servo action hold from NVRAM
+    void saveServoActionHold(uint16_t newHold)
+    {
+        if (((newHold >= 1) && (newHold <= 1000)))
+        {
+            Preferences _preferences;
+            _preferences.begin(NVRAM_PERFS, false);
+            _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_HOLD_PROP, newHold);
+            _preferences.end();
+            UtilityFunctions::debugLog("Servo action HOLD updated and saved to NVRAM.");
+        }
+        else
+        {
+            UtilityFunctions::debugLogf("Action HOLD must be between 1 and 1000 ms 1000 ms = 1 sec; got %i\n", newHold);
+        }
     }
 }

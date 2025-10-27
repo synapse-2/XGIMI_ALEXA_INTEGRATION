@@ -3,6 +3,7 @@
 #include "UtilityFunctions.h"
 #include "BlueRC.h"
 #include "HIDTypes.h"
+#include "ServerDecoder.h"
 
 
 #define HID_MANUFACTURER_NAME "Realtek BT"
@@ -397,12 +398,12 @@ class BlueXGIMI_RC : public BlueRC::BluetoothHID_RC
 {
 public:
     BlueXGIMI_RC(BLEServer *server);
-    void sendButtonPress(BlueRC::Remote_Cmd command) override;
-    bool canHandleButtonPress(BlueRC::Remote_Cmd command) override;
+    void sendButtonPress(ServerDecoder::Remote_Cmd command) override;
+    bool canHandleButtonPress(ServerDecoder::Remote_Cmd command) override;
     void initStandardAdvData() override;
     void startServices();
     void doCMD_ON_OFF();
-    void doButtons(BlueRC::Remote_Cmd command);
+    void doButtons(ServerDecoder::Remote_Cmd command);
     virtual ~BlueXGIMI_RC();
 
     friend class Callback_handler_Rep_Inp_01;

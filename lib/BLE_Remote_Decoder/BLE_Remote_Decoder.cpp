@@ -39,14 +39,12 @@ void BLE_Remote_Decoder::start()
     UtilityFunctions::debugLog("Bluetooth started...yeey :)");
 }
 
-void BLE_Remote_Decoder::dequeueCmd()
+void BLE_Remote_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
 {
-    BlueRC::Remote_Cmd *cmd;
-    size_t received_len;
-    cmd = CmdRingBuffer::peekCmd();
+
     if (cmd != NULL)
     {
-        std::string s_cmd = std::string((magic_enum::enum_name((BlueRC::RC_Cmd_Action)cmd->cmds.cmd)));
+        std::string s_cmd = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)cmd->cmds.cmd)));
         // UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
         bool cmdhandled = false;
@@ -59,9 +57,7 @@ void BLE_Remote_Decoder::dequeueCmd()
         // debug log if the cmd was not handled as not all remotes handle all commands
         if (!cmdhandled)
         {
-            UtilityFunctions::debugLogf("Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
+            UtilityFunctions::debugLogf("By BLE remote decoder - Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
         }
-        // free up the buffer
-        CmdRingBuffer::dequeueCmd(cmd);
     }
 }

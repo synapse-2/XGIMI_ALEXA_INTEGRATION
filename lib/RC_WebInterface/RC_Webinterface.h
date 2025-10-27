@@ -4,7 +4,7 @@
 #include <WebServer.h>
 #include "defaults.h"
 #include <Preferences.h>
-#include "BlueRC.h"
+#include "ServerDecoder.h"
 #include "CmdRingBuffer.h"
 
 class RC_WebInterface {
@@ -29,7 +29,7 @@ protected:
 
     void refreshGlobalJS();
     String wifiSignalStrengthDecoder(int8_t rssi);
-    void enQueueCmd(BlueRC::Remote_Cmd cmd);
+    void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
 };
 
 #endif

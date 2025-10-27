@@ -73,8 +73,8 @@ Name                        Flash           RAM             Temp        RAM Spee
  ESP32-S3-WROOM-1-N16R8     16MB(QuadSPI)   8MB(OctalSPI)   –40~65      80Mhz
  ESP32-S3-WROOM-1-N16R16VA8 16MB(QuadSPI)   16MB(OctalSPI)   –40~65
 </code>
-NOTE: to get the Manged componets to work
-1) add the componet you want in the idf_component.yml in the ROOT folder of the project
+NOTE: to get the Manged components to work
+1) add the component you want in the idf_component.yml in the ROOT folder of the project
 2) Run menuconfig command that will PULL the componet in the project from the web, BUILD commnd does not
 3) add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
 4) then compile and it should work
@@ -82,3 +82,184 @@ NOTE: to get the Manged componets to work
 FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
 list (APPEND app_sources ${app_sources2})
 in the cmakelists.txt in the project root/scr folder
+
+
+
+Usable PINS for ESP32S3
+
+Multiplexing
+Pin multiplexing is one of the most important and useful features of the ESP32.
+
+Basically, on the ESP32 we can reassign most of the GPIO functions to act on any pin, with little impact on performance.
+
+Therefore, the values we will see are the default values, but generally, you can change them to others, as it suits you.
+
+The RTC
+The RTC (Real Time Clock) plays a fundamental role during Sleep modes. The RTC consists of the following parts:
+
+RTC controller (including timers and IO peripherals)
+RTC memory (fast and slow)
+Ultra Low Power (ULP) coprocessor
+The ESP32 has 8 kB of SRAM in the RTC part, called fast RTC memory. The data stored here is not erased during deep sleep mode.
+
+In addition, there are another 8kB of SRAM called slow memory, used for the ULP processor.
+
+Digital Pins
+GPIO Pins
+The ESP32-S3 has up to 45 GPIO pins that can be assigned to different functions through programming.
+
+Most of these digital GPIOs can be configured with internal pull-up or pull-down resistors.
+
+Configuration (Strapping) Pins of the ESP32-S3
+The ESP32 chip has the following configuration (strapping) pins:
+
+GPIO 0
+GPIO 45
+GPIO 46
+These pins are involved in the configuration during startup. So avoid using them in your project.
+
+
+Input-Only GPIO Pins
+These pins cannot be used as outputs, but can be used as digital or analog inputs, or for other purposes.
+
+GPIO 46
+Additionally, unlike the other GPIO pins, they lack internal pull-up and pull-down resistors.
+
+Interrupt Pins of the ESP32-S3
+All GPIO pins can be configured as interrupts.
+
+
+
+RTC GPIO Pins of the ESP32-S3
+Some GPIOs are connected to the low-power RTC subsystem and are known as RTC GPIOs
+
+RTC_GPIO0 - GPIO0
+RTC_GPIO1 - GPIO1
+RTC_GPIO2 - GPIO2
+RTC_GPIO3 - GPIO3
+RTC_GPIO4 - GPIO4
+RTC_GPIO5 - GPIO5
+RTC_GPIO6 - GPIO6
+RTC_GPIO7 - GPIO7
+RTC_GPIO8 - GPIO8
+RTC_GPIO9 - GPIO9
+RTC_GPIO10 - GPIO10
+RTC_GPIO11 - GPIO11
+RTC_GPIO12 - GPIO12
+RTC_GPIO13 - GPIO13
+RTC_GPIO14 - GPIO14
+RTC_GPIO15 - GPIO15
+RTC_GPIO16 - GPIO16
+RTC_GPIO17 - GPIO17
+RTC_GPIO18 - GPIO18
+RTC_GPIO19 - GPIO19
+RTC_GPIO20 - GPIO20
+RTC_GPIO21 - GPIO21
+These pins are used to wake the ESP32-S3 from deep low-power mode when the ultra-low power (ULP) coprocessor is running.
+
+
+
+Touch Pins of the ESP32-S3
+The ESP32-S3 has 14 capacitive touch GPIO pins.
+
+TOUCH1 - GPIO 1
+TOUCH2 - GPIO 2
+TOUCH3 - GPIO 3
+TOUCH4 - GPIO 4
+TOUCH5 - GPIO 5
+TOUCH6 - GPIO 6
+TOUCH7 - GPIO 7
+TOUCH8 - GPIO 8
+TOUCH9 - GPIO 9
+TOUCH10 - GPIO 10
+TOUCH11 - GPIO 11
+TOUCH12 - GPIO 12
+TOUCH13 - GPIO 13
+TOUCH14 - GPIO 14
+When a capacitive load (such as a human finger) is near the GPIO pin, the ESP32-S3 detects the change in capacitance.
+
+
+
+Enable (EN) Pin
+Enable (EN) is the pin that controls the 3V3 regulator. It is configured with a pull-up resistor, so it connects to ground to disable the 3.3V regulator. For example, to reset the ESP32.
+
+Analog Pins
+PWM Pins of the ESP32-S3
+The ESP32-S3 board has 8 PWM channels (all GPIO pins except the input-only pins) controlled by a PWM controller.
+
+The PWM output can be used to control motors and digital LEDs.
+
+
+
+ADC Pins of the ESP32-S3
+The ESP32 integrates two ADCs and supports measurements on 20 channels
+
+ADC1_CH0 - GPIO 1
+ADC1_CH1 - GPIO 2
+ADC1_CH2 - GPIO 3
+ADC1_CH3 - GPIO 4
+ADC1_CH4 - GPIO 5
+ADC1_CH5 - GPIO 6
+ADC1_CH6 - GPIO 7
+ADC1_CH7 - GPIO 8
+ADC1_CH8 - GPIO 9
+ADC1_CH9 - GPIO 10
+ADC2_CH0 - GPIO 11
+ADC2_CH1 - GPIO 12
+ADC2_CH2 - GPIO 13
+ADC2_CH3 - GPIO 14
+ADC2_CH4 - GPIO 15
+ADC2_CH5 - GPIO 16
+ADC2_CH6 - GPIO 17
+ADC2_CH7 - GPIO 18
+ADC2_CH8 - GPIO 19
+ADC2_CH9 - GPIO 20
+The ADCs are 12 bits, so we have 4096 (2^12) discrete levels, which translates to a precision of 0.8mV.
+
+
+
+DAC Pins of the ESP32-S3
+The ESP32-S3 does not include a DAC.
+
+Communication Pins
+UART Pins of the ESP32-S3
+The ESP32-S3 development board has three UART interfaces: UART0, UART1, and UART2, supporting asynchronous communication (RS232 and RS485) and IrDA up to 5 Mbps.
+
+The UART0 pins are connected to the USB-to-serial converter and are used for programming and debugging. It is not recommended to use the UART0 pins.
+
+On the other hand, the UART is reserved for the integrated FLASH memory chip. The UART1 pins are reserved for the integrated flash memory chip.
+
+So the best option is to use UART2 to connect UART devices.
+
+
+
+I2C Pins of the ESP32-S3
+The ESP32-S3 has a single I2C bus that allows connecting up to 112 sensors and peripherals. The SDA and SCL pins are default assigned to the following pins.
+
+SDA - GPIO 8
+SCL - GPIO 9
+However, it is possible to use any GPIO pin to implement the I2C protocol using the command wire.begin(SDA, SCL).
+
+
+
+SPI Pins of the ESP32-S3
+The ESP32 has four interfaces SPI0, SPI1, SPI2, and SPI3. SPI0 is used to connect with the FLASH memory, and SPI1 for PSRAM (if the board has it). So it’s best to focus on SPI2 and SPI3.
+
+SPI	MOSI	MISO	CLK	CS
+SPI2	GPIO 35	GPIO 37	GPIO 36	GPIO 39
+SPI3	GPIO 11	GPIO 13	GPIO 12	GPIO 10
+
+
+SPI FLASH
+These pins are connected to the integrated SPI flash memory in the ESP32-S3 chip. Do not use these pins in your projects.
+
+GPIO 26
+GPIO 27
+GPIO 28
+GPIO 29
+GPIO 30
+GPIO 31
+GPIO 32
+
+
+<table><tr><th>GPIO</th><th>FUNCTIONS</th><th>YOU CAN USE IT</th></tr><tr><td>0</td><td>RTC_GPIO0, GPIO0</td><td>⚠️ STRAPPING<br>Pulled-up</td></tr><tr><td>1</td><td>RTC_GPIO1, GPIO1, TOUCH1, ADC1_CH0</td><td>✔️</td></tr><tr><td>2</td><td>RTC_GPIO2, GPIO2, TOUCH2, ADC1_CH1</td><td>✔️</td></tr><tr><td>3</td><td>RTC_GPIO3, GPIO3, TOUCH3, ADC1_CH2</td><td>⚠️ STRAPPING<br>Floating</td></tr><tr><td>4</td><td>RTC_GPIO4, GPIO4, TOUCH4, ADC1_CH3</td><td>✔️</td></tr><tr><td>5</td><td>RTC_GPIO5, GPIO5, TOUCH5, ADC1_CH4</td><td>✔️</td></tr><tr><td>6</td><td>RTC_GPIO6, GPIO6, TOUCH6, ADC1_CH5</td><td>✔️</td></tr><tr><td>7</td><td>RTC_GPIO7, GPIO7, TOUCH7, ADC1_CH6</td><td>✔️</td></tr><tr><td>8</td><td>RTC_GPIO8, GPIO8, TOUCH8, ADC1_CH7</td><td>✔️</td></tr><tr><td>9</td><td>RTC_GPIO9, GPIO9, TOUCH9, ADC1_CH8, FSPIHD</td><td>✔️</td></tr><tr><td>10</td><td>RTC_GPIO10, GPIO10, TOUCH10, ADC1_CH9, FSPICS0, FSPIIO4</td><td>✔️</td></tr><tr><td>11</td><td>RTC_GPIO11, GPIO11, TOUCH11, ADC2_CH0, FSPID, FSPIIO5</td><td>✔️</td></tr><tr><td>12</td><td>RTC_GPIO12, GPIO12, TOUCH12, ADC2_CH1, FSPICLK, FSPIIO6</td><td>✔️</td></tr><tr><td>13</td><td>RTC_GPIO13, GPIO13, TOUCH13, ADC2_CH2, FSPIQ, FSPIIO7</td><td>✔️</td></tr><tr><td>14</td><td>RTC_GPIO14, GPIO14, TOUCH14, ADC2_CH3, FSPIWP, FSPIDQS</td><td>✔️</td></tr><tr><td>15</td><td>RTC_GPIO15, GPIO15, U0RTS, ADC2_CH4, XTAL_32K_P</td><td>✔️</td></tr><tr><td>16</td><td>RTC_GPIO16, GPIO16, U0CTS, ADC2_CH5, XTAL_32K_N</td><td>✔️</td></tr><tr><td>17</td><td>RTC_GPIO17, GPIO17, U1TXD, ADC2_CH6, DAC_1</td><td>✔️</td></tr><tr><td>18</td><td>RTC_GPIO18, GPIO18, U1RXD, ADC2_CH7, DAC_2, CLK_OUT3</td><td>✔️</td></tr><tr><td>19</td><td>RTC_GPIO19, GPIO19, U1RTS, ADC2_CH8, CLK_OUT2, USB_D-</td><td>⚠️ USB_D-</td></tr><tr><td>20</td><td>RTC_GPIO20, GPIO20, U1CTS, ADC2_CH9, CLK_OUT1, USB_D+</td><td>⚠️ USB_D+</td></tr><tr><td>21</td><td>RTC_GPIO21, GPIO21</td><td>✔️</td></tr><tr><td>22</td><td>GPIO22</td><td>✔️</td></tr><tr><td>23</td><td>GPIO23</td><td>✔️</td></tr><tr><td>24</td><td>GPIO24</td><td>✔️</td></tr><tr><td>25</td><td>GPIO25</td><td>✔️</td></tr><tr><td>26</td><td>SPICS1, GPIO26</td><td>❌ FLASH SPI</td></tr><tr><td>27</td><td>SPIHD, GPIO27</td><td>❌ FLASH SPI</td></tr><tr><td>28</td><td>SPIWP, GPIO28</td><td>❌ FLASH SPI</td></tr><tr><td>29</td><td>SPICS0, GPIO29</td><td>❌ FLASH SPI</td></tr><tr><td>30</td><td>SPICLK, GPIO30</td><td>❌ FLASH SPI</td></tr><tr><td>31</td><td>SPIQ, GPIO31</td><td>❌ FLASH SPI</td></tr><tr><td>32</td><td>SPID, GPIO32</td><td>❌ FLASH SPI</td></tr><tr><td>33</td><td>SPIIO4, GPIO33, FSPIHD</td><td>🟢 PSRAM</td></tr><tr><td>34</td><td>SPIIO5, GPIO34, FSPICS0</td><td>🟢 PSRAM</td></tr><tr><td>35</td><td>SPIIO6, GPIO35, FSPID</td><td>🟢 PSRAM</td></tr><tr><td>36</td><td>SPIIO7, GPIO36, FSPICLK</td><td>🟢 PSRAM</td></tr><tr><td>37</td><td>SPIDQS, GPIO37, FSPIQ</td><td>🟢 PSRAM</td></tr><tr><td>38</td><td>GPIO38, FSPIWP</td><td>✔️</td></tr><tr><td>39</td><td>MTCK, GPIO39, CLK_OUT3</td><td>🟢 DEBUG JTAG</td></tr><tr><td>40</td><td>MTDO, GPIO40, CLK_OUT2</td><td>🟢 DEBUG JTAG</td></tr><tr><td>41</td><td>MTDI, GPIO41, CLK_OUT1</td><td>🟢 DEBUG JTAG</td></tr><tr><td>42</td><td>MTMS, GPIO42</td><td>🟢 DEBUG JTAG</td></tr><tr><td>43</td><td>U0TXD, GPIO43, CLK_OUT1</td><td>⚠️ U0TX</td></tr><tr><td>44</td><td>U0RXD, GPIO44, CLK_OUT2</td><td>⚠️ U0RX</td></tr><tr><td>45</td><td>GPIO45</td><td>❌ STRAPPING<br>Pulled-down</td></tr><tr><td>46</td><td>GPIO46</td><td>❌ STRAPPING<br>Pulled-down</td></tr><tr><td>EN</td><td>CHIP_PU, Reset</td><td>❌</td></tr></table>

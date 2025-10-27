@@ -4,6 +4,7 @@
 #include "BlueRC.h"
 #include <WiFiManager.h>
 #include <ArduinoIoTCloud.h>
+#include "ServerDecoder.h"
 
 class AcloudIOT_Decoder
 {
@@ -17,10 +18,8 @@ public:
     void onNetworkDisconnect();
     void onNetworkError();
     void onProjectorChange(CloudTelevision newPrj);
+    void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
 
-    void enQueueCmd(BlueRC::Remote_Cmd cmd);
-
-    void addCallback(NetworkConnectionEvent const event, OnNetworkEventCallback callback);
 protected:
     WiFiConnectionHandler * iot_connector;
     bool firstCloudSyncHasHappened = false; // used to ignore the first cloud update after connection as it syncs the variable

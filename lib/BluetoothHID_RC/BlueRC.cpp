@@ -422,8 +422,8 @@ NimBLEService *BlueRC::BluetoothHID_RC::getBatteryService()
 } // getBatteryService
 
 // the infamous entry in vtables :)
-void BlueRC::BluetoothHID_RC::sendButtonPress(BlueRC::Remote_Cmd command) {}
-bool BlueRC::BluetoothHID_RC::canHandleButtonPress(BlueRC::Remote_Cmd command) {}
+void BlueRC::BluetoothHID_RC::sendButtonPress(ServerDecoder::Remote_Cmd command) {}
+bool BlueRC::BluetoothHID_RC::canHandleButtonPress(ServerDecoder::Remote_Cmd command) {}
 void BlueRC::BluetoothHID_RC::startStandardAdv() {}
 void BlueRC::BluetoothHID_RC::initStandardAdvData() {}
 void BlueRC::BluetoothHID_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {}

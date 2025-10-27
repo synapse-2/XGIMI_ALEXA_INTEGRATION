@@ -143,7 +143,7 @@ bool RC_WebInterface::checkAdminAuth()
     }
     return true;
 }
-void RC_WebInterface::enQueueCmd(BlueRC::Remote_Cmd cmd)
+void RC_WebInterface::enQueueCmd(ServerDecoder::Remote_Cmd cmd)
 {
     CmdRingBuffer::enQueueCmd(cmd);
 }
@@ -156,7 +156,7 @@ void RC_WebInterface::handleRemotePress()
         return;
     }
 
-    BlueRC::Remote_Cmd rcCmd;
+    ServerDecoder::Remote_Cmd rcCmd;
     bool enQueuedCmd = false;
     String action;
 
@@ -169,7 +169,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::On_OFF_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::On_OFF_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -177,7 +177,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Settings_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Settings_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -186,7 +186,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Up_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Up_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -195,7 +195,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Left_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Left_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -204,7 +204,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Ok_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Ok_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -213,7 +213,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Right_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Right_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -222,7 +222,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Down_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Down_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -231,7 +231,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Channel_Up_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Channel_Up_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -240,7 +240,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Channel_Dn_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Channel_Dn_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -249,7 +249,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Vol_Up_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Vol_Up_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -258,7 +258,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Vol_Dn_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Vol_Dn_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -267,7 +267,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Previous;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Previous;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -276,7 +276,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Menu_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Menu_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -285,7 +285,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Home_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Home_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }
@@ -294,7 +294,7 @@ void RC_WebInterface::handleRemotePress()
         {
 
             // add to the ring buffer
-            rcCmd.cmds.cmd = BlueRC::RC_Cmd_Action::Projector_Setting_Btn;
+            rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Projector_Setting_Btn;
             enQueueCmd(rcCmd);
             enQueuedCmd = true;
         }

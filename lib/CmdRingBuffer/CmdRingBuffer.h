@@ -7,8 +7,8 @@ namespace CmdRingBuffer{
 
     extern RingbufHandle_t ringBufHandle;
     void initCmdRingBuffer();
-    void enQueueCmd(BlueRC::Remote_Cmd cmd);
-    BlueRC::Remote_Cmd* peekCmd();
-    void dequeueCmd(BlueRC::Remote_Cmd*  cmd);
+    void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
+    ServerDecoder::Remote_Cmd* peekCmd();
+    void dequeueCmd(ServerDecoder::Remote_Cmd*  cmd);
 
 }
