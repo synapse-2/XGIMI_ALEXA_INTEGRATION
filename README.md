@@ -1,4 +1,5 @@
 # XGIMI_ALEXA_INTEGRATION
+
 XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
@@ -11,17 +12,16 @@ It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework wi
 The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
 
 ### platformio.ini
+
 <code>
 platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip (version: Arduino Release v3.3.0 based on ESP-IDF v5.5.0)
 framework = arduino, espidf
 
-
 </code>
 
-
 ### PIOArduino 
-You can also build this using the native new fork of platoformio called # PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
 
+You can also build this using the native new fork of platoformio called # PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
 
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
 Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
@@ -35,11 +35,11 @@ For coexistance to work:
 ### Threre is a ring buffer between the cores for communication.
 
 ## THE LIB MUST BE COMPILED with GNU++23 
+
 You must see "- toolchain-xtensa-esp-elf @ 14.2.0+20241119" or above in the build output
 If you want to use the old platfrom code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
 
 If you want to change the sdkconfig options then use the "pio run -t menuconfig" command in the PlatfromCIO Core CLI window. 
-
 
 CLI for flashing: pio pkg exec -p "tool-esptoolpy" -- esptool.py --help
 cli for commands avaliable:pio run --list-targets
@@ -53,13 +53,14 @@ https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
 https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
 
 ### UID - HID Report decoder/encorder 
+
 https://eleccelerator.com/usbdescreqparser/
 
 ### BLuetooth CoD (Class of device) encoder/decoder
+
 https://bluetooth-pentest.narod.ru/software/bluetooth_class_of_device-service_generator.html
 
 Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf 
-
 
 ## Modules used
 
@@ -87,11 +88,10 @@ FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
 list (APPEND app_sources ${app_sources2})
 in the cmakelists.txt in the project root/scr folder
 
-
-
 # Usable PINS for ESP32S3
 
 ## Multiplexing
+
 Pin multiplexing is one of the most important and useful features of the ESP32.
 
 Basically, on the ESP32 we can reassign most of the GPIO functions to act on any pin, with little impact on performance.
@@ -99,6 +99,7 @@ Basically, on the ESP32 we can reassign most of the GPIO functions to act on any
 Therefore, the values we will see are the default values, but generally, you can change them to others, as it suits you.
 
 ## The RTC
+
 The RTC (Real Time Clock) plays a fundamental role during Sleep modes. The RTC consists of the following parts:
 
 RTC controller (including timers and IO peripherals)
@@ -109,6 +110,7 @@ The ESP32 has 8 kB of SRAM in the RTC part, called fast RTC memory. The data sto
 In addition, there are another 8kB of SRAM called slow memory, used for the ULP processor.
 
 ## Digital Pins
+
 GPIO Pins
 The ESP32-S3 has up to 45 GPIO pins that can be assigned to different functions through programming.
 
@@ -122,19 +124,19 @@ The ESP32 chip has the following configuration (strapping) pins:
 * GPIO 46
 These pins are involved in the configuration during startup. So avoid using them in your project.
 
-
 ## Input-Only GPIO Pins
+
 These pins cannot be used as outputs, but can be used as digital or analog inputs, or for other purposes.
 
 GPIO 46
 Additionally, unlike the other GPIO pins, they lack internal pull-up and pull-down resistors.
 
 ## Interrupt Pins of the ESP32-S3
+
 All GPIO pins can be configured as interrupts.
 
-
-
 ## RTC GPIO Pins of the ESP32-S3
+
 Some GPIOs are connected to the low-power RTC subsystem and are known as RTC GPIOs
 
 * RTC_GPIO0 - GPIO0
@@ -162,9 +164,8 @@ Some GPIOs are connected to the low-power RTC subsystem and are known as RTC GPI
 
 These pins are used to wake the ESP32-S3 from deep low-power mode when the ultra-low power (ULP) coprocessor is running.
 
-
-
 ## Touch Pins of the ESP32-S3
+
 The ESP32-S3 has 14 capacitive touch GPIO pins.
 
 * TOUCH1 - GPIO 1
@@ -184,20 +185,19 @@ The ESP32-S3 has 14 capacitive touch GPIO pins.
 
 When a capacitive load (such as a human finger) is near the GPIO pin, the ESP32-S3 detects the change in capacitance.
 
-
-
 ## Enable (EN) Pin
+
 Enable (EN) is the pin that controls the 3V3 regulator. It is configured with a pull-up resistor, so it connects to ground to disable the 3.3V regulator. For example, to reset the ESP32.
 
 ## Analog Pins
+
 PWM Pins of the ESP32-S3
 The ESP32-S3 board has 8 PWM channels (all GPIO pins except the input-only pins) controlled by a PWM controller.
 
 The PWM output can be used to control motors and digital LEDs.
 
-
-
 ## ADC Pins of the ESP32-S3
+
 The ESP32 integrates two ADCs and supports measurements on 20 channels
 
 * ADC1_CH0 - GPIO 1
@@ -222,12 +222,12 @@ The ESP32 integrates two ADCs and supports measurements on 20 channels
 * ADC2_CH9 - GPIO 20
 The ADCs are 12 bits, so we have 4096 (2^12) discrete levels, which translates to a precision of 0.8mV.
 
-
-
 ## DAC Pins of the ESP32-S3
+
 The ESP32-S3 does not include a DAC.
 
 ## Communication Pins
+
 UART Pins of the ESP32-S3
 The ESP32-S3 development board has three UART interfaces: UART0, UART1, and UART2, supporting asynchronous communication (RS232 and RS485) and IrDA up to 5 Mbps.
 
@@ -237,26 +237,26 @@ On the other hand, the UART is reserved for the integrated FLASH memory chip. Th
 
 So the best option is to use UART2 to connect UART devices.
 
-
-
 ## I2C Pins of the ESP32-S3
+
 The ESP32-S3 has a single I2C bus that allows connecting up to 112 sensors and peripherals. The SDA and SCL pins are default assigned to the following pins.
 
 * SDA - GPIO 8
 * SCL - GPIO 9
 However, it is possible to use any GPIO pin to implement the I2C protocol using the command wire.begin(SDA, SCL).
 
-
-
 ## SPI Pins of the ESP32-S3
+
 The ESP32 has four interfaces SPI0, SPI1, SPI2, and SPI3. SPI0 is used to connect with the FLASH memory, and SPI1 for PSRAM (if the board has it). So it’s best to focus on SPI2 and SPI3.
 
-* SPI	MOSI	MISO	CLK	CS
-* SPI2	GPIO 35	GPIO 37	GPIO 36	GPIO 39
-* SPI3	GPIO 11	GPIO 13	GPIO 12	GPIO 10
-
+<table>
+<tr><td>SPI</td><td>	MOSI</td><td>	MISO</td><td>	CLK</td><td>	CS</td></tr>
+<tr><td>SPI2</td><td>	GPIO 35</td><td>	GPIO 37</td><td>	GPIO 36</td><td>	GPIO 39</td></tr>
+<tr><td>SPI3</td><td>	GPIO 11</td><td>	GPIO 13</td><td>	GPIO 12</td><td>	GPIO 10</td></tr>
+</table>
 
 ## SPI FLASH
+
 These pins are connected to the integrated SPI flash memory in the ESP32-S3 chip. Do not use these pins in your projects.
 
 * GPIO 26
@@ -266,7 +266,6 @@ These pins are connected to the integrated SPI flash memory in the ESP32-S3 chip
 * GPIO 30
 * GPIO 31
 * GPIO 32
-
 
 <table>
 <th>GPIO</th><th>FUNCTIONS</th><th>YOU CAN USE IT</th>
