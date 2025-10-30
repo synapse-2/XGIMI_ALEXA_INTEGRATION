@@ -37,6 +37,7 @@ namespace UtilityFunctions
 
     String chipInfo();
     String taskInfo();
+    String ledCInfo();
 
     // Load the mDNS hostname from NVRAM
     String loadLocalHostname();

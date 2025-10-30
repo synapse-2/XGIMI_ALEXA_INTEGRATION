@@ -19,17 +19,13 @@ framework = arduino, espidf
 
 </code>
 
-### PIOArduino 
-
-You can also build this using the native new fork of platoformio called # PIOArduino (another Visual Studio Code extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)
-
 The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth connections.
 Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
 For coexistance to work:
-* Wifi and all apps logic is run on core 1, Bluetooh on code 0. 
-* Arduino is run on code 1 
-* Rtos oncores 0 and 1
+* Wifi and all apps logic is run on core 1, Bluetooh on core 0
+* Arduino is run on core 1 
+* Rtos on cores 0 and 1
 * We should put all web checks for activity polling functions in one thread, too may tasks and performnce is impacted. Refer to the loop() function
 
 ### Threre is a ring buffer between the cores for communication.

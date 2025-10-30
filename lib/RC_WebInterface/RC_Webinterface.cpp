@@ -15,7 +15,6 @@
 
 extern BLE_Remote_Decoder bleRemoteDecoder;
 
-
 // Constructor
 RC_WebInterface::RC_WebInterface()
     : _server(80)
@@ -86,8 +85,10 @@ void RC_WebInterface::refreshGlobalJS()
     chipInfo.replace("\n", "<br>\\\n");
     String taskInfo = UtilityFunctions::taskInfo();
     taskInfo.replace("\n", "<br>\\\n");
+    String ledCInfo = UtilityFunctions::ledCInfo();
+    ledCInfo.replace("\n", "<br>\\\n");
 
-    globalJS = globalJS + "const statusTxt =  \"" + chipInfo + "<br>\\" + taskInfo + "\";\n";
+    globalJS = globalJS + "const statusTxt =  \"" + chipInfo + "<br>\\" + taskInfo + "<br>\\" + ledCInfo + "\";\n";
 }
 
 // Public begin method to start the web interface

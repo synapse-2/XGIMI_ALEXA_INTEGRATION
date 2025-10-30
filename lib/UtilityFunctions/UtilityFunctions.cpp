@@ -12,6 +12,7 @@
 #include <WiFiManager.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/ledc.h"
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
@@ -413,6 +414,46 @@ namespace UtilityFunctions
         return String(str.c_str());
     }
 
+    String ledCInfo()
+    {
+
+        std::string str = std::format("LEDC Channel Status:\n");
+
+        // Iterate through high-speed mode channels
+#if SOC_LEDC_SUPPORT_HS_MODE
+        str = str + std::format("High-Speed Mode Channels:\n");
+        for (int channel = 0; channel < LEDC_CHANNEL_MAX; channel++)
+        {
+            uint32_t duty = ledc_get_duty(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_channel_t)channel);
+
+            str = str + std::format("Channel {}: Duty={}\n", channel, duty);
+        }
+        for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
+        {
+            uint32_t freq = ledc_get_freq(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_timer_t)timer);
+            str = str + std::format("Timer {}: Freq={} Hz\n", timer, freq);
+        }
+#else
+    str = str + std::format("High-Speed Mode Channels: NA \n");
+#endif
+
+        // Iterate through low-speed mode channels
+        str = str + std::format("Low-Speed Mode Channels:\n");
+        for (int channel = 0; channel < LEDC_CHANNEL_MAX; channel++)
+        {
+            uint32_t duty = ledc_get_duty(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_channel_t)channel);
+
+            str = str + std::format("Channel {}: Duty={}\n", channel, duty);
+        }
+        for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
+        {
+            uint32_t freq = ledc_get_freq(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_timer_t)timer);
+            str = str + std::format("Timer {}: Freq={} Hz\n", timer, freq);
+        }
+
+        return String(str.c_str());
+    }
+
     void UtilityFunctionsInit()
     {
         // only init once
@@ -768,7 +809,7 @@ namespace UtilityFunctions
     // Save servo PWN MIN Width from NVRAM
     void saveServoPWMFreq(uint32_t newFreq)
     {
-        if (((newFreq >= 1) && (newFreq <= 5000)))
+        if (((newFreq >= 50) && (newFreq <= 400)))
         {
             Preferences _preferences;
             _preferences.begin(NVRAM_PERFS, false);
@@ -778,7 +819,7 @@ namespace UtilityFunctions
         }
         else
         {
-            UtilityFunctions::debugLogf("Must be between 1 and 5000; type 50 hz got %i\n", newFreq);
+            UtilityFunctions::debugLogf("Must be between 50 and 400; type 50 hz got %i\n", newFreq);
         }
     }
 

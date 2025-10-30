@@ -34,11 +34,11 @@ void Servo_Decoder::start()
     };
 
     // Initialize the servo
-    iot_servo_init(LEDC_LOW_SPEED_MODE, &servo_cfg);
+    iot_servo_init(ledc_mode_t::LEDC_LOW_SPEED_MODE, &servo_cfg);
 
     // set servo to rest angle
 
-    iot_servo_write_angle(LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
+    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
 }
 
 void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
@@ -52,12 +52,12 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
         bool cmdhandled = false;
         if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_OFF_Btn)
         {
-            iot_servo_write_angle(LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
-            iot_servo_write_angle(LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoActionAngle());
-            UtilityFunctions::debugLogf("Servo at action angle");
+            iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
+            iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoActionAngle());
+            UtilityFunctions::debugLogf("Servo at action angle\n");
             UtilityFunctions::delay(UtilityFunctions::loadServoActionHold());
             iot_servo_write_angle(LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
-            UtilityFunctions::debugLogf("Servo at rest angle");
+            UtilityFunctions::debugLogf("Servo at rest angle\n");
         }
         else
         {
