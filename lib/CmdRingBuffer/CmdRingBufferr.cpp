@@ -10,8 +10,8 @@ namespace CmdRingBuffer
     RingbufHandle_t ringBufHandle;
     void initCmdRingBuffer()
     {
-        // Create a ring buffer of 16 bytes with no-split type
-        ringBufHandle = xRingbufferCreate(32, RINGBUF_TYPE_NOSPLIT);
+        // Create a ring buffer of bytes with no-split type
+        ringBufHandle = xRingbufferCreate(RING_BUFF_SIZE_FOR_CMD, RINGBUF_TYPE_NOSPLIT);
 
         if (ringBufHandle == NULL)
         {

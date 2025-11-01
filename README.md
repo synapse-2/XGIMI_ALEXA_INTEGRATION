@@ -4,12 +4,64 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
+How to set up 
+You need 
+1. Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
+2. An Aurdino Cloud account at: https://app.arduino.cc/
+3. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
+    a. Select "comptible device" option
+    b. Select "ESP32" option
+    c. Select "Arduino Nano ESP32" from the drop down
+    d. hit continue
+    e. give a name
+    f. NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
+    g. SECRET KEY is only displpayed once so you will have to re do this step if you forget it
+4. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
+5. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
+6. The "projector" variable should be of 
+    a. type "Television"
+    b. variable permission : read & write
+    c. Variable update policy: On change
+7. Associate the thing with the devide you created in step 3 (on the things page)
+8. Select the smart home integration as Alexa (on the things page)
+9. Go to Alexa app on the phone etc and add the alexa skill for arduino and the device you want refer to this guide: https://docs.arduino.cc/arduino-cloud/guides/alexa/
+10. Compile and flash the binary to the ESP32S3
+11. Make sure you also flash the file system form the PIO command "Upload filesystem image"
+12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
+13. join to it
+14. You can get the ESP32's ip from teh serial port else opne the browser for host name "xigimi-alexa.local" (mDNS is enabled by defaut so this should work) of you have conencted to the the ESP32's wifi network
+15. Scan to fimd your wifi
+16. Only b and n networks o 2.5GHz ESP32S3 supports 
+17. Identiy the network, provide the passskey and hit save
+18. The devide shoud connect. the device will go from red led to a long Green blink. the long green series of blinks means it has conencted to the wifi
+19. Open the browser to "xigimi-alexa.local" you should see the Remote HTML UI
+20. Go to Settings page. The default user and password both are "admin"
+21. In the Settings update the device ID and Secret ID
+22. Each time you update the device will restart 
+23. Once updated the device should connect to the Arduino IOT and you should be able to do commands like "Alexa tun projector off" ; "Alexa set projector volume to 10" etc.
+24. Pressing the boot button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
+
+
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
 
 The code is built on PIOArduino (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
 
 The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
+
+## Clangd 
+
+The code also has  cland enabled 
+
+you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
+clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
+
+You have to create a .clangd file in the root of your project folder with the lines
+
+<code>
+CompileFlags:
+  Remove: [-fno-tree-switch-conversion]
+</code>
 
 ### platformio.ini
 

@@ -45,12 +45,14 @@ namespace ServerDecoder
             uint8_t cmd;
             uint8_t fromVal;
             uint8_t toVal;
+            uint8_t codeData[8];
         } __attribute__((packed)) cmds;
         struct
         {
             uint8_t byte1;
             uint8_t byte2;
             uint8_t byte3;
+            uint8_t codeData[8]; //used to send the additional codes from raw blutooth.
         } __attribute__((packed)) bytes3;
 
     } __attribute__((packed)) Remote_Cmd;

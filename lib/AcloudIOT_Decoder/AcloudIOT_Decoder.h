@@ -19,9 +19,11 @@ public:
     void onNetworkError();
     void onProjectorChange(CloudTelevision newPrj);
     void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
+    bool isConnectOK();
 
 protected:
     WiFiConnectionHandler * iot_connector;
     bool firstCloudSyncHasHappened = false; // used to ignore the first cloud update after connection as it syncs the variable
     CloudTelevision oldProjector_value;     // used to compare the value to derermine what to do
+    bool isConnectOkState = false;
 };

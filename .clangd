@@ -1,0 +1,6 @@
+CompileFlags:
+  Remove: [-fno-tree-switch-conversion, -fstrict-volatile-bitfields, -mdisable-hardware-atomics, -mlongcalls, -std=gnu++11, -std=gnu++2b, -std=gnu++2a ]
+  Add: [-std=gnu++23, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__servo/include/, -I include ]
+
+
+  

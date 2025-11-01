@@ -196,7 +196,7 @@
             </form>
         </div>
 
-         <!-- Unit Blutooth name Change Form -->
+        <!-- Unit Blutooth name Change Form -->
         <div class="form-section">
             <h3>Change Unit BlueTooth Name</h3>
             <form action="/change-bluename" method="post">
@@ -205,6 +205,78 @@
                 <input type="submit" value="Change BlueTooth Name">
             </form>
         </div>
+
+        <!-- SERVO name Change Form -->
+        <div class="form-section">
+            <h3>Change Servo IO pin</h3>
+            <form action="/change-servoIOPIN" method="post">
+                <label for="new-servoIOPIN">New Servo IO PIN:</label>
+                <input type="text" id="new-servoIOPIN" name="newservoIOPIN" required>
+                <input type="submit" value="Change Servo IO PIN">
+            </form>
+        </div>
+
+
+        <!-- SERVO max angle Change Form -->
+        <div class="form-section">
+            <h3>Change Servo MAX TRAVEL ANGLE (Typ :180 degrees)</h3>
+            <form action="/change-servoMAXAngle" method="post">
+                <label for="new-servoMAXAngle">New Servo MAX Travel Angle:</label>
+                <input type="text" id="new-servoMAXAngle" name="newservoMAXAngle" required>
+                <input type="submit" value="Change Servo MAX Travel Angle">
+            </form>
+        </div>
+
+        <!-- SERVO rest angle Change Form -->
+        <div class="form-section">
+            <h3>Change Servo at REST ANGLE (Typ :90 degrees)</h3>
+            <form action="/change-servoRESTAngle" method="post">
+                <label for="new-servoRESTAngle">New Servo REST Angle:</label>
+                <input type="text" id="new-servoRESTAngle" name="newservoRESTAngle" required>
+                <input type="submit" value="Change Servo REST Angle">
+            </form>
+        </div>
+
+        <!-- SERVO action angle Change Form -->
+        <div class="form-section">
+            <h3>Change Servo at Action ANGLE (Typ :120 degrees)</h3>
+            <form action="/change-servoActionAngle" method="post">
+                <label for="new-servoActionAngle">New Servo Action Angle:</label>
+                <input type="text" id="new-servoActionAngle" name="newservoActionAngle" required>
+                <input type="submit" value="Change Action Angle">
+            </form>
+        </div>
+
+        <!-- SERVO action dela Change Form -->
+        <div class="form-section">
+            <h3>Change Servo at Action delay (Typ :100 mili sec)</h3>
+            <form action="/change-servoActionDelay" method="post">
+                <label for="new-servoActionDelay">New Servo Action delay:</label>
+                <input type="text" id="new-servoActionDelay" name="newservoActionDelay" required>
+                <input type="submit" value="Change Action delay">
+            </form>
+        </div>
+
+        <!-- Device ID Form -->
+        <div class="form-section">
+            <h3>Change AIOT Device ID</h3>
+            <form action="/change-deviceID" method="post">
+                <label for="new-deviceID">New AIOT Device ID:</label>
+                <input type="text" id="new-deviceID" name="newdeviceID" required>
+                <input type="submit" value="Change AIOT Device ID">
+            </form>
+        </div>
+
+        <!-- Device SECRET ID Form -->
+        <div class="form-section">
+            <h3>Change AIOT Device Secret ID</h3>
+            <form action="/change-secretID" method="post">
+                <label for="new-secretID">New AIOT Device Secret ID:</label>
+                <input type="text" id="new-secretID" name="newsecretID" required>
+                <input type="submit" value="Change AIOT Device Secret ID">
+            </form>
+        </div>
+
         <div class="footer">
             <a href="/">Home</a>
             <a href="/settings.htm">Settings</a>
@@ -216,10 +288,33 @@
     <script>
 
         const hostElement = document.getElementById("new-hostname");
-        hostElement.value = devHostname; 
+        hostElement.value = devHostname;
 
         const blueElement = document.getElementById("new-bluename");
-        blueElement.value = devBlueName; 
+        blueElement.value = devBlueName;
+
+
+        const servoIOPINElement = document.getElementById("new-servoIOPIN");
+        servoIOPINElement.value = servoIOPIN;
+
+        const servoMAXAngleElement = document.getElementById("new-servoMAXAngle");
+        servoMAXAngleElement.value = servoMAXAngle;
+
+        const servoRESTAngleElement = document.getElementById("new-servoRESTAngle");
+        servoRESTAngleElement.value = servoRESTAngle;
+
+        const servoActionAngleElement = document.getElementById("new-servoActionAngle");
+        servoActionAngleElement.value = servoActionAngle;
+
+        const servoActionDelayElement = document.getElementById("new-servoActionDelay");
+        servoActionDelayElement.value = servoActionDelay;
+
+        const deviceIDElement = document.getElementById("new-deviceID");
+        deviceIDElement.value = deviceID;
+
+        const secretIDElement = document.getElementById("new-secretID");
+        secretIDElement.value = secretID;
+
     </script>
 
 
