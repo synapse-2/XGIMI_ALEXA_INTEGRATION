@@ -29,14 +29,14 @@ You need
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
-14. You can get the ESP32's ip from the serial port else opne the browser for host name "xigimi-alexa.local" (mDNS is enabled by defaut so this should work) of you have conencted to the the ESP32's wifi network
-15. Scan to fimd your wifi
-16. Only b and n networks o 2.5GHz ESP32S3 supports 
-17. Identiy the network, provide the passskey and hit save
-18. The devide shoud connect. the device will go from red led to a long Green blink. the long green series of blinks means it has conencted to the wifi
+14. You can get the ESP32's ip from the serial port else open the browser for host name "xigimi-alexa.local" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
+15. Scan to find your wifi
+16. Only b and n networks at 2.5GHz ESP32S3 supports 
+17. Identify the network, provide the passskey and hit save
+18. The device should reboot and connect. The device will go from red led to a long Green blink. The long green series of blinks means it has conencted to the wifi
 19. Open the browser to "xigimi-alexa.local" you should see the Remote HTML UI
 20. Go to Settings page. The default user and password both are "admin"
-21. In the Settings update the device ID and Secret ID
+21. In the Settings update the device ID and Secret ID for ATOT things you created
 22. Each time you update the device will restart 
 23. Once updated the device should connect to the Arduino IOT and you should be able to do commands like "Alexa tun projector off" ; "Alexa set projector volume to 10" etc.
 24. Pressing the rest button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
