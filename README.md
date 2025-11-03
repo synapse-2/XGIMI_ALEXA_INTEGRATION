@@ -81,7 +81,7 @@ The code uses one ESP32S3 Arduino chips to simultaneously do Wi-Fi and Bluetooth
 Apprently coexistance works GREAT  https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/coexist.html
 
 For coexistance to work:
-* Wifi and all apps logic is run on core 1, Bluetooh on core 0
+* Wifi and all apps logic is run on core 1, Bluetooth on core 0
 * Arduino is run on core 1 
 * Rtos on cores 0 and 1
 * We should put all web checks for activity polling functions in one thread, too may tasks and performnce is impacted. Refer to the loop() function
@@ -98,7 +98,9 @@ If you want to change the sdkconfig options then use the "pio run -t menuconfig"
 CLI for flashing: pio pkg exec -p "tool-esptoolpy" -- esptool.py --help
 cli for commands avaliable:pio run --list-targets
 
-### Nifty ESp32 partion table generator: https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
+### Nifty ESp32 partion table generator: 
+
+https://thelastoutpostworkshop.github.io/microcontroller_devkit/esp32partitionbuilder/
 
 ## How Bluetooh works:
 
@@ -132,12 +134,12 @@ Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf
 <tr> <td>ESP32-S3-WROOM-1-N16R16VA8</td><td> 16MB(QuadSPI)</td><td>   16MB(OctalSPI)</td><td>   –40~65</td><td> </td></tr>
 </table>
 
-NOTE: to get the Manged components to work
-1. add the component you want in the idf_component.yml in the ROOT folder of the project
-2. Run menuconfig command that will PULL the componet in the project from the web, BUILD commnd does not
+NOTE: to get the Managed components from espressif to work
+1. Add the component you want in the idf_component.yml in the ROOT folder of the project
+2. Run menuconfig command that will PULL the component in the project from the web, BUILD commnd does not
 3. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
-4. then compile and it should work
-5. if you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
+4. Then compile and it should work
+5. If you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
 FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
 list (APPEND app_sources ${app_sources2})
 in the cmakelists.txt in the project root/scr folder
