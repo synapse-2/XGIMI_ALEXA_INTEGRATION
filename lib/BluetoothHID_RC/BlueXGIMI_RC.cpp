@@ -331,7 +331,7 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   uint8_t batteryLevel = 100;    // battery lvel can only be set AFTER advitsment and server start
   setBatteryLevel(batteryLevel); // set initial battery level to 100%
 
-  UtilityFunctions::debugLog("Advertising started!");
+  UtilityFunctions::debugLog("Advertising started....");
 }
 
 void BlueXGIMI_RC::startServices()
@@ -354,6 +354,31 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
   {
     switch (command.cmds.cmd)
     {
+
+    case ServerDecoder::RC_Cmd_Action::Raw_2Byte:
+
+      UtilityFunctions::debugLogf("Sending RAW 2 byte button %0X,%0X\n", command.cmds.codeData[0], command.cmds.codeData[1]);
+      thirdDeviceInput_03->setValue(command.cmds.codeData, 2);
+      btnPressedType = 3;
+      // tell value has changed
+      if (!thirdDeviceInput_03->notify())
+      {
+        UtilityFunctions::debugLog("RAW 2 byte button Notify failed");
+      }
+      break;
+
+    case ServerDecoder::RC_Cmd_Action::Raw_8Byte:
+
+      UtilityFunctions::debugLogf("Sending RAW 8 byte button %0X,%0X,%0X,%0X,%0X,%0X,%0X,%0X\n", command.cmds.codeData[0], command.cmds.codeData[1], command.cmds.codeData[2], command.cmds.codeData[3], command.cmds.codeData[4], command.cmds.codeData[5], command.cmds.codeData[6], command.cmds.codeData[7]);
+      keyboardInput_01->setValue(command.cmds.codeData, 8);
+      btnPressedType = 1;
+      // tell value has changed
+      if (!keyboardInput_01->notify())
+      {
+        UtilityFunctions::debugLog("RAW 8 byte button Notify failed");
+      }
+      break;
+
     case ServerDecoder::RC_Cmd_Action::Previous:
 
       // //Back button pressed
@@ -581,7 +606,9 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
         UtilityFunctions::debugLog("On off button Notify failed");
       }
     }
-  }else{
+  }
+  else
+  {
     UtilityFunctions::debugLog("BLE NOT conneccted ignoring button push");
   }
 }
@@ -774,6 +801,8 @@ bool BlueXGIMI_RC::canHandleButtonPress(ServerDecoder::Remote_Cmd command)
   case ServerDecoder::RC_Cmd_Action::Vol_Up_Btn:
   case ServerDecoder::RC_Cmd_Action::Volume:
   case ServerDecoder::RC_Cmd_Action::Channel:
+  case ServerDecoder::RC_Cmd_Action::Raw_2Byte:
+  case ServerDecoder::RC_Cmd_Action::Raw_8Byte:
 
     return true;
   }
@@ -808,6 +837,9 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
   case ServerDecoder::RC_Cmd_Action::Up_Btn:
   case ServerDecoder::RC_Cmd_Action::Vol_Dn_Btn:
   case ServerDecoder::RC_Cmd_Action::Vol_Up_Btn:
+  case ServerDecoder::RC_Cmd_Action::Raw_2Byte:
+  case ServerDecoder::RC_Cmd_Action::Raw_8Byte:
+
     doButtons(command);
     cmdExecuted = true;
     break;
@@ -816,7 +848,7 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
   case ServerDecoder::RC_Cmd_Action::Channel:
 
     int steps = command.cmds.toVal - command.cmds.fromVal;
-    
+
     if (steps == 0)
       break;
     steps = (steps < 0) ? -steps : steps;

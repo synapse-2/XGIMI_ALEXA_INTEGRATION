@@ -39,7 +39,7 @@ You need
 21. In the Settings update the device ID and Secret ID
 22. Each time you update the device will restart 
 23. Once updated the device should connect to the Arduino IOT and you should be able to do commands like "Alexa tun projector off" ; "Alexa set projector volume to 10" etc.
-24. Pressing the boot button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
+24. Pressing the rest button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
 
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
@@ -56,12 +56,18 @@ The code also has  cland enabled
 you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
 clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
 
-You have to create a .clangd file in the root of your project folder with the lines
+1. You have to create a .clangd file in the root of your project folder with the lines, change the abslute path "d:\" to what ever is in your env 
 
 <code>
 CompileFlags:
-  Remove: [-fno-tree-switch-conversion]
+  Remove: [-fno-tree-switch-conversion, -fstrict-volatile-bitfields, -mdisable-hardware-atomics, -mlongcalls, -std=gnu++11, -std=gnu++2b, -std=gnu++2a ]
+  Add: [-std=gnu++23, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__servo/include/, -I include ]
 </code>
+
+2. Also add the following lines in the settings.jason
+<code>
+"C_Cpp.intelliSenseEngine": "disabled",
+<code>
 
 ### platformio.ini
 

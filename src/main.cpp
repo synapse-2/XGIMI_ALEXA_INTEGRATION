@@ -116,6 +116,9 @@ void setup() {
     wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
     wm.setHostname(UtilityFunctions::loadLocalHostname());
+    wm.setShowInfoErase(false); // no erase settings on info page
+    wm.setDarkMode(true); // show in black background
+    wm.setShowInfoUpdate(false); // no OTA mode
     wm.setConfigPortalTimeout(
         AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
 

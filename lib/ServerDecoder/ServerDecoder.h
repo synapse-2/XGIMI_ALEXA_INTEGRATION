@@ -14,6 +14,8 @@ namespace ServerDecoder
         StartOver = 6,
         Stop = 7,
 
+        Raw_8Byte = 232,
+        Raw_2Byte = 233,
         Menu_Btn = 234,
         Channel_Up_Btn = 235,
         Channel_Dn_Btn = 236,

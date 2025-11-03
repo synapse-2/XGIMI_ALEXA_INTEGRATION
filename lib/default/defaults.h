@@ -41,7 +41,7 @@
      The default is 0 (only errors).
      Maximum is 4
  */
-#define ArduinoCloudDebugLevel 5
+#define ArduinoCloudDebugLevel 4
 
 // esp32 Ble does not support having null cars in mauf data and we have issue with the NimbleBle stack due to
 // incompatability with ArduinoIoT so we created our own NewNimBle-esp32 stack
@@ -77,7 +77,8 @@
 #define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
 #define WEB_ESP_RESTART_DELAY 2000 // mills 2 mins
-#define RING_BUFF_SIZE_FOR_CMD 5*11
+#define WEB_STATUS_LOG_BUFFER 2048  /// buffer for log to be shon in the web page
+#define RING_BUFF_SIZE_FOR_CMD 5*11 //each server command message is 11 bytes long
 
 #define NVRAM_PERFS "registry"
 #define NVRAM_PERFS_ADMIN_PASS_PROP "adminPass"
@@ -103,6 +104,7 @@
 
 #define NVRAM_PERFS_SERVO_ACTION_HOLD_PROP "ServoActionHOLD"
 #define NVRAM_PERFS_SERVO_ACTION_HOLD_DEFAULT 100
+#define NVRAM_PERFS_SERVO_ACTION_HOLD_MAX 10000
 
 #define NVRAM_PERFS_SERVO_REST_ANGLE_PROP "ServoRestANGLE"
 #define NVRAM_PERFS_SERVO_REST_ANGLE_DEFAULT 90
@@ -128,7 +130,9 @@
 
 #define NVRAM_PERFS_AIoT_DEVICE_ID_PROP "AoITDevID"
 #define NVRAM_PERFS_AIoT_DEVICE_ID_DEFAULT  "<add>"
+#define NVRAM_PERFS_AIoT_DEVICE_ID_LEN  36
 #define NVRAM_PERFS_AIoT_DEVICE_SECRET_PROP "AoITDevSID"
+#define NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN 25
 #define NVRAM_PERFS_AIoT_DEVICE_SECRET_DEFAULT  "<add>" // Secret device password
 
 struct projectorWAKE_str
