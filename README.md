@@ -1,4 +1,4 @@
-# XGIMI_ALEXA_INTEGRATION
+# XGIMI ALEXA INTEGRATION over Wifi and Bluetooth
 
 XGIMI Projector with Alexa integration
 
