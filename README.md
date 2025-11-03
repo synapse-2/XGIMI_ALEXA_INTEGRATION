@@ -26,7 +26,7 @@ You need
 8. Select the smart home integration as Alexa (on the things page)
 9. Go to Alexa app on the phone etc and add the alexa skill for arduino and the device you want refer to this guide: https://docs.arduino.cc/arduino-cloud/guides/alexa/
 10. Compile and flash the binary to the ESP32S3
-11. Make sure you also flash the file system form the PIO command "Upload filesystem image"
+11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
 14. You can get the ESP32's ip from teh serial port else opne the browser for host name "xigimi-alexa.local" (mDNS is enabled by defaut so this should work) of you have conencted to the the ESP32's wifi network
