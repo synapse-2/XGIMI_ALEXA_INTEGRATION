@@ -51,7 +51,7 @@ The code used hybrid build it builds ## espidf and ## arduino libs using the fol
 
 ## Clangd 
 
-The code also has  cland enabled 
+The code also can have clandg enabled: off by default
 
 you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
 clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
@@ -67,7 +67,7 @@ CompileFlags:
 2. Also add the following lines in the settings.jason
 <code>
 "C_Cpp.intelliSenseEngine": "disabled",
-<code>
+</code>
 
 ### platformio.ini
 
