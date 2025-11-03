@@ -4,6 +4,17 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
+Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Alexa skill (you can can also connect to google)
+Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
+You can pair the ESP#@S# as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "Xgimi RC" in the settting web UI (and it will auto pair with the Xgimi projector)
+Once paired you can use Alexa voice command to turn on off, volume change etc.
+There is an option to add a servo and have it move on on-off command if you want to have it push another button of some sort
+There is also built in remote web gui to send commands from iphone or anotehr web browser etc.
+
+The code was tested with Xgimi horizon-ultra
+
+There you have it.  Alexa integration via cloning of the Bluetooth factory remote. All on the the ESP32S3 single chip supporintg Wifi and BLE5.0
+
 How to set up 
 You need 
 1. Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
@@ -29,12 +40,12 @@ You need
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
-14. You can get the ESP32's ip from the serial port else open the browser for host name "xigimi-alexa.local" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
+14. You can get the ESP32's ip from the serial port else open the browser for host name "Xigimi-alexa.local" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
 15. Scan to find your wifi
 16. Only b and n networks at 2.5GHz ESP32S3 supports 
 17. Identify the network, provide the passskey and hit save
 18. The device should reboot and connect. The device will go from red led to a long Green blink. The long green series of blinks means it has conencted to the wifi
-19. Open the browser to "xigimi-alexa.local" you should see the Remote HTML UI
+19. Open the browser to "Xigimi-alexa.local" you should see the Remote HTML UI
 20. Go to Settings page. The default user and password both are "admin"
 21. In the Settings update the device ID and Secret ID for ATOT things you created
 22. Each time you update the device will restart 
