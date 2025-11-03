@@ -6,7 +6,7 @@ Objective of the project is to use esp32s3 arduino to enable voice commands from
 
 Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Alexa skill (you can can also connect to google)
 Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
-You can pair the ESP#@S# as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "Xgimi RC" in the settting web UI (and it will auto pair with the Xgimi projector)
+You can pair the ESP23S3 as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "Xgimi RC" in the settting web UI (and it will auto pair with the Xgimi projector)
 Once paired you can use Alexa voice command to turn on off, volume change etc.
 There is an option to add a servo and have it move on on-off command if you want to have it push another button of some sort
 There is also built in remote web gui to send commands from iphone or anotehr web browser etc.
