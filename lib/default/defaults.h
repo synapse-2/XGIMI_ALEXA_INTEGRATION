@@ -85,7 +85,7 @@
 #define NVRAM_PERFS_ADMIN_PASS_DEFAULT "admin"
 #define NVRAM_PERFS_ADMIN_NAME "admin"
 #define NVRAM_PERFS_HOSTNAME_LOCAL_PROP "hostname"
-#define NVRAM_PERFS_HOSTNAME_LOCAL_DEFAULT "xigimi-alexa" // only use nuber alphabets and - and dot . NO .local It is added automtically
+#define NVRAM_PERFS_HOSTNAME_LOCAL_DEFAULT "xgimi-alexa" // only use nuber alphabets and - and dot . NO .local It is added automtically
 
 #define NVRAM_PERFS_BLUETOOTH_NAME_PROP "bluename"
 #define NVRAM_PERFS_BLUETOOTH_NAME_DEFAULT "XGIMI BH" // only use nuber alphabets and - and dot . NO .local It is added automtically
@@ -117,6 +117,15 @@
 
 #define NVRAM_PERFS_SERVO_PWM_FREQ_PROP "ServoPWMFRQ"
 #define NVRAM_PERFS_SERVO_PWM_FREQ_DEFAULT 50
+
+
+#define NVRAM_PERFS_RELAY_IO_PROP "RelayIO"
+#define NVRAM_PERFS_RELAY_IO_DEFAULT 5
+
+#define NVRAM_PERFS_RELAY_ACTION_HOLD_PROP "RelayActionHOLD"
+#define NVRAM_PERFS_RELAY_ACTION_HOLD_DEFAULT 100
+#define NVRAM_PERFS_RELAY_ACTION_HOLD_MAX 10000
+
 
 #define ResetButton GPIO_NUM_0 // the boot button on the ESP32
 

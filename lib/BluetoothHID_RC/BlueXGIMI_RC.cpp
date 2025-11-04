@@ -733,7 +733,7 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
 
 #ifdef XGIMI_USE_EXT_ADV
 
-      UtilityFunctions::debugLogf("On button type 3 adv data %s\n", advertisingOnButtonDataType3.toString().c_str());
+      //UtilityFunctions::debugLogf("On button type 3 adv data %s\n", advertisingOnButtonDataType3.toString().c_str());
       advertising->setInstanceData(HID_ADV_ONDATA3_ID, advertisingOnButtonDataType3);
       advertising->setScanResponseData(HID_ADV_ONDATA3_ID, advertisingOnButtonDataScanDataType3);
       /** Set the advertisement as connectable */

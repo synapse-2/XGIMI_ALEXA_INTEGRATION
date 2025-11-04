@@ -206,6 +206,26 @@
             </form>
         </div>
 
+        <!-- Relay name Change Form -->
+        <div class="form-section">
+            <h3>Change Relay IO pin</h3>
+            <form action="/change-relayIOPIN" method="post">
+                <label for="new-relayIOPIN">New Relay IO PIN:</label>
+                <input type="text" id="new-relayIOPIN" name="newrelayIOPIN" required>
+                <input type="submit" value="Change Relay IO PIN">
+            </form>
+        </div>
+
+        <!-- Relay action delay Change Form -->
+        <div class="form-section">
+            <h3>Change Relay at Action delay (Typ :100 mili sec)</h3>
+            <form action="/change-relayActionDelay" method="post">
+                <label for="new-relayActionDelay">New Relay Action delay:</label>
+                <input type="text" id="new-relayActionDelay" name="newrelayActionDelay" required>
+                <input type="submit" value="Change Relay delay">
+            </form>
+        </div>
+
         <!-- SERVO name Change Form -->
         <div class="form-section">
             <h3>Change Servo IO pin</h3>
@@ -293,6 +313,11 @@
         const blueElement = document.getElementById("new-bluename");
         blueElement.value = devBlueName;
 
+        const relayIOPINElement = document.getElementById("new-relayIOPIN");
+        relayIOPINElement.value = relayIOPIN;
+
+        const relayActionDelayElement = document.getElementById("new-relayActionDelay");
+        relayActionDelayElement.value = relayActionDelay;
 
         const servoIOPINElement = document.getElementById("new-servoIOPIN");
         servoIOPINElement.value = servoIOPIN;

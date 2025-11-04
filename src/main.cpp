@@ -5,6 +5,7 @@
 #include "CmdRingBuffer.h"
 #include "RC_Webinterface.h"
 #include "Servo_Decoder.h"
+#include "Relay_Decoder.h"
 #include "UtilityFunctions.h"
 #include "WiFiManager.h"
 #include "defaults.h"
@@ -28,6 +29,7 @@ template <typename E> auto to_integer(magic_enum::Enum<E> value) -> int {
 AcloudIOT_Decoder aIOT;
 inline BLE_Remote_Decoder bleRemoteDecoder;
 inline Servo_Decoder ServoRemoteDecoder;
+inline Relay_Decoder RelayRemoteDecoder;
 WiFiManager wm;
 RC_WebInterface *rc_web;
 
@@ -193,6 +195,11 @@ void loop() {
   ServoRemoteDecoder = Servo_Decoder();
   ServoRemoteDecoder.start();
   UtilityFunctions::debugLog("Servo SERVER started ... ");
+
+  RelayRemoteDecoder = Relay_Decoder();
+  RelayRemoteDecoder.start();
+  UtilityFunctions::debugLog("Relay SERVER started ... ");
+
   for (;;) // infinite loop
   {
     /// bluetooth handle
@@ -204,6 +211,7 @@ void loop() {
     if (cmd != NULL) {
       // start of command
       UtilityFunctions::ledWhite();
+      RelayRemoteDecoder.doCmd(cmd);
       ServoRemoteDecoder.doCmd(cmd);
       bleRemoteDecoder.doCmd(cmd);
       UtilityFunctions::ledStop();

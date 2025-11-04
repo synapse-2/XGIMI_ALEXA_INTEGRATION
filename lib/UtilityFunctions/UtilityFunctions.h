@@ -123,4 +123,19 @@ namespace UtilityFunctions
     String loadAIoTDeviceSECRET();
     String saveAIoTDeviceSECRET(String newSecret);
 
+
+    // Load relayIO pin  num  from NVRAM
+    int loadRelayIOPin();
+
+    // Save RelayIO pin  num   from NVRAM
+    String saveRelayIOPin(int newPinIO);
+
+      // Load relay action hold from NVRAM
+    uint16_t loadRelayActionHold();
+
+    // Save servo action hold from NVRAM
+    String saveRelayActionHold(uint16_t newhold);
+
+
+
 }

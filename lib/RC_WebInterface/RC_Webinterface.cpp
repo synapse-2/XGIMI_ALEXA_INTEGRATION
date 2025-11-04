@@ -117,6 +117,13 @@ void RC_WebInterface::refreshGlobalJS()
   globalJS = globalJS + "const servoActionDelay =  " +
              UtilityFunctions::loadServoActionHold() + ";\n";
 
+  globalJS = globalJS +
+             "const relayIOPIN =  " + UtilityFunctions::loadRelayIOPin() +
+             ";\n";
+
+  globalJS = globalJS + "const relayActionDelay =  " +
+             UtilityFunctions::loadRelayActionHold() + ";\n";
+
   String chipInfo = UtilityFunctions::chipInfo();
   chipInfo.replace("\n", "<br>\\\n");
   String taskInfo = UtilityFunctions::taskInfo();
@@ -590,7 +597,8 @@ void RC_WebInterface::setupRoutes()
       String sucess = UtilityFunctions::saveServoIOPin(num);
       if (sucess.isEmpty()) {
         _server.send(200, "text/plain", "Servo IO PIN Updated...");
-
+   delay(WEB_ESP_RESTART_DELAY);
+      ESP.restart();
       } else {
         _server.send(200, "text/plain",
                      "Servo IO PIN FAILED to update:" + sucess);
@@ -730,5 +738,55 @@ void RC_WebInterface::setupRoutes()
     } else {
       _server.send(200, "text/plain",
                    "DEVICE SECRET ID update FAILED ..." + sucess);
+    } });
+
+  _server.on("/change-relayIOPIN", HTTP_POST, [this]()
+             {
+    if (!checkAdminAuth())
+      return;
+    String arg = _server.arg("newrelayIOPIN");
+    // Add logic here to change the hostname and restart
+    UtilityFunctions::debugLog("Relay IO PIN  change requested to: " + arg);
+    int num = arg.toInt();
+    if (num == 0) {
+      UtilityFunctions::debugLog(
+          "Relay IO PIN change is not anumber or zero: " + arg);
+          _server.send(200, "text/plain", "Relay IO PIN FAILED change is not anumber or zero: " + arg);
+    } else {
+      String sucess = UtilityFunctions::saveRelayIOPin(num);
+      if (sucess.isEmpty()) {
+        _server.send(200, "text/plain", "Relay IO PIN Updated...");
+   delay(WEB_ESP_RESTART_DELAY);
+      ESP.restart();
+      } else {
+        _server.send(200, "text/plain",
+                     "Relay IO PIN FAILED to update:" + sucess);
+      }
+    } });
+
+  _server.on("/change-relayActionDelay", HTTP_POST, [this]()
+             {
+    if (!checkAdminAuth())
+      return;
+    String arg = _server.arg("newrelayActionDelay");
+    // Add logic here to change the hostname and restart
+    UtilityFunctions::debugLog("Relay ACTION Delay change requested to: " +
+                               arg);
+    int num = arg.toInt();
+    if (num == 0) {
+      UtilityFunctions::debugLog(
+          "Relay new ACTION Delay change is not anumber or zero: " + arg);
+          _server.send(200, "text/plain",
+                     "Relay new ACTION Delay change FAILED is not anumber or zero: " + arg);
+    } else {
+      String sucess = UtilityFunctions::saveRelayActionHold(num);
+
+      if (sucess.isEmpty()) {
+        _server.send(200, "text/plain", "Relay ACTION Delay Updated...");
+
+      } else {
+        _server.send(200, "text/plain",
+                     "Relay ACTION Delay FAILED to update:" + sucess);
+      }
     } });
 }

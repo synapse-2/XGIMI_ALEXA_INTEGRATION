@@ -74,13 +74,15 @@ namespace UtilityFunctions
       void pushString(const char *str)
       {
         int len = strlen(str);
-        if (len == 0){
+        if (len == 0)
+        {
           return; // no need to add a zero length sting
         }
 
-        if (len > capacity_){
-          strcpy(buffer_, &str[len +1 - capacity_]); // fill up the buffer wiith the ending bytes that are in the string minus 1 for null char 
-          size_ = capacity_ -1;
+        if (len > capacity_)
+        {
+          strcpy(buffer_, &str[len + 1 - capacity_]); // fill up the buffer wiith the ending bytes that are in the string minus 1 for null char
+          size_ = capacity_ - 1;
           return;
         }
 
@@ -922,6 +924,15 @@ namespace UtilityFunctions
   String saveServoIOPin(int newPinIO)
   {
 
+    if (newPinIO == loadRelayIOPin())
+    {
+      std::string str = std::format(
+          "ServerIO pin cannot be same as RelayIO PIN got {} and RelayIO pin is {}",
+          newPinIO, loadRelayIOPin());
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
     // only use gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, gpio.9
     // gpio.15 ,gpio.16 ,gpio.17 ,gpio.18
     // gpio.21
@@ -940,7 +951,7 @@ namespace UtilityFunctions
     {
 
       std::string str = std::format(
-          "Only use on ESP32S3 gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
+          "Only use on ESP32S3 ServerIO Pin gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
           "gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got {}",
           newPinIO);
       String Astr = String(str.c_str());
@@ -1199,7 +1210,7 @@ namespace UtilityFunctions
     else
     {
       std::string str = std::format(
-          "Action HOLD must be between 1 and "  STRINGIFY(NVRAM_PERFS_SERVO_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
+          "Servo Action HOLD must be between 1 and " STRINGIFY(NVRAM_PERFS_SERVO_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
           newHold);
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1278,6 +1289,98 @@ namespace UtilityFunctions
 
       std::string str = std::format("Invalid Device AIoT SECRET, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) "chars;not empty got length:{}",
                                     newSecret.length());
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+  }
+
+  // Load relayIO pin  num  from NVRAM
+  int loadRelayIOPin()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    int relayIOPin = _preferences.getInt(NVRAM_PERFS_RELAY_IO_PROP,
+                                         NVRAM_PERFS_RELAY_IO_DEFAULT);
+    _preferences.end();
+    UtilityFunctions::debugLogf("loaded RelayIO pin num from NVRAM. %i\n",
+                                relayIOPin);
+
+    return relayIOPin;
+  }
+
+  // Save relayIO pin num from NVRAM
+  String saveRelayIOPin(int newPinIO)
+  {
+
+    if (newPinIO == loadServoIOPin())
+    {
+      std::string str = std::format(
+          "RelayIO pin cannot be same as ServoIO PIN got {} andd ServoIO pin is {}",
+          newPinIO, loadServoIOPin());
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+    // only use gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, gpio.9
+    // gpio.15 ,gpio.16 ,gpio.17 ,gpio.18
+    // gpio.21
+    if (((newPinIO >= 1) && (newPinIO < 2)) ||
+        ((newPinIO >= 5) && (newPinIO < 9)) ||
+        ((newPinIO >= 15) && (newPinIO < 18)) || (newPinIO == 21))
+    {
+      Preferences _preferences;
+      _preferences.begin(NVRAM_PERFS, false);
+      _preferences.putInt(NVRAM_PERFS_RELAY_IO_PROP, newPinIO);
+      _preferences.end();
+      UtilityFunctions::debugLog("relayIO pin num updated and saved to NVRAM.");
+      return "";
+    }
+    else
+    {
+
+      std::string str = std::format(
+          "Only use on ESP32S3 RelayIO pin gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
+          "gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got {}",
+          newPinIO);
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+  }
+
+
+  // Load relay action hold from NVRAM
+  uint16_t loadRelayActionHold()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    uint16_t hold = _preferences.getUInt(NVRAM_PERFS_RELAY_ACTION_HOLD_PROP,
+                                         NVRAM_PERFS_RELAY_ACTION_HOLD_DEFAULT);
+    _preferences.end();
+    UtilityFunctions::debugLogf(
+        "loaded relay action hold time in ms from NVRAM. %i\n", hold);
+
+    return hold;
+  }
+
+  // Save relay action hold from NVRAM
+  String saveRelayActionHold(uint16_t newHold)
+  {
+    if (((newHold >= 1) && (newHold <= NVRAM_PERFS_RELAY_ACTION_HOLD_MAX)))
+    {
+      Preferences _preferences;
+      _preferences.begin(NVRAM_PERFS, false);
+      _preferences.putUInt(NVRAM_PERFS_RELAY_ACTION_HOLD_PROP, newHold);
+      _preferences.end();
+      UtilityFunctions::debugLog("Relay action HOLD updated and saved to NVRAM.");
+      return "";
+    }
+    else
+    {
+      std::string str = std::format(
+          "Relay Action HOLD must be between 1 and " STRINGIFY(NVRAM_PERFS_RELAY_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
+          newHold);
       String Astr = String(str.c_str());
       debugLog(Astr);
       return Astr;
