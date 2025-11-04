@@ -67,7 +67,7 @@ You need
 
 ## Other Goodies in the project
 
-01. Full deccoded Bluetooth messages for the Xgimi RC remote via wiresniffer in the \Archive\XGIMI-RC_BLE_SPEC folder
+01. Full decoded Bluetooth messages for the Xgimi RC remote via wiresniffer in the \Archive\XGIMI-RC_BLE_SPEC folder
 02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
 03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
 04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
@@ -79,6 +79,13 @@ The code is built on PIOArduino (Visual Studio Code Extension - https://marketpl
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
 
 The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
+
+## Set up build env by:
+1. Download VS Code at: https://code.visualstudio.com/download
+2. Get the PIOArduino extennssion and installed ( https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide) 
+3. Clone or fork the Git hub repo 
+4. Point VS Code to open the workspace in the root of github repo 
+5. Compile and fash to ESP32S3
 
 ## Clangd 
 
