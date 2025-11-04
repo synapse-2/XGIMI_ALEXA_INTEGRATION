@@ -16,10 +16,11 @@ The code was tested with Xgimi horizon-ultra
 There you have it.  Alexa integration via cloning of the Bluetooth factory remote. All on the the ESP32S3 single chip supporintg Wifi and BLE5.0
 
 ## How to set up 
+
 You need 
-1. Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
-2. An Aurdino Cloud account at: https://app.arduino.cc/
-3. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
+01. Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
+02. An Aurdino Cloud account at: https://app.arduino.cc/
+03. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
     a. Select "comptible device" option
     b. Select "ESP32" option
     c. Select "Arduino Nano ESP32" from the drop down
@@ -27,15 +28,17 @@ You need
     e. give a name
     f. NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
     g. SECRET KEY is only displpayed once so you will have to re do this step if you forget it
-4. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
-5. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
-6. The "projector" variable should be of 
+
+04. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
+05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
+06. The "projector" variable should be of 
     a. type "Television"
     b. variable permission : read & write
     c. Variable update policy: On change
-7. Associate the thing with the devide you created in step 3 (on the things page)
-8. Select the smart home integration as Alexa (on the things page)
-9. Go to Alexa app on the phone etc and add the alexa skill for arduino and the device you want refer to this guide: https://docs.arduino.cc/arduino-cloud/guides/alexa/
+
+07. Associate the thing with the devide you created in step 3 (on the things page)
+08. Select the smart home integration as Alexa (on the things page)
+09. Go to Alexa app on the phone etc and add the alexa skill for arduino and the device you want refer to this guide: https://docs.arduino.cc/arduino-cloud/guides/alexa/
 10. Compile and flash the binary to the ESP32S3
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
@@ -53,21 +56,22 @@ You need
 24. Pressing the rest button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
 
 ## Operation 
-1. Red solid light means we are in AP mode and cannot connect to WiFi - need to configure the WiFi ssid and pass key by joining the ESP_XXXX WiFi network
-2. Long green blinks mean we have connected to the WiFI network
-3. Red blink light means we have not been able to connect to Arduino IoT clout - need to make sure DeviceID and SecretId are set in the settings page
-4. Blue blink menas we have Bluetooth stack working ok
-5. Solid White means we are executing a remote command, be it from alexa or web 
-6. Pressing "boot" button will restart the ESP32S3
-7. Pressing reset three times within three secs will erase all settigns and restart 
 
+01. Red solid light means we are in AP mode and cannot connect to WiFi - need to configure the WiFi ssid and pass key by joining the ESP_XXXX WiFi network
+02. Long green blinks mean we have connected to the WiFI network
+03. Red blink light means we have not been able to connect to Arduino IoT clout - need to make sure DeviceID and SecretId are set in the settings page
+04. Blue blink menas we have Bluetooth stack working ok
+05. Solid White means we are executing a remote command, be it from alexa or web 
+06. Pressing "boot" button will restart the ESP32S3
+07. Pressing reset three times within three secs will erase all settigns and restart 
 
 ## Other Goodies in the project
-1. Full deccoded Bluetooth messages for the Xgimi RC remote via wiresniffer in the \Archive\XGIMI-RC_BLE_SPEC folder
-2. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
-3. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
-4. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
-5. Backup if the FastLED and tzapu WiFIManager libs as weel as the Menuconfig files settings that work in \Archive\Old-Config-files
+
+01. Full deccoded Bluetooth messages for the Xgimi RC remote via wiresniffer in the \Archive\XGIMI-RC_BLE_SPEC folder
+02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
+03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
+04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
+05. Backup if the FastLED and tzapu WiFIManager libs as weel as the Menuconfig files settings that work in \Archive\Old-Config-files
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
 
@@ -83,7 +87,7 @@ The code also can have clandg enabled: off by default
 you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
 clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
 
-1. You have to create a .clangd file in the root of your project folder with the lines, change the abslute path "d:\" to what ever is in your env 
+01. You have to create a .clangd file in the root of your project folder with the lines, change the abslute path "d:\" to what ever is in your env 
 
 <code>
 CompileFlags:
@@ -91,12 +95,14 @@ CompileFlags:
   Add: [-std=gnu++23, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/, -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__servo/include/, -I include ]
 </code>
 
-2. Also add the following lines in the settings.jason
+02. Also add the following lines in the settings.jason
 <code>
-"C_Cpp.intelliSenseEngine": "disabled",
+"C_Cpp.intelliSenseEngine": "disabled", 
 </code>
 
 ### platformio.ini
+
+Code is built using ESP_IDF framework with arduino as a component specifed in the platformio.ini file as follows:
 
 <code>
 platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip (version: Arduino Release v3.3.0 based on ESP-IDF v5.5.0)
@@ -162,11 +168,11 @@ Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf
 </table>
 
 NOTE: to get the Managed components from espressif to work
-1. Add the component you want in the idf_component.yml in the ROOT folder of the project
-2. Run menuconfig command that will PULL the component in the project from the web, BUILD commnd does not
-3. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
-4. Then compile and it should work
-5. If you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
+01. Add the component you want in the idf_component.yml in the ROOT folder of the project
+02. Run menuconfig command that will PULL the component in the project from the web, BUILD commnd does not
+03. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
+04. Then compile and it should work
+05. If you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
 FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)
 list (APPEND app_sources ${app_sources2})
 in the cmakelists.txt in the project root/scr folder
