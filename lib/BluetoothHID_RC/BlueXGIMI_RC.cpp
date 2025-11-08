@@ -142,13 +142,10 @@ void BlueXGIMI_RC::startStandardAdv()
 
   // UtilityFunctions::debugLogf("STD ADV packet data %s\n", advertisingData.toString().c_str());
 
-  UtilityFunctions::debugLog("STD ADV before instnce set");
   advertising->setInstanceData(HID_ADV_STD_ID, advertisingData);
 
-  UtilityFunctions::debugLog("STD ADV After instnce set");
   advertising->setScanResponseData(HID_ADV_STD_ID, advertisingScanData);
 
-  UtilityFunctions::debugLog("STD ADV after scan data set");
   if (advertising->start(HID_ADV_STD_ID))
   {
     UtilityFunctions::debugLog("ADV MAIN STARTED");

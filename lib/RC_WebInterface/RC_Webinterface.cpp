@@ -124,6 +124,12 @@ void RC_WebInterface::refreshGlobalJS()
   globalJS = globalJS + "const relayActionDelay =  " +
              UtilityFunctions::loadRelayActionHold() + ";\n";
 
+  globalJS = globalJS + "const servoEnableFlag =  " +
+             UtilityFunctions::loadServoEnableFlag() + ";\n";
+
+  globalJS = globalJS + "const relayEnableFlag =  " +
+             UtilityFunctions::loadRelayEnableFlag() + ";\n";
+
   String chipInfo = UtilityFunctions::chipInfo();
   chipInfo.replace("\n", "<br>\\\n");
   String taskInfo = UtilityFunctions::taskInfo();
@@ -553,7 +559,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newHostname = _server.arg("newHostname");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Hostname change requested to: " + newHostname);
     String sucess = UtilityFunctions::saveLocalHostname(newHostname);
     if (sucess.isEmpty()) {
@@ -569,7 +574,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newBlueName = _server.arg("newBlueName");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("BlueTooth name change requested to: " +
                                newBlueName);
     String sucess = UtilityFunctions::saveBlueToothName(newBlueName);
@@ -586,7 +590,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoIOPIN");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Servo IO PIN  change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -610,7 +613,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoMAXAngle");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Servo Max Angle change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -633,7 +635,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoRESTAngle");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Servo REST Angle change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -657,7 +658,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoActionAngle");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Servo ACTION Angle change requested to: " +
                                arg);
     int num = arg.toInt();
@@ -683,7 +683,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoActionDelay");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Servo ACTION Delay change requested to: " +
                                arg);
     int num = arg.toInt();
@@ -709,7 +708,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newDevID = _server.arg("newdeviceID");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Device ID change requested to: " + newDevID);
     String sucess = UtilityFunctions::saveAIoTDeviceID(newDevID);
     if (sucess.isEmpty()) {
@@ -725,7 +723,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newsecretID = _server.arg("newsecretID");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Device SECRET ID change requested to: " +
                                newsecretID);
     String sucess = UtilityFunctions::saveAIoTDeviceSECRET(newsecretID);
@@ -745,7 +742,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newrelayIOPIN");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Relay IO PIN  change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -769,7 +765,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newrelayActionDelay");
-    // Add logic here to change the hostname and restart
     UtilityFunctions::debugLog("Relay ACTION Delay change requested to: " +
                                arg);
     int num = arg.toInt();
@@ -789,4 +784,50 @@ void RC_WebInterface::setupRoutes()
                      "Relay ACTION Delay FAILED to update:" + sucess);
       }
     } });
+
+  _server.on("/update-relay-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("relay_enabled");
+               UtilityFunctions::debugLog("Relay is enabled change requested to: " + arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveRelayEnableFlag(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to Enable Relay -" +
+                     sucess + "\" }");
+               } });
+
+  _server.on("/update-servo-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("servo_enabled");
+               UtilityFunctions::debugLog("Servo is enabled change requested to: " +
+                                          arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveServoEnableFlag(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+                delay(WEB_ESP_RESTART_DELAY);
+                ESP.restart();
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to Enable Servo -" +
+                     sucess + "\" }");
+               } });
 }

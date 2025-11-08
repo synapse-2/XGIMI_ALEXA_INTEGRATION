@@ -9,7 +9,7 @@ Once the Alexa connection is made the project has a full re-implemenation of the
 You can pair the ESP32S3 as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "XGIMI RC" in the settting web UI (and it will auto pair with the Xgimi projector)
 Once paired you can use Alexa voice command to turn on off, volume change etc.
 There is an option to add a servo and have it move on on-off command if you want to have it push another button of some sort
-There is also built in remote web gui to send commands from iphone or anotehr web browser etc.
+There is also built in remote web gui to send commands from iphone or another web browser etc.
 
 The code was tested with Xgimi horizon-ultra
 
@@ -18,8 +18,8 @@ There you have it.  Alexa integration via cloning of the Bluetooth factory remot
 ## How to set up 
 
 You need 
-01. Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
-02. An Aurdino Cloud account at: https://app.arduino.cc/
+01. Obtain Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
+02. Create an Aurdino Cloud account at: https://app.arduino.cc/
 03. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
     a. Select "comptible device" option
     b. Select "ESP32" option

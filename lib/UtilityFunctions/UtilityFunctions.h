@@ -6,136 +6,141 @@
 namespace UtilityFunctions
 {
 
-    extern CRGB leds[NUMPIXELS];
+  extern CRGB leds[NUMPIXELS];
 
-    void delay(long waitMills);
-    void waitTillInitComplete();
+  void delay(long waitMills);
+  void waitTillInitComplete();
 
-    void UtilityFunctionsInit();
-    bool isMaster();
-    
-    int findI2cOtherAddress();
-    bool isResetPressed();
-    int numTimesResetPressed();
-    void unpressRest();
-    unsigned long resetMills();
+  void UtilityFunctionsInit();
+  bool isMaster();
 
+  int findI2cOtherAddress();
+  bool isResetPressed();
+  int numTimesResetPressed();
+  void unpressRest();
+  unsigned long resetMills();
 
-    void ledRed();
-    void ledGreen();
-    void ledYellow();
-    void ledBlue();
-    void ledWhite();
-    void ledBrown();
-    void ledStop();
+  void ledRed();
+  void ledGreen();
+  void ledYellow();
+  void ledBlue();
+  void ledWhite();
+  void ledBrown();
+  void ledStop();
 
-    void ledBlinkGreen();
-    void ledBlinkBlue();
-    void ledBlinkRed();
-    void ledBlinkYellow();
-    void ledBlinkGreenLong();
-    void ledBlinkRedLong();
+  void ledBlinkGreen();
+  void ledBlinkBlue();
+  void ledBlinkRed();
+  void ledBlinkYellow();
+  void ledBlinkGreenLong();
+  void ledBlinkRedLong();
 
-    void debugLog(String message);
-    void debugLog();
-    void debugLogf(const char *format, ...);
+  void debugLog(String message);
+  void debugLog();
+  void debugLogf(const char *format, ...);
 
-    String chipInfo();
-    String taskInfo();
-    String ledCInfo();
-    String webLog();
+  String chipInfo();
+  String taskInfo();
+  String ledCInfo();
+  String webLog();
 
+  // Load the mDNS hostname from NVRAM
+  String loadLocalHostname();
 
-    // Load the mDNS hostname from NVRAM
-    String loadLocalHostname();
+  // save
+  String saveLocalHostname(String newHostname);
 
-    // save
-    String saveLocalHostname(String newHostname);
+  // Load wol packet num  from NVRAM
+  int loadWakePacketNum();
 
-    // Load wol packet num  from NVRAM
-    int loadWakePacketNum();
+  // Save  wol packet num  from NVRAM
+  String saveWakePacketNum(int newWolNum);
 
-    // Save  wol packet num  from NVRAM
-    String saveWakePacketNum(int newWolNum);
+  // Load BlueTooth Name from NVRAM
+  String loadBlueToothName();
 
-    // Load BlueTooth Name from NVRAM
-    String loadBlueToothName();
+  // Save BlueTooth Name to NVRAM
+  String saveBlueToothName(String newBlueName);
 
-    // Save BlueTooth Name to NVRAM
-    String saveBlueToothName(String newBlueName);
+  /// get the actual ad bytes
+  std::vector<uint8_t> getHID_AD2_MANUF_DATA();
 
-    /// get the actual ad bytes
-    std::vector<uint8_t> getHID_AD2_MANUF_DATA();
+  // Load servoIO pin  num  from NVRAM
+  int loadServoIOPin();
 
-    // Load servoIO pin  num  from NVRAM
-    int loadServoIOPin();
+  // Save  ServoIO pin  num   from NVRAM
+  String saveServoIOPin(int newPinIO);
 
-    // Save  ServoIO pin  num   from NVRAM
-    String saveServoIOPin(int newPinIO);
+  // Load servo PWM MIN Width from NVRAM
+  uint16_t loadServoPWMMinWidth();
 
-    // Load servo PWM MIN Width from NVRAM
-    uint16_t loadServoPWMMinWidth();
+  // Save servo PWN MIN Width from NVRAM
+  String saveServoPWMMinWidth(uint16_t newMinWidth);
 
-    // Save servo PWN MIN Width from NVRAM
-    String saveServoPWMMinWidth(uint16_t newMinWidth);
+  // Load servo PWM MAX Width from NVRAM
+  uint16_t loadServoPWMMaxWidth();
 
-    // Load servo PWM MAX Width from NVRAM
-    uint16_t loadServoPWMMaxWidth();
+  // Save servo PWN MIN Width from NVRAM
+  String saveServoPWMMaxWidth(uint16_t newMaxWidth);
 
-    // Save servo PWN MIN Width from NVRAM
-    String saveServoPWMMaxWidth(uint16_t newMaxWidth);
+  // Load servo PWM Freq from NVRAM
+  uint32_t loadServoPWMFreq();
 
-    // Load servo PWM Freq from NVRAM
-    uint32_t loadServoPWMFreq();
+  // Save servo PWN MIN Width from NVRAM
+  String saveServoPWMFreq(uint32_t newFreq);
 
-    // Save servo PWN MIN Width from NVRAM
-    String saveServoPWMFreq(uint32_t newFreq);
+  // Load servo max angle from NVRAM
+  uint16_t loadServoMaxAngle();
 
-    // Load servo max angle from NVRAM
-    uint16_t loadServoMaxAngle();
+  // Save servo max angle  from NVRAM
+  String saveServoMaxAngle(uint16_t newAngle);
 
-    // Save servo max angle  from NVRAM
-    String saveServoMaxAngle(uint16_t newAngle);
+  // Load servo action angle from NVRAM
+  uint16_t loadServoActionAngle();
 
-    // Load servo action angle from NVRAM
-    uint16_t loadServoActionAngle();
+  // Save servo action angle from NVRAM
+  String saveServoActionAngle(uint16_t newAngle);
 
-    // Save servo action angle from NVRAM
-    String saveServoActionAngle(uint16_t newAngle);
+  // Load servo rest angle from NVRAM
+  uint16_t loadServoRestAngle();
 
-    // Load servo rest angle from NVRAM
-    uint16_t loadServoRestAngle();
+  // Save servo rest angle from NVRAM
+  String saveServoRestAngle(uint16_t newAngle);
 
-    // Save servo rest angle from NVRAM
-    String saveServoRestAngle(uint16_t newAngle);
+  // Load servo action hold from NVRAM
+  uint16_t loadServoActionHold();
 
+  // Save servo action hold from NVRAM
+  String saveServoActionHold(uint16_t newhold);
 
-      // Load servo action hold from NVRAM
-    uint16_t loadServoActionHold();
+  String loadAIoTDeviceID();
+  String saveAIoTDeviceID(String newDeviceID);
 
-    // Save servo action hold from NVRAM
-    String saveServoActionHold(uint16_t newhold);
+  String loadAIoTDeviceSECRET();
+  String saveAIoTDeviceSECRET(String newSecret);
 
-    String loadAIoTDeviceID();
-    String saveAIoTDeviceID(String newDeviceID);
+  // Load relayIO pin  num  from NVRAM
+  int loadRelayIOPin();
 
+  // Save RelayIO pin  num   from NVRAM
+  String saveRelayIOPin(int newPinIO);
 
-    String loadAIoTDeviceSECRET();
-    String saveAIoTDeviceSECRET(String newSecret);
+  // Load relay action hold from NVRAM
+  uint16_t loadRelayActionHold();
 
+  // Save servo action hold from NVRAM
+  String saveRelayActionHold(uint16_t newhold);
 
-    // Load relayIO pin  num  from NVRAM
-    int loadRelayIOPin();
+  // Load servo enable flag from NVRAM
+  bool loadServoEnableFlag();
 
-    // Save RelayIO pin  num   from NVRAM
-    String saveRelayIOPin(int newPinIO);
+  // Save servo action hold from NVRAM
+  String saveServoEnableFlag(bool flag);
 
-      // Load relay action hold from NVRAM
-    uint16_t loadRelayActionHold();
+  // Load relay enable flag from NVRAM
+  bool loadRelayEnableFlag();
 
-    // Save servo action hold from NVRAM
-    String saveRelayActionHold(uint16_t newhold);
-
-
+  // Save relay action hold from NVRAM
+  String saveRelayEnableFlag(bool flag);
 
 }

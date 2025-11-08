@@ -573,7 +573,7 @@ namespace UtilityFunctions
     str = str + std::format("[WIFI] PASS: {} \n", wm.getWiFiPass().c_str());
     str = str + std::format("[WIFI] HOSTNAME: {} \n", WiFi.getHostname());
 
-    str = str + "In order to RESET and erase NVRAM press boot key 3 times within "
+    str = str + "\n\nIn order to RESET and erase NVRAM press boot key 3 times within "
                 "3 seconds";
 
     return String(str.c_str());
@@ -592,13 +592,13 @@ namespace UtilityFunctions
       uint32_t duty = ledc_get_duty(ledc_mode_t::LEDC_LOW_SPEED_MODE,
                                     (ledc_channel_t)channel);
 
-      str = str + std::format("Channel {}: Duty={}\n", channel, duty);
+      str = str + std::format("Channel {}: Duty={} {}\n", channel, ((duty == 259) ? "Not Init" : ""), duty);
     }
     for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
     {
       uint32_t freq =
           ledc_get_freq(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_timer_t)timer);
-      str = str + std::format("Timer {}: Freq={} Hz\n", timer, freq);
+      str = str + std::format("Timer {}: Freq={} {} Hz\n", timer, ((freq == 259) ? "Not Init" : ""), freq);
     }
 #else
   str = str + std::format("High-Speed Mode Channels: NA \n");
@@ -611,13 +611,13 @@ namespace UtilityFunctions
       uint32_t duty = ledc_get_duty(ledc_mode_t::LEDC_LOW_SPEED_MODE,
                                     (ledc_channel_t)channel);
 
-      str = str + std::format("Channel {}: Duty={}\n", channel, duty);
+      str = str + std::format("Channel {}: Duty={} {}\n", channel, ((duty == 259) ? "Not Init" : ""), duty);
     }
     for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
     {
       uint32_t freq =
           ledc_get_freq(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_timer_t)timer);
-      str = str + std::format("Timer {}: Freq={} Hz\n", timer, freq);
+      str = str + std::format("Timer {}: Freq={} {} Hz\n", timer, ((freq == 259) ? "Not Init" : ""), freq);
     }
 
     return String(str.c_str());
@@ -924,7 +924,7 @@ namespace UtilityFunctions
   String saveServoIOPin(int newPinIO)
   {
 
-    if (newPinIO == loadRelayIOPin())
+    if (loadRelayEnableFlag() && loadServoEnableFlag() && (newPinIO == loadRelayIOPin()))
     {
       std::string str = std::format(
           "ServerIO pin cannot be same as RelayIO PIN got {} and RelayIO pin is {}",
@@ -1313,10 +1313,10 @@ namespace UtilityFunctions
   String saveRelayIOPin(int newPinIO)
   {
 
-    if (newPinIO == loadServoIOPin())
+    if (loadRelayEnableFlag() && loadServoEnableFlag() && (newPinIO == loadServoIOPin()))
     {
       std::string str = std::format(
-          "RelayIO pin cannot be same as ServoIO PIN got {} andd ServoIO pin is {}",
+          "RelayIO pin cannot be same as ServoIO PIN got {} and ServoIO pin is {}",
           newPinIO, loadServoIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1338,7 +1338,6 @@ namespace UtilityFunctions
     }
     else
     {
-
       std::string str = std::format(
           "Only use on ESP32S3 RelayIO pin gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
           "gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got {}",
@@ -1348,7 +1347,6 @@ namespace UtilityFunctions
       return Astr;
     }
   }
-
 
   // Load relay action hold from NVRAM
   uint16_t loadRelayActionHold()
@@ -1381,6 +1379,80 @@ namespace UtilityFunctions
       std::string str = std::format(
           "Relay Action HOLD must be between 1 and " STRINGIFY(NVRAM_PERFS_RELAY_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
           newHold);
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+  }
+
+  // Load servo enable flag from NVRAM
+  bool loadServoEnableFlag()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_SERVO_ENBALED_PROP,
+                                     NVRAM_PERFS_SERVO_ENABLED_DEFAULT);
+    _preferences.end();
+    UtilityFunctions::debugLogf(
+        "loaded servo enable flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save servo enable flag from NVRAM
+  String saveServoEnableFlag(bool flag)
+  {
+    if ((flag && loadServoIOPin() != loadRelayIOPin()) || (!flag))
+    {
+      Preferences _preferences;
+      _preferences.begin(NVRAM_PERFS, false);
+      _preferences.putBool(NVRAM_PERFS_SERVO_ENBALED_PROP, flag);
+      _preferences.end();
+      UtilityFunctions::debugLog("Servo enable flag updated and saved to NVRAM.");
+      return "";
+    }
+    else
+    {
+      std::string str = std::format(
+          "Cannot Enable Servo as ServoIO Pin  {} and Relay IO PIN () are same",
+          loadServoIOPin(), loadRelayIOPin());
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+  }
+
+  // Load reley enable flag from NVRAM
+  bool loadRelayEnableFlag()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_RELAY_ENABLED_PROP,
+                                     NVRAM_PERFS_RELAY_ENABLED_DEFAULT);
+    _preferences.end();
+    UtilityFunctions::debugLogf(
+        "loaded relay enable flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save relay action hold from NVRAM
+  String saveRelayEnableFlag(bool flag)
+  {
+    if ((flag && (loadServoIOPin() != loadRelayIOPin())) || (!flag))
+    {
+      Preferences _preferences;
+      _preferences.begin(NVRAM_PERFS, false);
+      _preferences.putBool(NVRAM_PERFS_RELAY_ENABLED_PROP, flag);
+      _preferences.end();
+      UtilityFunctions::debugLog("Relay enable flag updated and saved to NVRAM.");
+      return "";
+    }
+    else
+    {
+      std::string str = std::format(
+          "Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN () are same",
+          loadServoIOPin(), loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
       return Astr;

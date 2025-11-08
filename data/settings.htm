@@ -57,6 +57,16 @@
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        /* New Rule: Add margin below the enable form to separate it from the settings form */
+        #servoEnableForm {
+            margin-bottom: 20px;
+        }
+
         h3 {
             margin-top: 0;
             color: #f5f5f5;
@@ -71,6 +81,7 @@
         }
 
         input[type=text],
+        input[type=number],
         input[type=password],
         select {
             width: calc(100% - 22px);
@@ -81,6 +92,31 @@
             color: #e0e0e0;
             border-radius: 8px;
             box-sizing: border-box;
+        }
+
+        input[type=text]:disabled,
+        input[type=password]:disabled,
+        input[type=number]:disabled {
+            background-color: #3f3f3f;
+            /* Solid black background */
+            color: #797878;
+            /* Very dark grey text color to make it look "blacked out" */
+            cursor: not-allowed;
+            /* Standard indicator for disabled input */
+            border-color: #000000;
+            /* Optional: make the border black too */
+        }
+
+        input[type=submit]:disabled {
+            background-color: #3f3f3f;
+            color: #797878;
+        }
+
+        /* Explicitly define disabled hover state to be the same as the disabled state */
+        input[type=submit]:disabled:hover {
+            background-color: #3f3f3f;
+            color: #797878;
+            /* Ensures the color doesn't change on hover when disabled */
         }
 
         input[type=submit] {
@@ -206,77 +242,101 @@
             </form>
         </div>
 
-        <!-- Relay name Change Form -->
         <div class="form-section">
-            <h3>Change Relay IO pin</h3>
-            <form action="/change-relayIOPIN" method="post">
-                <label for="new-relayIOPIN">New Relay IO PIN:</label>
-                <input type="text" id="new-relayIOPIN" name="newrelayIOPIN" required>
-                <input type="submit" value="Change Relay IO PIN">
+            <h3>Relay Control Settings</h3>
+
+            <!-- Form 1: Rwlay Enable/Disable (Auto-submitting) -->
+            <form id="relayEnableForm" action="/update-relay-enabled" method="post">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="relayCheckbox" name="relay_enabled" value="true"
+                        onchange="updateRelayFields(); submitServoEnableFetch(this.form);">
+                    <label for="relayCheckbox" style="display: inline; margin: 0;">Enable Relay Mechanism</label>
+                </div>
             </form>
+            <!-- Relay name Change Form -->
+            <div class="form-section">
+                <h3>Change Relay IO pin</h3>
+                <form action="/change-relayIOPIN" method="post">
+                    <label for="new-relayIOPIN">New Relay IO PIN:</label>
+                    <input type="number" id="new-relayIOPIN" name="newrelayIOPIN" required>
+                    <input type="submit" id="new-relayIOPINSubmit" value="Change Relay IO PIN">
+                </form>
+            </div>
+
+            <!-- Relay action delay Change Form -->
+            <div class="form-section">
+                <h3>Change Relay at Action delay (Typ :100 mili sec)</h3>
+                <form action="/change-relayActionDelay" method="post">
+                    <label for="new-relayActionDelay">New Relay Action delay:</label>
+                    <input type="number" id="new-relayActionDelay" name="newrelayActionDelay" required>
+                    <input type="submit" id="new-relayActionDelaySubmit" value="Change Relay delay">
+                </form>
+            </div>
         </div>
 
-        <!-- Relay action delay Change Form -->
         <div class="form-section">
-            <h3>Change Relay at Action delay (Typ :100 mili sec)</h3>
-            <form action="/change-relayActionDelay" method="post">
-                <label for="new-relayActionDelay">New Relay Action delay:</label>
-                <input type="text" id="new-relayActionDelay" name="newrelayActionDelay" required>
-                <input type="submit" value="Change Relay delay">
+            <h3>Servo Control Settings</h3>
+
+            <!-- Form 1: Servo Enable/Disable (Auto-submitting) -->
+            <form id="servoEnableForm" action="/update-servo-enabled" method="post">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="servoCheckbox" name="servo_enabled" value="true"
+                        onchange="updateServoFields(); submitServoEnableFetch(this.form);">
+                    <label for="servoCheckbox" style="display: inline; margin: 0;">Enable Servo Mechanism</label>
+                </div>
             </form>
+
+            <!-- SERVO name Change Form -->
+            <div class="form-section">
+                <h3>Change Servo IO pin</h3>
+                <form action="/change-servoIOPIN" method="post">
+                    <label for="new-servoIOPIN">New Servo IO PIN:</label>
+                    <input type="number" id="new-servoIOPIN" name="newservoIOPIN" required>
+                    <input type="submit" id="new-servoIOPINSubmit" value="Change Servo IO PIN">
+                </form>
+            </div>
+
+
+            <!-- SERVO max angle Change Form -->
+            <div class="form-section">
+                <h3>Change Servo MAX TRAVEL ANGLE (Typ :180 degrees)</h3>
+                <form action="/change-servoMAXAngle" method="post">
+                    <label for="new-servoMAXAngle">New Servo MAX Travel Angle:</label>
+                    <input type="number" id="new-servoMAXAngle" name="newservoMAXAngle" required>
+                    <input type="submit" id="new-servoMAXAngleSubmit" value="Change Servo MAX Travel Angle">
+                </form>
+            </div>
+
+            <!-- SERVO rest angle Change Form -->
+            <div class="form-section">
+                <h3>Change Servo at REST ANGLE (Typ :90 degrees)</h3>
+                <form action="/change-servoRESTAngle" method="post">
+                    <label for="new-servoRESTAngle">New Servo REST Angle:</label>
+                    <input type="number" id="new-servoRESTAngle" name="newservoRESTAngle" required>
+                    <input type="submit" id="new-servoRESTAngleSubmit" value="Change Servo REST Angle">
+                </form>
+            </div>
+
+            <!-- SERVO action angle Change Form -->
+            <div class="form-section">
+                <h3>Change Servo at Action ANGLE (Typ :120 degrees)</h3>
+                <form action="/change-servoActionAngle" method="post">
+                    <label for="new-servoActionAngle">New Servo Action Angle:</label>
+                    <input type="number" id="new-servoActionAngle" name="newservoActionAngle" required>
+                    <input type="submit" id="new-servoActionAngleSubmit" value="Change Action Angle">
+                </form>
+            </div>
+
+            <!-- SERVO action dela Change Form -->
+            <div class="form-section">
+                <h3>Change Servo at Action delay (Typ :100 mili sec)</h3>
+                <form action="/change-servoActionDelay" method="post">
+                    <label for="new-servoActionDelay">New Servo Action delay:</label>
+                    <input type="number" id="new-servoActionDelay" name="newservoActionDelay" required>
+                    <input type="submit" id="new-servoActionDelaySubmit" value="Change Action delay">
+                </form>
+            </div>
         </div>
-
-        <!-- SERVO name Change Form -->
-        <div class="form-section">
-            <h3>Change Servo IO pin</h3>
-            <form action="/change-servoIOPIN" method="post">
-                <label for="new-servoIOPIN">New Servo IO PIN:</label>
-                <input type="text" id="new-servoIOPIN" name="newservoIOPIN" required>
-                <input type="submit" value="Change Servo IO PIN">
-            </form>
-        </div>
-
-
-        <!-- SERVO max angle Change Form -->
-        <div class="form-section">
-            <h3>Change Servo MAX TRAVEL ANGLE (Typ :180 degrees)</h3>
-            <form action="/change-servoMAXAngle" method="post">
-                <label for="new-servoMAXAngle">New Servo MAX Travel Angle:</label>
-                <input type="text" id="new-servoMAXAngle" name="newservoMAXAngle" required>
-                <input type="submit" value="Change Servo MAX Travel Angle">
-            </form>
-        </div>
-
-        <!-- SERVO rest angle Change Form -->
-        <div class="form-section">
-            <h3>Change Servo at REST ANGLE (Typ :90 degrees)</h3>
-            <form action="/change-servoRESTAngle" method="post">
-                <label for="new-servoRESTAngle">New Servo REST Angle:</label>
-                <input type="text" id="new-servoRESTAngle" name="newservoRESTAngle" required>
-                <input type="submit" value="Change Servo REST Angle">
-            </form>
-        </div>
-
-        <!-- SERVO action angle Change Form -->
-        <div class="form-section">
-            <h3>Change Servo at Action ANGLE (Typ :120 degrees)</h3>
-            <form action="/change-servoActionAngle" method="post">
-                <label for="new-servoActionAngle">New Servo Action Angle:</label>
-                <input type="text" id="new-servoActionAngle" name="newservoActionAngle" required>
-                <input type="submit" value="Change Action Angle">
-            </form>
-        </div>
-
-        <!-- SERVO action dela Change Form -->
-        <div class="form-section">
-            <h3>Change Servo at Action delay (Typ :100 mili sec)</h3>
-            <form action="/change-servoActionDelay" method="post">
-                <label for="new-servoActionDelay">New Servo Action delay:</label>
-                <input type="text" id="new-servoActionDelay" name="newservoActionDelay" required>
-                <input type="submit" value="Change Action delay">
-            </form>
-        </div>
-
         <!-- Device ID Form -->
         <div class="form-section">
             <h3>Change AIOT Device ID</h3>
@@ -302,6 +362,7 @@
             <a href="/settings.htm">Settings</a>
             <a href="/status.htm">Status</a>
         </div>
+        <div id="error-message" style="color: red; font-weight: bold;"></div>
     </div>
 
 
@@ -339,6 +400,90 @@
 
         const secretIDElement = document.getElementById("new-secretID");
         secretIDElement.value = secretID;
+
+        const servoCheckbox = document.getElementById("servoCheckbox");
+        servoCheckbox.checked = servoEnableFlag;
+
+         const relayCheckbox = document.getElementById("relayCheckbox");
+        relayCheckbox.checked = relayEnableFlag;
+
+        // Function to toggle the disabled state of related inputs
+        function updateRelayFields() {
+
+            // Disable inputs and submit button if the checkbox is not checked
+            relayIOPINElement.disabled = !relayCheckbox.checked;
+            relayActionDelayElement.disabled = !relayCheckbox.checked;
+
+            document.getElementById("new-relayIOPINSubmit").disabled = !relayCheckbox.checked;
+            document.getElementById("new-relayActionDelaySubmit").disabled = !relayCheckbox.checked;
+
+        }
+
+
+        // Function to toggle the disabled state of related inputs
+        function updateServoFields() {
+
+            // Disable inputs and submit button if the checkbox is not checked
+            servoIOPINElement.disabled = !servoCheckbox.checked;
+            servoMAXAngleElement.disabled = !servoCheckbox.checked;
+            servoRESTAngleElement.disabled = !servoCheckbox.checked;
+            servoActionAngleElement.disabled = !servoCheckbox.checked;
+            servoActionDelayElement.disabled = !servoCheckbox.checked;
+
+            document.getElementById("new-servoIOPINSubmit").disabled = !servoCheckbox.checked;
+            document.getElementById("new-servoMAXAngleSubmit").disabled = !servoCheckbox.checked;
+            document.getElementById("new-servoRESTAngleSubmit").disabled = !servoCheckbox.checked;
+            document.getElementById("new-servoActionAngleSubmit").disabled = !servoCheckbox.checked;
+            document.getElementById("new-servoActionDelaySubmit").disabled = !servoCheckbox.checked;
+
+        }
+
+
+
+        // Run on page load to initialize the state and set defaults
+        window.onload = function () {
+            // Call the toggle function to set initial disabled states correctly
+            updateServoFields();
+            updateRelayFields();
+        };
+
+        // Function to handle the asynchronous submission using Fetch API
+        function submitServoEnableFetch(form) {
+            // Create form data from the form element
+            const formData = new FormData(form);
+            const url = form.action;
+
+            fetch(url, {
+                method: 'POST',
+                // ESP32 endpoints often expect data URL-encoded, not JSON, 
+                // so we use the URLSearchParams to format FormData correctly.
+                body: new URLSearchParams(formData),
+                signal: AbortSignal.timeout(5000)
+            })
+                .then((response) => {
+                    if (!response.ok) { // Don't forget this part!
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then((responseData) => {
+                    console.log("txt:", responseData);
+                    const answer = JSON.parse(responseData);
+                    if (answer.success == false) {
+                        var errorTXT = document.getElementById('error-message');
+                        errorTXT.textContent = answer.message;
+                        errorTXT.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    } else {
+                        document.getElementById('error-message').textContent = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to fetch:', error);
+                    var errorTXT = document.getElementById('error-message');
+                    errorTXT.textContent = '⚠️ Failed to send command. ERROR:' + error.textContent
+                    errorTXT.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                });
+        }
 
     </script>
 
