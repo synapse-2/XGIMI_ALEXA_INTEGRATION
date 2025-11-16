@@ -53,7 +53,7 @@ You need
 21. In the Settings update the device ID and Secret ID for ATOT things you created
 22. Each time you update the device will restart 
 23. Once updated the device should connect to the Arduino IOT and you should be able to do commands like "Alexa tun projector off" ; "Alexa set projector volume to 10" etc.
-24. Pressing the rest button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
+24. Pressing the reset button three times within 3 secs will completey wipe the NV ram and get back to the WIF provisioning step 12
 
 ## Operation 
 
@@ -71,14 +71,14 @@ You need
 02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
 03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
 04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
-05. Backup if the FastLED and tzapu WiFIManager libs as weel as the Menuconfig files settings that work in \Archive\Old-Config-files
+05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
 
 The code is built on PIOArduino (Visual Studio Code Extension - https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide)  
 It uses the latest 'Arduino Release v3.2.1 based on ESP-IDF v5.4.2' framework with the V14 toolchain-xtensa-esp-elf for gcc++23 version support
 
-The code used hybrid build it builds ## espidf and ## arduino libs using the folling in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
+The code used hybrid build it builds ## espidf and ## arduino libs using the following in the platformio.ini (Note it uses PIOarduino packages NOT PlatfomIO arduino packages)
 
 ## Set up build env by:
 1. Download VS Code at: https://code.visualstudio.com/download
@@ -133,10 +133,10 @@ For coexistance to work:
 You must see "- toolchain-xtensa-esp-elf @ 14.2.0+20241119" or above in the build output
 If you want to use the old platfrom code then refactor the code to NOT use "magic_enum" embedded lib (from: https://github.com/Neargye/magic_enum)
 
-If you want to change the sdkconfig options then use the "pio run -t menuconfig" command in the PlatfromCIO Core CLI window. 
+If you want to change the sdkconfig options then use the "pio run -t menuconfig" command in the PlatfromIO Core CLI window. 
 
 CLI for flashing: pio pkg exec -p "tool-esptoolpy" -- esptool.py --help
-cli for commands avaliable:pio run --list-targets
+CLI for commands avaliable:pio run --list-targets
 
 ### Nifty ESp32 partion table generator: 
 

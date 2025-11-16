@@ -211,9 +211,9 @@ void loop() {
     if (cmd != NULL) {
       // start of command
       UtilityFunctions::ledWhite();
+      bleRemoteDecoder.doCmd(cmd);
       RelayRemoteDecoder.doCmd(cmd);
       ServoRemoteDecoder.doCmd(cmd);
-      bleRemoteDecoder.doCmd(cmd);
       UtilityFunctions::ledStop();
       // end of command
 
