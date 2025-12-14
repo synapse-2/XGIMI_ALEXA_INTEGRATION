@@ -50,7 +50,7 @@ You need
 16. Only b and n networks at 2.5GHz ESP32S3 supports 
 17. Identify the network, provide the passskey and hit save
 18. The device should reboot and connect. The device will go from red led to a long Green blink. The long green series of blinks means it has conencted to the wifi
-19. Open the browser to "Xgimi-alexa.local" you should see the Remote HTML UI
+19. Open the browser to "Xgimi-alexa" you should see the Remote HTML UI
 20. Go to Settings page. The default user and password both are "admin"
 21. In the Settings update the device ID and Secret ID for ATOT things you created
 22. Each time you update the device will restart 
