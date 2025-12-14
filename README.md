@@ -4,7 +4,7 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
-The XGIMI projector has no Alexa or Google ssupport built in. 
+The XGIMI projector has no Alexa or Google support built in. 
 
 Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Alexa skill (you can can also connect to google)
 Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
