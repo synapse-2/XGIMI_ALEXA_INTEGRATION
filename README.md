@@ -93,7 +93,7 @@ The code used hybrid build it builds ## espidf and ## arduino libs using the fol
 
 The code also can have clandg enabled: off by default
 
-you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
+you need to run the command "pio run --target compiledb" to generate the include files path for the clangd to work
 clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
 
 01. You have to create a .clangd file in the root of your project folder with the lines, change the abslute path "d:\" to what ever is in your env 
