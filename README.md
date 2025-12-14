@@ -45,7 +45,7 @@ You need
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
-14. You can get the ESP32's ip from the serial port else open the browser for host name "Xgimi-alexa.local" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
+14. You can get the ESP32's ip from the serial port else open the browser for host name "Xgimi-alexa" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
 15. Scan to find your wifi
 16. Only b and n networks at 2.5GHz ESP32S3 supports 
 17. Identify the network, provide the passskey and hit save
