@@ -32,7 +32,7 @@ You need
     07.  SECRET KEY is only displpayed once so you will have to re do this step if you forget it
 
 04. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
-05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
+05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingPropertites.h and related reefrences in main.cpp 
 06. The "projector" variable should be of 
     a. type "Television"
     b. variable permission : read & write
