@@ -8,7 +8,7 @@ Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Al
 Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
 You can pair the ESP32S3 as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "XGIMI RC" in the settting web UI (and it will auto pair with the Xgimi projector)
 Once paired you can use Alexa voice command to turn on off, volume change etc.
-There is an option to add a servo and have it move on on-off command if you want to have it push another button of some sort
+There is an option to add a servo(like: https://www.amazon.com/Servo-Servos-Helicopter-Airplane-Controls/dp/B0BJQ2QTHG/) and/or a 5v relay (like: https://www.amazon.com/AEDIKO-Channel-Optocoupler-Isolation-Support/dp/B095YD3732/) and have it move on on-off command if you want to have it push another button of some sort
 There is also built in remote web gui to send commands from iphone or another web browser etc.
 
 The code was tested with Xgimi horizon-ultra
