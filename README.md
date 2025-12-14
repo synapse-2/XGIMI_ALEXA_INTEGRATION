@@ -4,6 +4,8 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
+The XGIMI projector has no Alexa or Google ssupport built in. 
+
 Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Alexa skill (you can can also connect to google)
 Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
 You can pair the ESP32S3 as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "XGIMI RC" in the settting web UI (and it will auto pair with the Xgimi projector)
@@ -11,7 +13,7 @@ Once paired you can use Alexa voice command to turn on off, volume change etc.
 There is an option to add a servo(like: https://www.amazon.com/Servo-Servos-Helicopter-Airplane-Controls/dp/B0BJQ2QTHG/) and/or a 5v relay (like: https://www.amazon.com/AEDIKO-Channel-Optocoupler-Isolation-Support/dp/B095YD3732/) and have it move on on-off command if you want to have it push another button of some sort
 There is also built in remote web gui to send commands from iphone or another web browser etc.
 
-The code was tested with Xgimi horizon-ultra
+The code was tested with Xgimi horizon-ultra (https://us.xgimi.com/pages/horizon-ultra) and has codes for other xgimi models ("XGIMI Elfin", "XGIMI Z6X", "XGIMI Horizon Pro 4K","XGIMI H3","XGIMI H3S-a","XGIMI H3S-b","XGIMI H5","XGIMI H1S","XGIMI Z4Air", "XGIMI Horizon")
 
 There you have it.  Alexa integration via cloning of the Bluetooth factory remote. All on the the ESP32S3 single chip supporintg Wifi and BLE5.0
 
