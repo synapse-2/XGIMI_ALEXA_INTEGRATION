@@ -84,10 +84,10 @@ The code used hybrid build it builds ## espidf and ## arduino libs using the fol
 
 ## Set up build env by:
 1. Download VS Code at: https://code.visualstudio.com/download
-2. Get the PIOArduino extennssion and installed ( https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide) 
+2. Get the PIOArduino extension and installed ( https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide) 
 3. Clone or fork the Git hub repo 
 4. Point VS Code to open the workspace in the root of github repo 
-5. Compile and fash to ESP32S3
+5. Compile and flash to ESP32S3
 
 ## Clangd 
 
