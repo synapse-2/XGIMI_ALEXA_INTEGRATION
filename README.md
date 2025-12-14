@@ -73,7 +73,7 @@ You need
 02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
 03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
 04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
-05. Backup if the FastLED and tzapu WiFIManager libs as weel as the Menuconfig files settings that work in \Archive\Old-Config-files
+05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
 
