@@ -23,13 +23,13 @@ You need
 01. Obtain Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
 02. Create an Aurdino Cloud account at: https://app.arduino.cc/
 03. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
-    a. Select "comptible device" option
-    b. Select "ESP32" option
-    c. Select "Arduino Nano ESP32" from the drop down
-    d. hit continue
-    e. give a name
-    f. NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
-    g. SECRET KEY is only displpayed once so you will have to re do this step if you forget it
+    A. Select "comptible device" option
+    B. Select "ESP32" option
+    C. Select "Arduino Nano ESP32" from the drop down
+    D. hit continue
+    E. give a name
+    F. NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
+    G. SECRET KEY is only displpayed once so you will have to re do this step if you forget it
 
 04. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
 05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
