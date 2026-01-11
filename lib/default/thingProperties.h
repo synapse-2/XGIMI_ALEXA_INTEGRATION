@@ -6,7 +6,7 @@
 
 // SECRET_DEVICE_KEY;    // Secret device password
 
-CloudTelevision projector;
+inline CloudTelevision projector;
 
 
 

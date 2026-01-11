@@ -27,7 +27,7 @@
             </span>
             <script>
                 const mainHeadingElement = document.getElementById("main-heading");
-                mainHeadingElement.textContent = "TV Remote : " + headingTxt;
+                mainHeadingElement.textContent = "TV Remote:" + headingTxt;
             </script>
             <div id="Wifi-icon" class="wifi-icon wifi-low">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -166,8 +166,10 @@
         </div>
 
         <div class="footer">
+            <a href="/">Home</a>
             <a href="/settings.htm">Settings</a>
             <a href="/status.htm">Status</a>
+            <a href="/ota.htm">Update</a>
         </div>
         <div id="error-message" style="color: red; font-weight: bold;"></div>
 
@@ -190,7 +192,7 @@
                     })
                     .then((responseData) => {
                         console.log("txt:", responseData);
-                        const answer = JSON.parse(responseData);
+                        const answer = JSON.parse(responseData); // we are sending json response (success and error-message tags) from the server, so we need to parse it
                         if (answer.success == false) {
                             document.getElementById('error-message').textContent = answer.message;
                         } else {

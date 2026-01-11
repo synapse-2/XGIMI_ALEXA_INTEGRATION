@@ -5,8 +5,8 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ESP32 Projector Control</title>
-
+    <title>Alexa - Blutooth TV Remote</title>
+    
     <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="/remote.css">
 
@@ -152,7 +152,7 @@
         <h1 id="main-heading">ESP32 Projector Control</h1>
         <script>
             const mainHeadingElement = document.getElementById("main-heading");
-            mainHeadingElement.textContent = "ESP32 Settings : " + headingTxt;
+            mainHeadingElement.textContent = "TV Remote:" + headingTxt;
         </script>
         <!-- Projector Wake Packet Form -->
         <div class="form-section">
@@ -361,6 +361,7 @@
             <a href="/">Home</a>
             <a href="/settings.htm">Settings</a>
             <a href="/status.htm">Status</a>
+            <a href="/ota.htm">Update</a>
         </div>
         <div id="error-message" style="color: red; font-weight: bold;"></div>
     </div>
@@ -468,7 +469,7 @@
                 })
                 .then((responseData) => {
                     console.log("txt:", responseData);
-                    const answer = JSON.parse(responseData);
+                    const answer = JSON.parse(responseData); // we are sending jason response (success and error-message tags) from the server, so we need to parse it
                     if (answer.success == false) {
                         var errorTXT = document.getElementById('error-message');
                         errorTXT.textContent = answer.message;

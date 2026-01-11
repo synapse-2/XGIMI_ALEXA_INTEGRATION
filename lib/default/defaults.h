@@ -31,6 +31,7 @@
  */
 
 #define WIFIDEBUG WM_DEBUG_VERBOSE
+#define WIFI_DISCONNET_TIMEOUT_SEC 60 // in seconds
 
 #define WM_MDNS 1 // enable mdns for the name resolution
 
@@ -77,7 +78,9 @@
 #define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
 #define WEB_ESP_RESTART_DELAY 2000 // mills 2 mins
-#define WEB_STATUS_LOG_BUFFER 2048  /// buffer for log to be shon in the web page
+#define WEB_STATUS_LOG_BUFFER 4096  /// buffer for log to be shon in the web page
+#define NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_PROP "weblogOld"
+#define NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_SIZE_PROP "weblogSize"
 #define RING_BUFF_SIZE_FOR_CMD 5*11 //each server command message is 11 bytes long
 
 #define NVRAM_PERFS "registry"

@@ -16,6 +16,9 @@
 #include <magicEnum/magic_enum_iostream.hpp>
 #include <ranges>
 #include <string>
+#include "esp_partition.h"
+#include "esp_ota_ops.h"
+#include "thingProperties.h"
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
@@ -46,7 +49,7 @@ namespace UtilityFunctions
       bool pressed;
     };
 
-    // a string buffer that holdas max string content like a window loking at a train
+    // a string buffer that holdas max string content like a window looking at a train
     class AutoPopCharBuffer
     {
     public:
@@ -120,6 +123,11 @@ namespace UtilityFunctions
 
       // Get the maximum capacity of the buffer
       size_t capacity() const { return capacity_; }
+
+      char *getBuffer()
+      {
+        return buffer_;
+      }
 
     protected:
       char *buffer_;
@@ -400,12 +408,26 @@ namespace UtilityFunctions
 
   void unpressRest() { buttonReset.pressed = false; }
 
+  String getDateTimeUTC()
+  {
+    struct tm timeinfo;
+    time_t now;
+    time(&now);
+    localtime_r(&now, &timeinfo);
+
+    char s[51];
+
+    strftime(s, 50, "%a, %b %d %Y %H:%M:%S", &timeinfo);
+
+    return String(s);
+  }
+
   String taskInfo()
   {
 
     std::string str;
 #ifdef configUSE_TRACE_FACILITY
-    str = "Free RTOS TASKS :\n";
+    str = "";
     // Get the total number of tasks
     UBaseType_t numberOfTasks = uxTaskGetNumberOfTasks();
 
@@ -428,9 +450,9 @@ namespace UtilityFunctions
 
       str = str + std::format(
                       "{: <" STRINGIFY(
-                          CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <10}{: "
-                                                             "<10}{: <10}\n",
-                      "Task Name", "State", "Prio", "Core ID", "% CPU");
+                          CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <4}{: "
+                                                             "<2}{: <3}\n",
+                      "Task Name", "State", "Pri ", "Core ", "%CPU");
 
       for (int pri = ESP_TASK_PRIO_MAX - 1; pri >= ESP_TASK_PRIO_MIN;
            pri = pri - 1)
@@ -493,8 +515,8 @@ namespace UtilityFunctions
             str = str +
                   std::format(
                       "{: <" STRINGIFY(
-                          CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <10}{: "
-                                                             "<10}{: <10}\n",
+                          CONFIG_FREERTOS_MAX_TASK_NAME_LEN) "}{: <10}{: <4}{: "
+                                                             "<4}{: <3}\n",
                       taskName, state, priority, coreID, ulStatsAsPercentage);
           }
         }
@@ -573,7 +595,7 @@ namespace UtilityFunctions
     str = str + std::format("[WIFI] PASS: {} \n", wm.getWiFiPass().c_str());
     str = str + std::format("[WIFI] HOSTNAME: {} \n", WiFi.getHostname());
 
-    str = str + "\n\nIn order to RESET and erase NVRAM press boot key 3 times within "
+    str = str + "\n\nIn order to RESET and ERASE NVRAM press BOOT key 3 times within "
                 "3 seconds";
 
     return String(str.c_str());
@@ -582,7 +604,7 @@ namespace UtilityFunctions
   String ledCInfo()
   {
 
-    std::string str = std::format("LEDC Channel Status:\n");
+    std::string str = std::format("");
 
     // Iterate through high-speed mode channels
 #if SOC_LEDC_SUPPORT_HS_MODE
@@ -623,6 +645,43 @@ namespace UtilityFunctions
     return String(str.c_str());
   }
 
+  String partitionInfo()
+  {
+
+    std::string str = std::format("");
+
+    // Iterate through the partitions
+    str = str + std::format(
+                    "{: <17}{: <4} {: <4}\n{: <10}{: <10} {: <4}{: <2} {: <2}\n",
+                    "Name", "Type", "Sub", "Offset", "Size", "Size(KB)", "Enc", "RO");
+
+    // Find an iterator for all partition types and subtypes
+    esp_partition_iterator_t it = esp_partition_find(ESP_PARTITION_TYPE_ANY, ESP_PARTITION_SUBTYPE_ANY, NULL);
+
+    while (it != NULL)
+    {
+      const esp_partition_t *p = esp_partition_get(it);
+      str = str + std::format("{: <17}{:#04X} {:#04X}\n{:#010X} {:#010X} {:0>4}Kb {: <1} {: <1}\n",
+                              p->label, (uint32_t)p->type, (uint32_t)p->subtype, p->address, p->size, p->size / 1024, p->encrypted, p->readonly);
+      it = esp_partition_next(it);
+    }
+
+    // Release the iterator to avoid memory leaks
+    esp_partition_iterator_release(it);
+
+    str = str + std::format("\nBoot Partition :\n");
+    const esp_partition_t *p = esp_ota_get_boot_partition();
+    str = str + std::format("{: <17}{:#04X} {:#04X}\n{:#010X} {:#010X} {:0>4}Kb {: <1} {: <1}\n",
+                            p->label, (uint32_t)p->type, (uint32_t)p->subtype, p->address, p->size, p->size / 1024, p->encrypted, p->readonly);
+
+    str = str + std::format("\nRunning Partition :\n");
+    p = esp_ota_get_running_partition();
+    str = str + std::format("{: <17}{:#04X} {:#04X}\n{:#010X} {:#010X} {:0>4}Kb {: <1} {: <1}\n",
+                            p->label, (uint32_t)p->type, (uint32_t)p->subtype, p->address, p->size, p->size / 1024, p->encrypted, p->readonly);
+
+    return String(str.c_str());
+  }
+
   void UtilityFunctionsInit()
   {
     // only init once
@@ -636,7 +695,7 @@ namespace UtilityFunctions
     {
       // Handle mutex creation error
       UtilityFunctions::debugLog("Failed to create LED mute restarting...");
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     }
     FastLED.addLeds<RGBCHIP, LED_BUILTINIO, RGB_DATA_ORDER>(leds, NUMPIXELS);
     // Initialize the LED array to off (black)
@@ -862,7 +921,7 @@ namespace UtilityFunctions
   {
 
     std::string str =
-        std::format("CORE:{}:{}\n", xPortGetCoreID(), message.c_str());
+        std::format("{}:CORE:{}:{}\n", getDateTimeUTC().c_str(), xPortGetCoreID(), message.c_str());
     Serial.printf(str.c_str());
     webLogBuffer.pushString(str);
   }
@@ -894,7 +953,7 @@ namespace UtilityFunctions
     }
     va_end(arg);
 
-    std::string str = std::format("CORE:{}:{}", xPortGetCoreID(), temp);
+    std::string str = std::format("{}:CORE:{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
     Serial.printf(str.c_str());
     webLogBuffer.pushString(str);
 
@@ -1457,6 +1516,58 @@ namespace UtilityFunctions
       debugLog(Astr);
       return Astr;
     }
+  }
+
+  String getBuildTimeVersion()
+  {
+    std::string str = std::format("Build Time: {} {}", __DATE__, __TIME__);
+    return String(str.c_str());
+  }
+
+  // get the current cloud projector vallue
+  String getProjectrorValue()
+  {
+
+    std::string s_input = std::string((magic_enum::enum_name((InputValue)projector.getInputValue())));
+    std::string s_play = std::string((magic_enum::enum_name((PlaybackCommands)projector.getPlaybackCommand())));
+    std::string str = std::format("On_OFF:{} Volume:{} Mute:{} channel:{} Input:{} Playback_Cmd:{} \n", projector.getSwitch(), projector.getVolume(), projector.getMute(), projector.getChannel(), s_input, s_play);
+    return String(str.c_str());
+  }
+
+  // save the old log in nvram and restart
+  void ESP32Restart()
+  {
+
+
+    UtilityFunctions::debugLog("......REBOOTING.....EOF.");
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    uint size = webLogBuffer.size();
+    _preferences.putUInt(NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_SIZE_PROP, size);
+    _preferences.putBytes(NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_PROP, webLogBuffer.getBuffer(), size);
+    _preferences.end();
+    ESP.restart();
+  }
+
+  String getPreBootWebLog()
+  {
+
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    int size = _preferences.getUInt(NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_SIZE_PROP, 0);
+    if (size == 0)
+    {
+      _preferences.end();
+      return "";
+    }
+
+    char *buffer = (char *)malloc(size);
+
+    _preferences.getBytes(NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_PROP, buffer, size);
+
+    _preferences.end();
+    return String(buffer, size);
+    ;
   }
 
 } // namespace UtilityFunctions

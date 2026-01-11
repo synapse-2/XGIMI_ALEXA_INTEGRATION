@@ -16,7 +16,7 @@ namespace CmdRingBuffer
         if (ringBufHandle == NULL)
         {
             UtilityFunctions::debugLog("Failed to create ring buffer\n");
-            ESP.restart();
+            UtilityFunctions::ESP32Restart();
         }
     }
     void enQueueCmd(ServerDecoder::Remote_Cmd cmd)

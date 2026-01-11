@@ -6,7 +6,7 @@
 #include <ArduinoIoTCloud.h>
 #include "ServerDecoder.h"
 
-class AcloudIOT_Decoder
+class AcloudIOT_Decoder: public ServerDecoderHandler
 {
 public:
     AcloudIOT_Decoder();
@@ -20,6 +20,7 @@ public:
     void onProjectorChange(CloudTelevision newPrj);
     void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
     bool isConnectOK();
+    void doCmd(ServerDecoder::Remote_Cmd *cmd);
 
 protected:
     WiFiConnectionHandler * iot_connector;

@@ -18,8 +18,16 @@
         /* The child div's content is left-justified by default */
         padding: 20px;
         text-align: left;
-        font-family: monospace; 
+        font-family: monospace;
         white-space: pre-wrap;
+    }
+
+    /* Style for the strong tag */
+    strong {
+        color: #007bff;
+        /* Example: A nice blue color */
+        font-weight: bold;
+        /* Optional: background-color: #f0f0f0; */
     }
 </style>
 
@@ -43,7 +51,7 @@
             </span>
             <script>
                 const mainHeadingElement = document.getElementById("main-heading");
-                mainHeadingElement.textContent = "ESP32 Status : " + headingTxt;
+                mainHeadingElement.textContent = "TV Remote:" + headingTxt;
             </script>
             <div id="Wifi-icon" class="wifi-icon wifi-low">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -72,12 +80,12 @@
 
         <div class="flex-container">
             <div class="flex-item" id="statusTXT">
-       
+
                 This div is centered by its flex parent.
-                    This div is centered by its flex parent.
                 This div is centered by its flex parent.
-               
-                
+                This div is centered by its flex parent.
+
+
             </div>
         </div>
 
@@ -90,6 +98,7 @@
             <a href="/">Home</a>
             <a href="/settings.htm">Settings</a>
             <a href="/status.htm">Status</a>
+            <a href="/ota.htm">Update</a>
         </div>
 </body>
 

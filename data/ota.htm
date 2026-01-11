@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Load the file with globals first as a classic script -->
+<script src="/globals.js"></script>
+
+<!-- Load the main script as a module so it can access the globals -->
+<script type="module" src="/script.js"></script>
+
+<style>
+    /* -- Global Styles -- */
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        /* Aligns content to the top */
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .remote-container {
+        background-color: #2c2c2c;
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 450px;
+        text-align: center;
+        animation: fade-in 0.5s ease-in-out;
+        margin-top: 20px;
+        /* Space from the top */
+    }
+
+    h1 {
+        font-size: 1.8em;
+        font-weight: 500;
+        color: #f5f5f5;
+        margin-bottom: 25px;
+    }
+
+    .form-section {
+        border: 1px solid #3f3f3f;
+        background-color: #3f3f3f;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 20px;
+        text-align: left;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+    }
+
+    /* New Rule: Add margin below the enable form to separate it from the settings form */
+    #servoEnableForm {
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        margin-top: 0;
+        color: #f5f5f5;
+        font-size: 1.2em;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+        color: #e0e0e0;
+    }
+
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    select {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #555;
+        background-color: #2c2c2c;
+        color: #e0e0e0;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    input[type=text]:disabled,
+    input[type=password]:disabled,
+    input[type=number]:disabled {
+        background-color: #3f3f3f;
+        /* Solid black background */
+        color: #797878;
+        /* Very dark grey text color to make it look "blacked out" */
+        cursor: not-allowed;
+        /* Standard indicator for disabled input */
+        border-color: #000000;
+        /* Optional: make the border black too */
+    }
+
+    input[type=submit]:disabled {
+        background-color: #3f3f3f;
+        color: #797878;
+    }
+
+    /* Explicitly define disabled hover state to be the same as the disabled state */
+    input[type=submit]:disabled:hover {
+        background-color: #3f3f3f;
+        color: #797878;
+        /* Ensures the color doesn't change on hover when disabled */
+    }
+
+    input[type=submit] {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        transition: background-color 0.2s;
+    }
+
+    input[type=submit]:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 12px;
+        display: block;
+        /* Always visible for dark background */
+        margin-top: -8px;
+        margin-bottom: 10px;
+    }
+
+    /* This styles the "firmware.bin" text area to look like a button or input box */
+    .input-header {
+        display: block;
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #e0e0e0;
+        margin-bottom: 8px;
+        margin-top: 15px;
+        /* Adds space between sections */
+        text-align: left;
+    }
+
+    #file-input {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #2c2c2c;
+        border: 1px dashed #555;
+        color: #e0e0e0;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+
+    #file-input:hover {
+        border-color: #007bff;
+    }
+
+    .folder-icon {
+        color: #ffc107;
+        /* Yellow */
+        flex-shrink: 0;
+    }
+
+    .btn {
+        /* Use your existing input[type=submit] styles */
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    #prgbar {
+        width: 100%;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+    }
+
+    #bar {
+        height: 100%;
+        background-color: #28a745;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexa - Blutooth TV Remote</title>
+
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="/remote.css">
+
+</head>
+
+<body>
+    <div class="remote-container">
+        <!-- New status bar for icons -->
+        <div class="status-bar">
+            <div></div>
+            <span class="status-text">
+                <h1 id="main-heading">OTA Update</h1>
+            </span>
+            <script>
+                const mainHeadingElement = document.getElementById("main-heading");
+                mainHeadingElement.textContent = "TV Remote:" + headingTxt;
+            </script>
+            <div id="Wifi-icon" class="wifi-icon wifi-low">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <!-- Separate paths with space between each bar -->
+                    <!-- Smallest bar (dot) -->
+                    <path class="bar-1" fill="#000000" d="M12 19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    <!-- Second bar -->
+                    <path class="bar-2" fill="#000000"
+                        d="M12 15c-3.31 0-6 2.69-6 6h2c0-2.21 1.79-4 4-4s4 1.79 4 4h2c0-3.31-2.69-6-6-6z" />
+                    <!-- Third bar -->
+                    <path class="bar-3 fill=" #000000"
+                        d="M12 11c-5.52 0-10 4.48-10 10h2c0-4.41 3.59-8 8-8s8 3.59 8 8h2c0-5.52-4.48-10-10-10z" />
+                    <!-- Largest bar -->
+                    <path class="bar-4" fill="#000000"
+                        d="M12 7c-7.73 0-14 6.27-14 14h2c0-6.63 5.37-12 12-12s12 5.37 12 12h2c0-7.73-6.27-14-14-14z" />
+                    <title id="wifi-title">Arduino IOT connected</title>
+                </svg>
+            </div>
+            <svg id="bluetooth-icon" class="status-icon bt-advertising" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <title>Blue = Connected; Yellow = Advertising</title>
+                <path d="M7 7l10 10-5 5V2l5 5L7 17" />
+            </svg>
+        </div>
+
+
+
+        <div class="flex-container">
+            <!-- Form 1: Application -->
+            <form method="POST" action="/appOtaUpdate" enctype="multipart/form-data" id="app_form"
+                onsubmit="uploadFile(event, this)">
+                <label class="input-header">New Application Firmware File:</label>
+                <input type="file" name="update" id="file" onchange="updateFileName(this, 'file-name')"
+                    style="display:none">
+                <label id="file-input" for="file">
+                    <span id="file-name">App_firmware.bin</span>
+                    <svg class="folder-icon" xmlns="www.w3.org" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </label>
+                <input type="submit" class="btn" value="Update Application">
+            </form>
+
+
+            <div style="margin: 20px 0; border-top: 1px solid #555;"></div>
+
+            <!-- Form 2: Filesystem -->
+            <form method="POST" action="/fsOtaUpdate" enctype="multipart/form-data" id="fs_form"
+                onsubmit="uploadFile(event, this)">
+                <label class=" input-header">New File System Firmware File:</label>
+                <input type="file" name="filesystem" id="fs-file" onchange="updateFileName(this, 'fs-file-name')"
+                    style="display:none">
+                <label id="file-input" for="fs-file">
+                    <span id="fs-file-name">filesystem_firmware.bin</span>
+                    <svg class="folder-icon" xmlns="www.w3.org" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </label>
+                <input type="submit" class="btn" value="Update Filesystem">
+            </form>
+
+            <!-- Shared Progress Bar -->
+            <br></br>
+            <div id="prg">OTA Progress: 0%</div><br>
+            <div id="prgbar">
+                <div id="bar" style="width: 0%;"></div>
+            </div><br>
+        </div>
+
+
+        <script>
+            function updateFileName(obj, targetId) {
+                var file = obj.value;
+                var fileName = file.split("\\").pop();
+                if (fileName) {
+                    document.getElementById(targetId).textContent = fileName;
+                }
+            }
+
+            function uploadFile(event, formElement) {
+                event.preventDefault(); // Stop standard form submission and page reload
+
+                const formData = new FormData(formElement);
+                const xhr = new window.XMLHttpRequest();
+                const bar = document.getElementById("bar");
+                const prgText = document.getElementById("prg");
+                var errorTXT = document.getElementById('error-message');
+                errorTXT.textContent = '';
+
+                // Monitor upload progress
+                xhr.upload.addEventListener("progress", (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        bar.style.width = percent + "%";
+                        prgText.textContent = "progress: " + percent + "%";
+                    }
+                });
+
+                // Handle completion
+                xhr.addEventListener("load", () => {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success == false) {
+                            errorTXT.textContent = response.message;
+                            errorTXT.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        } else {
+                            document.getElementById('error-message').textContent = 'OTA SUCESS - Rebooting';
+                            setTimeout(() => {
+                                window.location.href = "/";
+                            }, 10000); // 10-second delay
+                        }
+                    } else {
+                        console.error('Failed to fetch:', xhr.statusText);
+                        errorTXT.textContent = '⚠️ Failed to send OTA. ERROR:' + xhr.statusText
+                        errorTXT.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                });
+
+                // Handle error
+                xhr.addEventListener("error", () => {
+                    console.error('Failed to fetch:', xhr.statusText);
+                    errorTXT.textContent = '⚠️ Failed to send OTA. ERROR:' + xhr.statusText
+                    errorTXT.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+                });
+
+                xhr.open("POST", formElement.action);
+                xhr.send(formData);
+            }
+        </script>
+        <div class="footer">
+            <a href="/">Home</a>
+            <a href="/settings.htm">Settings</a>
+            <a href="/status.htm">Status</a>
+            <a href="/ota.htm">Update</a>
+        </div>
+        <div id="error-message" style="color: red; font-weight: bold;"></div>
+    </div>
+
+</body>
+
+</html>

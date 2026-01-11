@@ -83,9 +83,13 @@ The code used hybrid build it builds ## espidf and ## arduino libs using the fol
 ## Set up build env by:
 1. Download VS Code at: https://code.visualstudio.com/download
 2. Get the PIOArduino extennssion and installed ( https://marketplace.visualstudio.com/items?itemName=pioarduino.pioarduino-ide) 
-3. Clone or fork the Git hub repo 
+3. Clone or fork the Git hub repo say to "\Documents\XGIMI_ALEXA_INTEGRATION\"
 4. Point VS Code to open the workspace in the root of github repo 
-5. Compile and fash to ESP32S3
+5. Go to the LIB dirctory ("\Documents\XGIMI_ALEXA_INTEGRATION\lib")
+6. Excute the command 'git submodule add https://github.com/synapse-2/Time.git ./Time
+6. Go to the LIB dirctory ("\Documents\XGIMI_ALEXA_INTEGRATION\lib")
+7. Excute the command 'git submodule add https://github.com/synapse-2/esp-nimble-cpp.git ./esp-nimble-cpp
+8. Compile and fash to ESP32S3
 
 ## Clangd 
 
@@ -174,7 +178,7 @@ Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf
 <tr> <td>ESP32-S3-WROOM-1-N16R16VA8</td><td> 16MB(QuadSPI)</td><td>   16MB(OctalSPI)</td><td>   –40~65</td><td> </td></tr>
 </table>
 
-NOTE: to get the Managed components from espressif to work
+# NOTE: to get the Managed components from espressif to work
 01. Add the component you want in the idf_component.yml in the ROOT folder of the project
 02. Run menuconfig command that will PULL the component in the project from the web, BUILD commnd does not
 03. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive

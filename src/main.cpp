@@ -17,8 +17,13 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/ringbuf.h>
 #include <freertos/task.h>
+#include <TimeLib.h>
+#include "esp_timer.h"
+#include "WiFiType.h"
 
-template <typename E> auto to_integer(magic_enum::Enum<E> value) -> int {
+template <typename E>
+auto to_integer(magic_enum::Enum<E> value) -> int
+{
   // magic_enum::Enum<E> - C++17 Concept for enum type.
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
@@ -32,22 +37,27 @@ inline Servo_Decoder ServoRemoteDecoder;
 inline Relay_Decoder RelayRemoteDecoder;
 WiFiManager wm;
 RC_WebInterface *rc_web;
+uint64_t Wifi_Disconnect_Start_Time = 0;
 
 String getSSID() { return wm.getWiFiSSID(); }
 String getPSK() { return wm.getWiFiPass(); }
 
-void checkResetPressed() {
-  if (UtilityFunctions::isMaster()) {
+void checkResetPressed()
+{
+  if (UtilityFunctions::isMaster())
+  {
     // only check the boot button is pressed if we are the master
 
-    if (UtilityFunctions::isResetPressed()) {
+    if (UtilityFunctions::isResetPressed())
+    {
       UtilityFunctions::debugLogf(
           "Boot pressed num time: %i need 3 to reset system count goees to "
           "zero after 3 secs reset detected at mills %i\n",
           UtilityFunctions::numTimesResetPressed(),
           UtilityFunctions::resetMills());
 
-      if (UtilityFunctions::numTimesResetPressed() < 3) {
+      if (UtilityFunctions::numTimesResetPressed() < 3)
+      {
         UtilityFunctions::unpressRest();
         return;
       }
@@ -55,7 +65,8 @@ void checkResetPressed() {
       wm.resetSettings(); // Reset WiFi settings
       nvs_flash_erase();
       UtilityFunctions::debugLog("Resetting ALL NVRAM settings...");
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 5; i++)
+      {
         UtilityFunctions::ledYellow();
         UtilityFunctions::delay(30);
         UtilityFunctions::ledStop();
@@ -63,7 +74,7 @@ void checkResetPressed() {
       }
       UtilityFunctions::delay(1000); // Wait for a second before restarting
       UtilityFunctions::debugLog("Restarting ESP...");
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     }
   }
 }
@@ -79,7 +90,8 @@ void onNetworkDisconnectMain() { aIOT.onNetworkDisconnect(); }
 
 void onNetworkErrorMain() { aIOT.onNetworkError(); }
 
-void setup() {
+void setup()
+{
 
   Serial.begin(115200);
   while (!Serial)
@@ -92,7 +104,8 @@ void setup() {
   CmdRingBuffer::initCmdRingBuffer();
 
   // Check if the device is in master or slave mode
-  if (UtilityFunctions::isMaster()) {
+  if (UtilityFunctions::isMaster())
+  {
 
 #ifdef XIGIMI_DEBUG_WIFI_OFF
     UtilityFunctions::debugLog(
@@ -100,7 +113,7 @@ void setup() {
 #else
 
     UtilityFunctions::debugLog("Device is in AcloudIOT_Decoder WIFI mode. "
-                               "Starting MASTER job if WIFI connect");
+                               "Starting MASTER job of WIFI connect");
     // reset settings - wipe stored credentials for testing
     //  these are stored by the esp library
     //  wm.resetSettings();
@@ -118,8 +131,8 @@ void setup() {
     wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
     wm.setHostname(UtilityFunctions::loadLocalHostname());
-    wm.setShowInfoErase(false); // no erase settings on info page
-    wm.setDarkMode(true); // show in black background
+    wm.setShowInfoErase(false);  // no erase settings on info page
+    wm.setDarkMode(true);        // show in black background
     wm.setShowInfoUpdate(false); // no OTA mode
     wm.setConfigPortalTimeout(
         AP_CONNECT_TIMEOUT); // Set the timeout for the configuration portal
@@ -130,14 +143,18 @@ void setup() {
     // res = wm.autoConnect("AutoConnectAP","password"); // password protected
     // ap
 
-    if (!res) {
-      UtilityFunctions::debugLog("Failed to connect");
+    if (!res)
+    {
+      UtilityFunctions::debugLogf("Failed to connect to wifi in startup init, and no one connected to AP in sec:%i\n",AP_CONNECT_TIMEOUT);
       UtilityFunctions::ledBlinkRedLong();
-      UtilityFunctions::debugLog("Failed to connect: RESTARTING");
-      ESP.restart();
-    } else {
+      UtilityFunctions::debugLog("Failed to connect to wifi ssid in start up init: RESTARTING");
+      UtilityFunctions::ESP32Restart();
+    }
+    else
+    {
       // if you get here you have connected to the WiFi
-      UtilityFunctions::debugLog("connected to WIFI Network...yeey :)");
+      WiFi.setAutoReconnect(true);
+      UtilityFunctions::debugLog("Connected to WIFI Network...yeey :)");
       UtilityFunctions::ledStop();
       UtilityFunctions::ledBlinkGreenLong();
     }
@@ -152,14 +169,16 @@ void setup() {
 }
 
 // this shoud run on core 1
-void loop() {
+void loop()
+{
   // yield(); // for the watchdog timer on core 0
   // UtilityFunctions::delay(1000);
 
   UtilityFunctions::debugLog("LOOP TASK Running...");
 
   // Check if the device is in master or slave mode
-  if (UtilityFunctions::isMaster()) {
+  if (UtilityFunctions::isMaster())
+  {
     UtilityFunctions::debugLog(
         "Device is in AcloudIOT_Decoder mode. Starting AIoT WIFI Connext ");
 
@@ -180,7 +199,9 @@ void loop() {
     UtilityFunctions::debugLog("AIoT SERVER started ... ");
 
 #endif
-  } else {
+  }
+  else
+  {
     UtilityFunctions::debugLog("Device is in BLE_Remote_Decoder mode.");
   }
 
@@ -200,17 +221,26 @@ void loop() {
   RelayRemoteDecoder.start();
   UtilityFunctions::debugLog("Relay SERVER started ... ");
 
+  Wifi_Disconnect_Start_Time = 0;
+
   for (;;) // infinite loop
   {
+
     /// bluetooth handle
     UtilityFunctions::delay(AIOT_POLL_TIME);
     UtilityFunctions::ledBlinkBlue();
 
     ServerDecoder::Remote_Cmd *cmd;
     cmd = CmdRingBuffer::peekCmd();
-    if (cmd != NULL) {
+    if (cmd != NULL)
+    {
       // start of command
       UtilityFunctions::ledWhite();
+#ifdef XIGIMI_DEBUG_WIFI_OFF
+#else
+      // for on-off toggle cmd
+      aIOT.doCmd(cmd);
+#endif
       bleRemoteDecoder.doCmd(cmd);
       RelayRemoteDecoder.doCmd(cmd);
       ServoRemoteDecoder.doCmd(cmd);
@@ -228,19 +258,55 @@ void loop() {
         "WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
 #else
     UtilityFunctions::delay(AIOT_POLL_TIME);
+
+    // check if we are connected to Wifi
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      // we are disconnected.
+      if (Wifi_Disconnect_Start_Time == 0)
+      {
+        // this is the first time we are disconnected
+        Wifi_Disconnect_Start_Time = esp_timer_get_time(); // set this to current time
+        UtilityFunctions::debugLogf("Wifi is NOT CONNECTED(State =3); current state:%i and current time:%llu\n", WiFi.status(),Wifi_Disconnect_Start_Time);
+      }
+      else
+      {
+        // we have been disconnected for some time find how long
+        uint64_t time_elapsed = (esp_timer_get_time() - Wifi_Disconnect_Start_Time);
+        if (time_elapsed > (WIFI_DISCONNET_TIMEOUT_SEC * 10000000))
+        {
+          // greater than s secs (s * 1000 * 1000)
+          UtilityFunctions::debugLogf("Wifi is NOT CONNECTED for atleast %i secs, REBOOTING time elapsed:%llu and start time:%llu\n", WIFI_DISCONNET_TIMEOUT_SEC, time_elapsed, Wifi_Disconnect_Start_Time);
+          UtilityFunctions::ESP32Restart();
+        }
+      }
+    }
+    else
+    {
+      // we are connected so reset the disconenct time
+      Wifi_Disconnect_Start_Time = 0;
+    }
+
     checkResetPressed(); // Check if the reset button has been pressed
     ArduinoCloud.update();
-    if (rc_web != NULL) {
+    if (rc_web != NULL)
+    {
       rc_web->handleClient(); // do the web serv tasks
     }
 
-    if (aIOT.isConnectOK()) {
-      if (aIOT.hasFirstCloudSyncHasHappened()) {
+    if (aIOT.isConnectOK())
+    {
+      if (aIOT.hasFirstCloudSyncHasHappened())
+      {
         UtilityFunctions::ledBlinkGreen();
-      } else {
+      }
+      else
+      {
         UtilityFunctions::ledBlinkYellow();
       }
-    } else {
+    }
+    else
+    {
       UtilityFunctions::ledBlinkRed();
     }
 

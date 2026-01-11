@@ -14,6 +14,8 @@
 #include <WiFi.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#define UPDATE_NOCRYPT
+#include <Update.h>
 
 extern BLE_Remote_Decoder bleRemoteDecoder;
 
@@ -136,16 +138,34 @@ void RC_WebInterface::refreshGlobalJS()
   taskInfo.replace("\n", "<br>\\\n");
   String ledCInfo = UtilityFunctions::ledCInfo();
   ledCInfo.replace("\n", "<br>\\\n");
+  String partitionInfo = UtilityFunctions::partitionInfo();
+  partitionInfo.replace("\n", "<br>\\\n");
+  String cloudInfo = UtilityFunctions::getProjectrorValue();
+  cloudInfo.replace("\n", "<br>\\\n");
+  String preBootLog = UtilityFunctions::getPreBootWebLog();
+  preBootLog.replace("\n", "<br>\\\n");
+
   String webLog = UtilityFunctions::webLog();
   webLog.replace("\n", "<br>\\\n");
 
-  globalJS = globalJS + "const statusTxt =  \"" + chipInfo + "<br>\\\n" +
+  globalJS = globalJS + "const statusTxt =  \"<strong>" + UtilityFunctions::getBuildTimeVersion() + "</strong><br>\\\n" +
+             chipInfo + "<br>\\\n" +
              ((UtilityFunctions::loadAIoTDeviceID().length() != NVRAM_PERFS_AIoT_DEVICE_ID_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE ID NOT CORRECT set in setting page</span><br>\\\n" : "") +
              ((UtilityFunctions::loadAIoTDeviceSECRET().length() != NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE SECRET NOT CORRECT set in setting page</span><br>\\\n" : "") +
-             "<br>\\\n" + taskInfo + "<br>\\\n" +
+             "<br>\\\n" +
+             "<strong>Free RTOS TASKS:</strong> <br> \\\n" +
+             taskInfo + "<br>\\\n" +
+             "<strong>LEDC Channel Status:</strong> <br> \\\n" +
              ledCInfo + "<br>\\\n" +
-             "Console log: <br> \\\n" +
-             webLog + "\";\n";
+             "<strong>Partition Status:</strong> <br> \\\n" +
+             partitionInfo + "<br>\\\n" +
+             "<strong>Alexa Cloud variable:</strong> <br> \\\n" +
+             cloudInfo + "<br>\\\n" +
+             "<strong>Console log: </strong><br> \\\n" +
+             webLog + "<br>\\\n" +
+             "<br>\\\n<br>\\\n<strong>LAST BOOT CONSOLE log:</strong> <br> \\\n" +
+             preBootLog + "<br>\\\n" +
+             "\";\n";
 }
 
 // Public begin method to start the web interface
@@ -234,7 +254,7 @@ void RC_WebInterface::handleRemotePress()
     {
 
       // add to the ring buffer
-      rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::On_OFF_Btn;
+      rcCmd.cmds.cmd = ServerDecoder::RC_Cmd_Action::Off_On_Btn;
       enQueueCmd(rcCmd);
       enQueuedCmd = true;
     }
@@ -460,12 +480,25 @@ void RC_WebInterface::setupRoutes()
       _server.send(404, "text/plain", "File not found");
     } });
 
-  // Admin settings page (requires auth)
+  // Admin status page (requires auth)
   _server.on("/status.htm", HTTP_GET, [this]()
              {
     if (!checkAdminAuth())
       return;
     File file = FFat.open("/status.htm", "r");
+    if (file) {
+      _server.streamFile(file, "text/html");
+      file.close();
+    } else {
+      _server.send(404, "text/plain", "File not found");
+    } });
+
+  // Admin ota page (requires auth)
+  _server.on("/ota.htm", HTTP_GET, [this]()
+             {
+    if (!checkAdminAuth())
+      return;
+    File file = FFat.open("/ota.htm", "r");
     if (file) {
       _server.streamFile(file, "text/html");
       file.close();
@@ -564,7 +597,7 @@ void RC_WebInterface::setupRoutes()
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "Hostname updated! Restarting...");
       UtilityFunctions::delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "Hostname FAILED to update:" + sucess);
     } });
@@ -580,7 +613,7 @@ void RC_WebInterface::setupRoutes()
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "BlueTooth name updated! Restarting...");
       UtilityFunctions::delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "BlueTooth FAILED to update:" + sucess);
     } });
@@ -601,7 +634,7 @@ void RC_WebInterface::setupRoutes()
       if (sucess.isEmpty()) {
         _server.send(200, "text/plain", "Servo IO PIN Updated...");
    delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
       } else {
         _server.send(200, "text/plain",
                      "Servo IO PIN FAILED to update:" + sucess);
@@ -713,7 +746,7 @@ void RC_WebInterface::setupRoutes()
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "DEVICE ID updated! Restarting...");
       delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "DEVICE ID update FAILED ..." + sucess);
     } });
@@ -731,7 +764,7 @@ void RC_WebInterface::setupRoutes()
       _server.send(200, "text/plain",
                    "DEVICE SECRET ID updated! Restarting...");
       delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain",
                    "DEVICE SECRET ID update FAILED ..." + sucess);
@@ -753,7 +786,7 @@ void RC_WebInterface::setupRoutes()
       if (sucess.isEmpty()) {
         _server.send(200, "text/plain", "Relay IO PIN Updated...");
    delay(WEB_ESP_RESTART_DELAY);
-      ESP.restart();
+      UtilityFunctions::ESP32Restart();
       } else {
         _server.send(200, "text/plain",
                      "Relay IO PIN FAILED to update:" + sucess);
@@ -823,11 +856,97 @@ void RC_WebInterface::setupRoutes()
 
               _server.send(200, "plain/txt", "{ \"success\": true }");
                 delay(WEB_ESP_RESTART_DELAY);
-                ESP.restart();
+                UtilityFunctions::ESP32Restart();
               }else
                {
                   _server.send(200, "plain/txt",
                  "{ \"success\": false, \"message\": \"Unable to Enable Servo -" +
                      sucess + "\" }");
                } });
+
+  /*handling uploading firmware file */
+  _server.on("/appOtaUpdate", HTTP_POST, [this]()
+             {
+              // completion handler after the upload finishes
+              if (!checkAdminAuth()) return;
+              _server.sendHeader("Connection", "close");
+              if (Update.hasError()) {
+                UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
+                _server.send(200, "plain/txt", "{ \"success\": false, \"message\": \"OTA Firmware Error-" + String(Update.errorString()) + "\" }");
+              } else {
+                UtilityFunctions::debugLog("OTA Firmware Update Success");
+                _server.send(200, "plain/txt", "{ \"success\": true }");
+              delay(WEB_ESP_RESTART_DELAY);
+              UtilityFunctions::ESP32Restart();} },
+             // this is called during uploading the file, it can be called multiple times as the file is uploaded in chunks
+             [this]()
+             {
+              if (!checkAdminAuth()) return; // no unauth access to upload
+              HTTPUpload& upload = _server.upload();
+              if (upload.status == UPLOAD_FILE_START) {
+                UtilityFunctions::debugLogf("OTA Firmware Update: %s\n", upload.filename.c_str());
+                if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_FLASH)) {  //start with max available size U_FLASH = app, U_FATFS = first fat partition
+                   UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+              } else if (upload.status == UPLOAD_FILE_WRITE) {
+                /* flashing firmware to ESP*/
+                if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+                   UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+              } else if (upload.status == UPLOAD_FILE_END) {
+                if (Update.end(true)) {  //true to set the size to the current progress
+                  UtilityFunctions::debugLogf("OTA Firmware Update Success: %u\nRebooting...\n", upload.totalSize);
+                } else {
+                  UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+              } });
+
+  /*handling uploading FS firmware file */
+  _server.on("/fsOtaUpdate", HTTP_POST, [this]()
+             {
+              // completion handler after the upload finishes
+              if (!checkAdminAuth()) return;
+              _server.sendHeader("Connection", "close");
+              if (Update.hasError()) {
+                UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
+                _server.send(200, "plain/txt", "{ \"success\": false, \"message\": \"OTA FS firmware Error-" + String(Update.errorString()) + "\" }");
+              } else {
+                UtilityFunctions::debugLog("OTA FS firmware Update Success");
+                _server.send(200, "plain/txt", "{ \"success\": true }");
+              delay(WEB_ESP_RESTART_DELAY);
+              UtilityFunctions::ESP32Restart(); } },
+             // this is called during uploading the file, it can be called multiple times as the file is uploaded in chunks
+             [this]()
+             {
+              if (!checkAdminAuth()) return; // no unauth access to upload
+              HTTPUpload& upload = _server.upload();
+              if (upload.status == UPLOAD_FILE_START) {
+                UtilityFunctions::debugLogf("FS firmware Update: %s\n", upload.filename.c_str());
+                if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_FATFS)) {  //start with max available size U_FLASH = app, U_FATFS = first fat partition
+                   UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+                // add the wear buffer of 0x1000 (4096) of zeros or this gives an error !BUG! in Update FAT image
+                byte* data_buffer = (byte*)malloc(1);
+                if (data_buffer == NULL) {
+                  UtilityFunctions::debugLogf("OTA FS firmware Update FAILED to allocate buffer for 4096 bytes\n");
+                  return; // Stop if allocation fails
+                }else {
+                  for (int i=0;i<CONFIG_WL_SECTOR_SIZE;i++){
+                  Update.write(data_buffer, 1);
+                  }
+                  free(data_buffer);
+                  data_buffer = NULL;
+                }
+              } else if (upload.status == UPLOAD_FILE_WRITE) {
+                /* flashing firmware to ESP*/
+                if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+                   UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+              } else if (upload.status == UPLOAD_FILE_END) {
+                if (Update.end(true)) {  //true to set the size to the current progress
+                  UtilityFunctions::debugLogf("OTA FS firmware Update Success: %u\nRebooting...\n", upload.totalSize);
+                } else {
+                  UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
+                }
+              } });
 }

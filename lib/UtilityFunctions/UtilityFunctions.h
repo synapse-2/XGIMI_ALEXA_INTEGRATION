@@ -42,7 +42,12 @@ namespace UtilityFunctions
   String chipInfo();
   String taskInfo();
   String ledCInfo();
+  String partitionInfo();
   String webLog();
+
+
+  //get RTC time 
+  String getDateTimeUTC();
 
   // Load the mDNS hostname from NVRAM
   String loadLocalHostname();
@@ -142,5 +147,16 @@ namespace UtilityFunctions
 
   // Save relay action hold from NVRAM
   String saveRelayEnableFlag(bool flag);
+
+  String getBuildTimeVersion();
+
+  // get the current cloud projector vallue
+  String getProjectrorValue();
+
+  // save the old log in nvram and restart
+  void ESP32Restart();
+
+  // get the log from last boot
+  String getPreBootWebLog();
 
 }

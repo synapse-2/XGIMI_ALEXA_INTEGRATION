@@ -609,44 +609,15 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     UtilityFunctions::debugLog("BLE NOT conneccted ignoring button push");
   }
 }
-void BlueXGIMI_RC::doCMD_ON_OFF()
+
+void BlueXGIMI_RC::doCMD_ON()
 {
 
   if (BLE_server->getConnectedCount() > 0)
   {
-    // ok we are connedted to the projector so the projector must me ON we send the off command
-    // off button pressed
-    // Bluetooth Attribute Protocol
-    // Opcode: Handle Value Notification (0x1b)
-    //     0... .... = Authentication Signature: False
-    //     .0.. .... = Command: False
-    //     ..01 1011 = Method: Handle Value Notification (0x1b)
-    // Handle: 0x002f (Human Interface Device: Report)
-    //     [Service UUID: Human Interface Device (0x1812)]
-    //     [UUID: Report (0x2a4d)] ie repor1
-    // Value: 0000660000000000
-    //     [Expert Info (Note/Undecoded): Undecoded]
-
-    keyboardInput_01->setValue(HID_REP01_OFF_CMD, sizeof(HID_REP01_OFF_CMD));
-
-    // tell value has changed
-    if (!keyboardInput_01->notify())
-    {
-      UtilityFunctions::debugLog("On off button Notify failed");
-    }
-    UtilityFunctions::delay(HID_KEY_DELAY);
-    keyboardInput_01->setValue(HID_REP01_NULL_CMD, sizeof(HID_REP01_NULL_CMD));
-    // tell value has changed
-    if (!keyboardInput_01->notify())
-    {
-      UtilityFunctions::debugLog("On off button Notify failed");
-    }
-
-    // now send ok button
-    ServerDecoder::Remote_Cmd command;
-    command.cmds.cmd = ServerDecoder::RC_Cmd_Action::Ok_Btn;
-    UtilityFunctions::delay(HID_KEY_DELAY);
-    doButtons(command);
+    // ok we are connedted to the projector so the projector must me ON
+    // So ignore ass we are already on
+    UtilityFunctions::debugLog("ON cmd received, but already connected to projector via BLE ignoring the command !!");
   }
   else
   {
@@ -730,7 +701,7 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
 
 #ifdef XGIMI_USE_EXT_ADV
 
-      //UtilityFunctions::debugLogf("On button type 3 adv data %s\n", advertisingOnButtonDataType3.toString().c_str());
+      // UtilityFunctions::debugLogf("On button type 3 adv data %s\n", advertisingOnButtonDataType3.toString().c_str());
       advertising->setInstanceData(HID_ADV_ONDATA3_ID, advertisingOnButtonDataType3);
       advertising->setScanResponseData(HID_ADV_ONDATA3_ID, advertisingOnButtonDataScanDataType3);
       /** Set the advertisement as connectable */
@@ -774,12 +745,59 @@ void BlueXGIMI_RC::doCMD_ON_OFF()
   }
 }
 
+void BlueXGIMI_RC::doCMD_OFF()
+{
+
+  if (BLE_server->getConnectedCount() > 0)
+  {
+    // ok we are connedted to the projector so the projector must me ON we send the off command
+    // off button pressed
+    // Bluetooth Attribute Protocol
+    // Opcode: Handle Value Notification (0x1b)
+    //     0... .... = Authentication Signature: False
+    //     .0.. .... = Command: False
+    //     ..01 1011 = Method: Handle Value Notification (0x1b)
+    // Handle: 0x002f (Human Interface Device: Report)
+    //     [Service UUID: Human Interface Device (0x1812)]
+    //     [UUID: Report (0x2a4d)] ie repor1
+    // Value: 0000660000000000
+    //     [Expert Info (Note/Undecoded): Undecoded]
+
+    keyboardInput_01->setValue(HID_REP01_OFF_CMD, sizeof(HID_REP01_OFF_CMD));
+
+    // tell value has changed
+    if (!keyboardInput_01->notify())
+    {
+      UtilityFunctions::debugLog("On off button Notify failed");
+    }
+    UtilityFunctions::delay(HID_KEY_DELAY);
+    keyboardInput_01->setValue(HID_REP01_NULL_CMD, sizeof(HID_REP01_NULL_CMD));
+    // tell value has changed
+    if (!keyboardInput_01->notify())
+    {
+      UtilityFunctions::debugLog("On off button Notify failed");
+    }
+
+    // now send ok button
+    ServerDecoder::Remote_Cmd command;
+    command.cmds.cmd = ServerDecoder::RC_Cmd_Action::Ok_Btn;
+    UtilityFunctions::delay(HID_KEY_DELAY);
+    doButtons(command);
+  }
+  else
+  {
+    // we are not connected to the projector but we got off command so we ignore 
+    UtilityFunctions::debugLog("OFF cmd received, but not connected to projector via BLE ignoring the command !!");
+  }
+}
+
 bool BlueXGIMI_RC::canHandleButtonPress(ServerDecoder::Remote_Cmd command)
 {
 
   switch (command.cmds.cmd)
   {
-  case ServerDecoder::RC_Cmd_Action::On_OFF_Btn:
+  case ServerDecoder::RC_Cmd_Action::On_Btn:
+  case ServerDecoder::RC_Cmd_Action::Off_Btn:
   case ServerDecoder::RC_Cmd_Action::Channel_Dn_Btn:
   case ServerDecoder::RC_Cmd_Action::Channel_Up_Btn:
   case ServerDecoder::RC_Cmd_Action::Down_Btn:
@@ -815,8 +833,13 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
   bool cmdExecuted = false;
   switch (command.cmds.cmd)
   {
-  case ServerDecoder::RC_Cmd_Action::On_OFF_Btn:
-    doCMD_ON_OFF();
+  case ServerDecoder::RC_Cmd_Action::On_Btn:
+    doCMD_ON();
+    cmdExecuted = true;
+    break;
+
+  case ServerDecoder::RC_Cmd_Action::Off_Btn:
+    doCMD_OFF();
     cmdExecuted = true;
     break;
 

@@ -56,7 +56,7 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
             // UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
             bool cmdhandled = false;
-            if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_OFF_Btn)
+            if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_Btn)
             {
                 int actionAngle = UtilityFunctions::loadServoActionAngle();
                 int restAngle = UtilityFunctions::loadServoRestAngle();
@@ -88,6 +88,14 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
                     UtilityFunctions::delay(delay);
                 }
                 iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+                UtilityFunctions::debugLogf("Servo at rest angle\n");
+            }
+            else if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn)
+            {
+                int restAngle = UtilityFunctions::loadServoRestAngle();
+
+                iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+
                 UtilityFunctions::debugLogf("Servo at rest angle\n");
             }
             else

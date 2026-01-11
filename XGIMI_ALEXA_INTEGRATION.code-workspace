@@ -76,7 +76,8 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"variant": "cpp",
-			"ledc_ll.h": "c"
+			"ledc_ll.h": "c",
+			"ranges": "cpp"
 		}
 	}
 }

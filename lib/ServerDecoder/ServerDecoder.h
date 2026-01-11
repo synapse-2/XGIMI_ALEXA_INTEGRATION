@@ -14,6 +14,8 @@ namespace ServerDecoder
         StartOver = 6,
         Stop = 7,
 
+        Off_On_Btn = 230,
+        Off_Btn = 231,
         Raw_8Byte = 232,
         Raw_2Byte = 233,
         Menu_Btn = 234,
@@ -32,7 +34,7 @@ namespace ServerDecoder
         Options_Btn = 247,
         Pairing_On = 248,
         Pairing_Off = 249,
-        On_OFF_Btn = 250,
+        On_Btn = 250,
         Volume = 251,
         Channel = 252,
         Mute = 253,

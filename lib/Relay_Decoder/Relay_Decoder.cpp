@@ -32,7 +32,7 @@ void Relay_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
             // UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
             bool cmdhandled = false;
-            if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_OFF_Btn)
+            if ((cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_Btn) || (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn))
             {
                 int ioPIN = UtilityFunctions::loadRelayIOPin();
 
@@ -49,7 +49,9 @@ void Relay_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
                 UtilityFunctions::debugLogf("By Relay decoder Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
             }
         }
-    }else{
+    }
+    else
+    {
         UtilityFunctions::debugLogf("Relay NOT enabled\n");
     }
 }

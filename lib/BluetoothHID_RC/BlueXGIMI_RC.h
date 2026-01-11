@@ -402,7 +402,8 @@ public:
     bool canHandleButtonPress(ServerDecoder::Remote_Cmd command) override;
     void initStandardAdvData() override;
     void startServices();
-    void doCMD_ON_OFF();
+    void doCMD_OFF();
+    void doCMD_ON();
     void doButtons(ServerDecoder::Remote_Cmd command);
     virtual ~BlueXGIMI_RC();
 
