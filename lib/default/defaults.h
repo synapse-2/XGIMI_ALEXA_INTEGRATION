@@ -31,7 +31,7 @@
  */
 
 #define WIFIDEBUG WM_DEBUG_VERBOSE
-#define WIFI_DISCONNET_TIMEOUT_SEC 60 // in seconds
+#define WIFI_DISCONNET_TIMEOUT_SEC 60 // in seconds time duration when disconneccted from wifi will cause the system to reboot.
 
 #define WM_MDNS 1 // enable mdns for the name resolution
 
