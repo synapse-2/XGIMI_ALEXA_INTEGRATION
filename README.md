@@ -4,14 +4,16 @@ XGIMI Projector with Alexa integration
 
 Objective of the project is to use esp32s3 arduino to enable voice commands from Alexa for the XGIMI projector. 
 
+The XGIMI projector has no Alexa or Google support built in. 
+
 Project uses Wifi and Arduino cloud IoT to connect to Alexa using the Arduino Alexa skill (you can can also connect to google)
 Once the Alexa connection is made the project has a full re-implemenation of the Xgimi bluetooth remote (model: https://us.xgimi.com/products/xgimi-remote-controller-horizon-serieshttps://us.xgimi.com/products/xgimi-remote-controller-horizon-series)
 You can pair the ESP32S3 as a remote on the Xgimi projector, alternatively if you want to to be just like the factory remote change the bluetooth device name to "XGIMI RC" in the settting web UI (and it will auto pair with the Xgimi projector)
 Once paired you can use Alexa voice command to turn on off, volume change etc.
-There is an option to add a servo and have it move on on-off command if you want to have it push another button of some sort
+There is an option to add a servo(like: https://www.amazon.com/Servo-Servos-Helicopter-Airplane-Controls/dp/B0BJQ2QTHG/) and/or a 5v relay (like: https://www.amazon.com/AEDIKO-Channel-Optocoupler-Isolation-Support/dp/B095YD3732/) and have it move on on-off command if you want to have it push another button of some sort
 There is also built in remote web gui to send commands from iphone or another web browser etc.
 
-The code was tested with Xgimi horizon-ultra
+The code was tested with Xgimi horizon-ultra (https://us.xgimi.com/pages/horizon-ultra) and has codes for other xgimi models ("XGIMI Elfin", "XGIMI Z6X", "XGIMI Horizon Pro 4K","XGIMI H3","XGIMI H3S-a","XGIMI H3S-b","XGIMI H5","XGIMI H1S","XGIMI Z4Air", "XGIMI Horizon")
 
 There you have it.  Alexa integration via cloning of the Bluetooth factory remote. All on the the ESP32S3 single chip supporintg Wifi and BLE5.0
 
@@ -21,16 +23,16 @@ You need
 01. Obtain Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
 02. Create an Aurdino Cloud account at: https://app.arduino.cc/
 03. Create a device (name does not matter) in arduino cloud using the "+device button at : https://app.arduino.cc/devices
-    a. Select "comptible device" option
-    b. Select "ESP32" option
-    c. Select "Arduino Nano ESP32" from the drop down
-    d. hit continue
-    e. give a name
-    f. NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
-    g. SECRET KEY is only displpayed once so you will have to re do this step if you forget it
+    01.  Select "comptible device" option
+    02.  Select "ESP32" option
+    03.  Select "Arduino Nano ESP32" from the drop down
+    04.  Hit continue
+    05.  Give a name
+    06.  NOTE the DEVICE ID and SECRET KEY. This needs to  be loaded in the settings. 
+    07.  SECRET KEY is only displpayed once so you will have to re do this step if you forget it
 
 04. Create a thing (name does not matter) in the arduino cloud using the "+thing" button at : https://app.arduino.cc/things 
-05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingProperrtites.h and related reefrences in main.cpp 
+05. Add a variable to the thing called "projector" (name does matter) if you want it something different change it in the thingPropertites.h and related reefrences in main.cpp 
 06. The "projector" variable should be of 
     a. type "Television"
     b. variable permission : read & write
@@ -43,12 +45,12 @@ You need
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
-14. You can get the ESP32's ip from the serial port else open the browser for host name "Xgimi-alexa.local" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
+14. You can get the ESP32's ip from the serial port else open the browser for host name "Xgimi-alexa" (mDNS is enabled by defaut so this should work) if you have conencted to the the ESP32's wifi network
 15. Scan to find your wifi
 16. Only b and n networks at 2.5GHz ESP32S3 supports 
 17. Identify the network, provide the passskey and hit save
 18. The device should reboot and connect. The device will go from red led to a long Green blink. The long green series of blinks means it has conencted to the wifi
-19. Open the browser to "Xgimi-alexa.local" you should see the Remote HTML UI
+19. Open the browser to "Xgimi-alexa" you should see the Remote HTML UI
 20. Go to Settings page. The default user and password both are "admin"
 21. In the Settings update the device ID and Secret ID for ATOT things you created
 22. Each time you update the device will restart 
@@ -71,6 +73,7 @@ You need
 02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
 03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
 04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
+05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
 05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
@@ -95,7 +98,7 @@ The code used hybrid build it builds ## espidf and ## arduino libs using the fol
 
 The code also can have clandg enabled: off by default
 
-you need to run the command "pio run --target compiledb" to generate the inclulde files path for the clangd to work
+you need to run the command "pio run --target compiledb" to generate the include files path for the clangd to work
 clangd extention to be loaded from: https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
 
 01. You have to create a .clangd file in the root of your project folder with the lines, change the abslute path "d:\" to what ever is in your env 
