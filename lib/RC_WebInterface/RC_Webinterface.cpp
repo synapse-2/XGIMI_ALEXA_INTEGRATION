@@ -140,7 +140,7 @@ void RC_WebInterface::refreshGlobalJS()
   ledCInfo.replace("\n", "<br>\\\n");
   String partitionInfo = UtilityFunctions::partitionInfo();
   partitionInfo.replace("\n", "<br>\\\n");
-  String cloudInfo = UtilityFunctions::getProjectrorValue();
+  String cloudInfo = UtilityFunctions::getProjecterValue();
   cloudInfo.replace("\n", "<br>\\\n");
   String preBootLog = UtilityFunctions::getPreBootWebLog();
   preBootLog.replace("\n", "<br>\\\n");
@@ -153,17 +153,17 @@ void RC_WebInterface::refreshGlobalJS()
              ((UtilityFunctions::loadAIoTDeviceID().length() != NVRAM_PERFS_AIoT_DEVICE_ID_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE ID NOT CORRECT set in setting page</span><br>\\\n" : "") +
              ((UtilityFunctions::loadAIoTDeviceSECRET().length() != NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE SECRET NOT CORRECT set in setting page</span><br>\\\n" : "") +
              "<br>\\\n" +
-             "<strong>Free RTOS TASKS:</strong> <br> \\\n" +
+             "<strong>Free RTOS TASKS:</strong><br>\\\n" +
              taskInfo + "<br>\\\n" +
-             "<strong>LEDC Channel Status:</strong> <br> \\\n" +
+             "<strong>LEDC Channel Status:</strong><br>\\\n" +
              ledCInfo + "<br>\\\n" +
-             "<strong>Partition Status:</strong> <br> \\\n" +
+             "<strong>Partition Status:</strong><br>\\\n" +
              partitionInfo + "<br>\\\n" +
-             "<strong>Alexa Cloud variable:</strong> <br> \\\n" +
+             "<strong>Alexa Cloud variable:</strong><br>\\\n" +
              cloudInfo + "<br>\\\n" +
-             "<strong>Console log: </strong><br> \\\n" +
+             "<strong>Console log:</strong><br>\\\n" +
              webLog + "<br>\\\n" +
-             "<br>\\\n<br>\\\n<strong>LAST BOOT CONSOLE log:</strong> <br> \\\n" +
+             "<br>\\\n<br>\\\n<strong>LAST BOOT CONSOLE log(not saved for hard reset i.e via reset button or poewer cycle, olny saved when using sofware reset in code):</strong><br>\\\n" +
              preBootLog + "<br>\\\n" +
              "\";\n";
 }

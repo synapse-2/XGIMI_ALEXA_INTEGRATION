@@ -273,7 +273,7 @@ void loop()
       {
         // we have been disconnected for some time find how long
         uint64_t time_elapsed = (esp_timer_get_time() - Wifi_Disconnect_Start_Time);
-        if (time_elapsed > (WIFI_DISCONNET_TIMEOUT_SEC * 10000000))
+        if (time_elapsed > (WIFI_DISCONNET_TIMEOUT_SEC * 1000000))
         {
           // greater than s secs (s * 1000 * 1000)
           UtilityFunctions::debugLogf("Wifi is NOT CONNECTED for atleast %i secs, REBOOTING time elapsed:%llu and start time:%llu\n", WIFI_DISCONNET_TIMEOUT_SEC, time_elapsed, Wifi_Disconnect_Start_Time);

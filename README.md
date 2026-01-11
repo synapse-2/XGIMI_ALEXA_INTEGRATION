@@ -64,8 +64,8 @@ You need
 03. Red blink light means we have not been able to connect to Arduino IoT clout - need to make sure DeviceID and SecretId are set in the settings page
 04. Blue blink menas we have Bluetooth stack working ok
 05. Solid White means we are executing a remote command, be it from alexa or web 
-06. Pressing "boot" button will restart the ESP32S3
-07. Pressing reset three times within three secs will erase all settigns and restart 
+06. Pressing "reset" button will restart the ESP32S3
+07. Pressing boot three times within three secs will erase all settigns and restart 
 
 ## Other Goodies in the project
 
@@ -73,8 +73,8 @@ You need
 02. Firmware for the Nordic nRF52840 dongle to do Bluetooth sniffing or Bluetooth connection in the folder \Archive\MDBT50Q-CX Nordic nRF52840 Dongle
 03. 3D printable files for the ESP32S3 case, with and without servo holder, relay case, editable files in FreeCAD3D format in \Archive\3d Print case files
 04. ESP32S3 dev board with two USB-C socket's pinouts, wiring schemaic etc. in \Archive\ESP32-S3-N16R8 dev board
-05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
-05. Backup if the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
+05. Backup of the FastLED and tzapu WiFIManager libs as well as the Menuconfig files settings that work in \Archive\Old-Config-files
+
 
 ## Project built uisng Visual Stuido Code and PIOArduino extension.
 
@@ -184,7 +184,7 @@ Bluetooth COD spec - https://www.ampedrftech.com/guides/cod_definition.pdf
 # NOTE: to get the Managed components from espressif to work
 01. Add the component you want in the idf_component.yml in the ROOT folder of the project
 02. Run menuconfig command that will PULL the component in the project from the web, BUILD commnd does not
-03. add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location on your hard drive
+03. Add the command -I D:/Documents/XGIMI_ALEXA_INTEGRATION/managed_components/espressif__mdns/include/	 to the platformio.ini file updating the location based on your hard drive
 04. Then compile and it should work
 05. If you get error Directory specified in EXTRA_COMPONENT_DIRS doesn't exist: Then create the direcorty in "project root/managed_components" and run the menuconfig command first to get the system to load the managed componet specifed in the idf_component.yml in the main 'src" directory. or comment the conmmands 
 FILE(GLOB_RECURSE app_sources2 ${CMAKE_SOURCE_DIR}/../managed_componets/*.h)

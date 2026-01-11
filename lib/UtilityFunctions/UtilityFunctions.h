@@ -151,7 +151,7 @@ namespace UtilityFunctions
   String getBuildTimeVersion();
 
   // get the current cloud projector vallue
-  String getProjectrorValue();
+  String getProjecterValue();
 
   // save the old log in nvram and restart
   void ESP32Restart();

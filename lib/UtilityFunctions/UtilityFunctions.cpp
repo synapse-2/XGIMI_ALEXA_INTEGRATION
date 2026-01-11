@@ -1525,7 +1525,7 @@ namespace UtilityFunctions
   }
 
   // get the current cloud projector vallue
-  String getProjectrorValue()
+  String getProjecterValue()
   {
 
     std::string s_input = std::string((magic_enum::enum_name((InputValue)projector.getInputValue())));
