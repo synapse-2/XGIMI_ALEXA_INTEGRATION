@@ -1,3 +1,6 @@
 [submodule "lib/esp-nimble-cpp"]
 	path = lib/esp-nimble-cpp
 	url = https://github.com/synapse-2/esp-nimble-cpp.git
+[submodule "lib/Time"]
+	path = lib/Time
+	url = https://github.com/synapse-2/Time.git
