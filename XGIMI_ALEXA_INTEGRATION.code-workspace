@@ -78,6 +78,15 @@
 			"variant": "cpp",
 			"ledc_ll.h": "c",
 			"ranges": "cpp"
-		}
+		},
+		"cSpell.words": [
+			"Alexa",
+			"UART",
+			"XGIMI"
+		],
+		"cSpell.ignoreWords": [
+			"Alexa",
+			"XGIMI"
+		]
 	}
 }

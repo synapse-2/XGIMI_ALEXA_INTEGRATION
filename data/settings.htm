@@ -242,6 +242,18 @@
             </form>
         </div>
 
+         <!-- Sync AIoT var with the device BLE connect Form -->
+        <div class="form-section">
+            <h3>Enable AIoT variable to be synced with BLE paired status of device (must pair projector else will not work right)</h3>
+            <form id="syncAIoTEnableForm" action="/update-syncAIoT-enabled" method="post">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="syncAIoTCheckbox" name="SyncAIoT_enabled" value="true"
+                        onchange="submitForm(this.form);">
+                    <label for="syncAIoTCheckbox" style="display: inline; margin: 0;">Enable AIoT variable to be synced with BLE paired status of device</label>
+                </div>
+            </form>
+        </div>
+
         <div class="form-section">
             <h3>Relay Control Settings</h3>
 
@@ -249,7 +261,7 @@
             <form id="relayEnableForm" action="/update-relay-enabled" method="post">
                 <div class="checkbox-container">
                     <input type="checkbox" id="relayCheckbox" name="relay_enabled" value="true"
-                        onchange="updateRelayFields(); submitServoEnableFetch(this.form);">
+                        onchange="updateRelayFields(); submitForm(this.form);">
                     <label for="relayCheckbox" style="display: inline; margin: 0;">Enable Relay Mechanism</label>
                 </div>
             </form>
@@ -281,7 +293,7 @@
             <form id="servoEnableForm" action="/update-servo-enabled" method="post">
                 <div class="checkbox-container">
                     <input type="checkbox" id="servoCheckbox" name="servo_enabled" value="true"
-                        onchange="updateServoFields(); submitServoEnableFetch(this.form);">
+                        onchange="updateServoFields(); submitForm(this.form);">
                     <label for="servoCheckbox" style="display: inline; margin: 0;">Enable Servo Mechanism</label>
                 </div>
             </form>
@@ -408,6 +420,10 @@
          const relayCheckbox = document.getElementById("relayCheckbox");
         relayCheckbox.checked = relayEnableFlag;
 
+        const syncAIoTCheckbox = document.getElementById("syncAIoTCheckbox");
+        syncAIoTCheckbox.checked = syncAITBLEDevEnableFlag;
+
+
         // Function to toggle the disabled state of related inputs
         function updateRelayFields() {
 
@@ -449,7 +465,7 @@
         };
 
         // Function to handle the asynchronous submission using Fetch API
-        function submitServoEnableFetch(form) {
+        function submitForm(form) {
             // Create form data from the form element
             const formData = new FormData(form);
             const url = form.action;

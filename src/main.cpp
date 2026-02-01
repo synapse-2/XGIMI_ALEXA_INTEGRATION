@@ -20,6 +20,7 @@
 #include <TimeLib.h>
 #include "esp_timer.h"
 #include "WiFiType.h"
+#include "NimBLEClient.h"
 
 template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
@@ -145,7 +146,7 @@ void setup()
 
     if (!res)
     {
-      UtilityFunctions::debugLogf("Failed to connect to wifi in startup init, and no one connected to AP in sec:%i\n",AP_CONNECT_TIMEOUT);
+      UtilityFunctions::debugLogf("Failed to connect to wifi in startup init, and no one connected to AP in sec:%i\n", AP_CONNECT_TIMEOUT);
       UtilityFunctions::ledBlinkRedLong();
       UtilityFunctions::debugLog("Failed to connect to wifi ssid in start up init: RESTARTING");
       UtilityFunctions::ESP32Restart();
@@ -267,7 +268,7 @@ void loop()
       {
         // this is the first time we are disconnected
         Wifi_Disconnect_Start_Time = esp_timer_get_time(); // set this to current time
-        UtilityFunctions::debugLogf("Wifi is NOT CONNECTED(State =3); current state:%i and current time:%llu\n", WiFi.status(),Wifi_Disconnect_Start_Time);
+        UtilityFunctions::debugLogf("Wifi is NOT CONNECTED(State =3); current state:%i and current time:%llu\n", WiFi.status(), Wifi_Disconnect_Start_Time);
       }
       else
       {
@@ -289,6 +290,43 @@ void loop()
 
     checkResetPressed(); // Check if the reset button has been pressed
     ArduinoCloud.update();
+
+    // check if we need to update the cloud variable based on the BLE device connected
+    if (UtilityFunctions::loadSyncAIoTWithBLEDevice())
+    {
+      if (BLEDevice::getNumBonds() != 0)
+      {
+
+        // ok we have stored device check if connected
+
+        BLEServer *svr = BLEDevice::getServer();
+
+        uint8_t clients = ((svr != NULL) ? svr->getConnectedCount() : 0);
+        if (clients > 0)
+        {
+          // we have a connccted client so projecor is on
+          if (!projector.getSwitch())
+          {
+            projector.setSwitch(true);
+            UtilityFunctions::debugLog("Projector is connected, but AIOT var is false setting to TRUE");
+          }
+        }
+        else
+        {
+          // we donot have a connccted client so projecor is off
+          if (projector.getSwitch())
+          {
+            projector.setSwitch(false);
+            UtilityFunctions::debugLog("Projector is NOT connected, but AIOT var is true setting to FALSE");
+          }
+        }
+      }
+      else
+      {
+        UtilityFunctions::debugLogf("Asked to sync BLE device connect status with AIoT cloud var, but no BLE devices paired, Stored bonds:{}, Pair a devicce to make this work \n", NimBLEDevice::getNumBonds());
+      }
+    }
+
     if (rc_web != NULL)
     {
       rc_web->handleClient(); // do the web serv tasks

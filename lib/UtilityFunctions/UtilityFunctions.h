@@ -148,10 +148,17 @@ namespace UtilityFunctions
   // Save relay action hold from NVRAM
   String saveRelayEnableFlag(bool flag);
 
+
+  // Load sync AaIOt with BLE device pair flag
+  bool loadSyncAIoTWithBLEDevice();
+
+  // Save sync AaIOt with BLE device pair flag
+  String saveSyncAIoTWithBLEDevice(bool flag);
+
   String getBuildTimeVersion();
 
-  // get the current cloud projector vallue
-  String getProjecterValue();
+  // get the current cloud projector value
+  String getAIoTProjectorVarValue();
 
   // save the old log in nvram and restart
   void ESP32Restart();

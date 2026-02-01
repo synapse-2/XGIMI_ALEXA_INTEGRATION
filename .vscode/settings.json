@@ -75,5 +75,8 @@
     },
     "platformio-ide.autoPreloadEnvTasks": true,
     "platformio-ide.customPATH": "",
-    "extensions.experimental.deferredStartupFinishedActivation": false
+    "extensions.experimental.deferredStartupFinishedActivation": false,
+    "cSpell.words": [
+        "wiresniffer"
+    ]
 }

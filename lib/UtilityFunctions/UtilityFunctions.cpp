@@ -811,13 +811,23 @@ namespace UtilityFunctions
   // Save hostname to NVRAM
   String saveLocalHostname(String newHostname)
   {
+    size_t bytesWritten;
     if (!newHostname.isEmpty() && (newHostname.length() < 32) &&
         (!newHostname.endsWith(".local")))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putString(NVRAM_PERFS_HOSTNAME_LOCAL_PROP, newHostname);
+      bytesWritten = _preferences.putString(NVRAM_PERFS_HOSTNAME_LOCAL_PROP, newHostname);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = "Unkown Error Invalid hostnname, must be less than 32 chars;not "
+                          "empty; and not .local in the end";
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
       return "";
     }
@@ -848,12 +858,23 @@ namespace UtilityFunctions
   // Save BlueTooth Name to NVRAM
   String saveBlueToothName(String newBlueName)
   {
+
+    size_t bytesWritten;
     if (!newBlueName.isEmpty() && (newBlueName.length() < 32))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putString(NVRAM_PERFS_BLUETOOTH_NAME_PROP, newBlueName);
+      bytesWritten = _preferences.putString(NVRAM_PERFS_BLUETOOTH_NAME_PROP, newBlueName);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = "Unkown Error Invalid hostnname, must be less than 32 chars;not "
+                          "empty; and not .local in the end";
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
       return "";
     }
@@ -883,12 +904,23 @@ namespace UtilityFunctions
   // Save  wol packet num  from NVRAM
   String saveWakePacketNum(int newWolNum)
   {
+    size_t bytesWritten;
     if ((newWolNum >= 0) && (newWolNum < projectorWakeList.size()))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putInt(NVRAM_PERFS_WAKE_PACKET_PROP, newWolNum);
+      bytesWritten = _preferences.putInt(NVRAM_PERFS_WAKE_PACKET_PROP, newWolNum);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str =
+            std::format("Unkown Error Number need to be bterween 0 and  less than {} got {}",
+                        projectorWakeList.size(), newWolNum);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("WOl packet num updated and saved to NVRAM.");
       return "";
     }
@@ -982,7 +1014,7 @@ namespace UtilityFunctions
   // Save ServoIO pin num from NVRAM
   String saveServoIOPin(int newPinIO)
   {
-
+    size_t bytesWritten;
     if (loadRelayEnableFlag() && loadServoEnableFlag() && (newPinIO == loadRelayIOPin()))
     {
       std::string str = std::format(
@@ -1001,8 +1033,19 @@ namespace UtilityFunctions
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putInt(NVRAM_PERFS_SERVO_IO_PROP, newPinIO);
+      bytesWritten = _preferences.putInt(NVRAM_PERFS_SERVO_IO_PROP, newPinIO);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error Only use on ESP32S3 ServerIO Pin gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
+            "gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got {}",
+            newPinIO);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("servoIO pin num updated and saved to NVRAM.");
       return "";
     }
@@ -1037,12 +1080,22 @@ namespace UtilityFunctions
   // Save servo PWN MIN Width from NVRAM
   String saveServoPWMMinWidth(uint16_t newMinWidth)
   {
+    size_t bytesWritten;
     if (((newMinWidth >= 0) && (newMinWidth <= 5000)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_PROP, newMinWidth);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_PROP, newMinWidth);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error Must be between 0 and 5000; 500 = 0.5 us got {}", newMinWidth);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("servo Min Width updated and saved to NVRAM.");
       return "";
     }
@@ -1074,12 +1127,23 @@ namespace UtilityFunctions
   // Save servo PWN MIN Width from NVRAM
   String saveServoPWMMaxWidth(uint16_t newMaxWidth)
   {
+    size_t bytesWritten;
     if (((newMaxWidth >= 0) && (newMaxWidth <= 5000)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_PROP, newMaxWidth);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_PROP, newMaxWidth);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+
+        std::string str = std::format(
+            "Unkown Error Must be between 0 and 5000; 2500 = 2.5 us got {}", newMaxWidth);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("servo Max Width updated and saved to NVRAM.");
       return "";
     }
@@ -1110,12 +1174,23 @@ namespace UtilityFunctions
   // Save servo PWN MIN Width from NVRAM
   String saveServoPWMFreq(uint32_t newFreq)
   {
+
+    size_t bytesWritten;
     if (((newFreq >= 50) && (newFreq <= 400)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_FREQ_PROP, newFreq);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_PWM_FREQ_PROP, newFreq);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str =
+            std::format("Unkown Error Must be between 50 and 400; type 50 hz got {}", newFreq);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("Servo Freq updated and saved to NVRAM.");
       return "";
     }
@@ -1146,12 +1221,22 @@ namespace UtilityFunctions
   // Save servo max angle  from NVRAM
   String saveServoMaxAngle(uint16_t newAngle)
   {
+    size_t bytesWritten;
     if (((newAngle >= 0) && (newAngle <= 200)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_MAX_ANGLE_PROP, newAngle);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_MAX_ANGLE_PROP, newAngle);
       _preferences.end();
+
+      if (bytesWritten = 0)
+      {
+        std::string str =
+            std::format("Unkown Error Max angle must be between 0 and 200; got {}", newAngle);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("Servo max angle updated and saved to NVRAM.");
       return "";
     }
@@ -1182,12 +1267,22 @@ namespace UtilityFunctions
   // Save servo action angle from NVRAM
   String saveServoActionAngle(uint16_t newAngle)
   {
+    size_t bytesWritten;
     if (((newAngle >= 0) && (newAngle <= loadServoMaxAngle())))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_ANGLE_PROP, newAngle);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_ANGLE_PROP, newAngle);
       _preferences.end();
+      if (bytesWritten == 0)
+      {
+        std::string str =
+            std::format("Unkown Error Action angle must be between 0 and {}; got {}",
+                        loadServoMaxAngle(), newAngle);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog(
           "Servo action angle updated and saved to NVRAM.");
       return "";
@@ -1220,12 +1315,22 @@ namespace UtilityFunctions
   // Save servo rest angle from NVRAM
   String saveServoRestAngle(uint16_t newAngle)
   {
+    size_t bytesWritten;
     if (((newAngle >= 0) && (newAngle <= loadServoMaxAngle())))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_REST_ANGLE_PROP, newAngle);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_REST_ANGLE_PROP, newAngle);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format("Unkown Error Rest angle must be between 0 and {}; got {}",
+                                      loadServoMaxAngle(), newAngle);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("Servo rest angle updated and saved to NVRAM.");
       return "";
     }
@@ -1257,12 +1362,23 @@ namespace UtilityFunctions
   // Save servo action hold from NVRAM
   String saveServoActionHold(uint16_t newHold)
   {
+    size_t bytesWritten;
     if (((newHold >= 1) && (newHold <= NVRAM_PERFS_SERVO_ACTION_HOLD_MAX)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_HOLD_PROP, newHold);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_SERVO_ACTION_HOLD_PROP, newHold);
       _preferences.end();
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error Servo Action HOLD must be between 1 and " STRINGIFY(NVRAM_PERFS_SERVO_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
+            newHold);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
+
       UtilityFunctions::debugLog("Servo action HOLD updated and saved to NVRAM.");
       return "";
     }
@@ -1294,12 +1410,22 @@ namespace UtilityFunctions
   // Save AiotDevice id Name from NVRAM
   String saveAIoTDeviceID(String newDeviceID)
   {
+    size_t bytesWritten;
     if (!newDeviceID.isEmpty() && (newDeviceID.length() == NVRAM_PERFS_AIoT_DEVICE_ID_LEN))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putString(NVRAM_PERFS_AIoT_DEVICE_ID_PROP, newDeviceID);
+      bytesWritten = _preferences.putString(NVRAM_PERFS_AIoT_DEVICE_ID_PROP, newDeviceID);
       _preferences.end();
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error Device AIoT ID, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_ID_LEN) " chars;not empty got length {}",
+            newDeviceID.length());
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog(" Device AIoT ID updated and saved to NVRAM.");
       return "";
     }
@@ -1307,7 +1433,7 @@ namespace UtilityFunctions
     {
 
       std::string str = std::format(
-          "Invalid Device AIoT ID, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_ID_LEN) " chars;not empty got length:{}",
+          "Invalid Device AIoT ID, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_ID_LEN) " chars;not empty got length {}",
           newDeviceID.length());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1333,12 +1459,22 @@ namespace UtilityFunctions
   // Save AiotDevice id Name from NVRAM
   String saveAIoTDeviceSECRET(String newSecret)
   {
+    size_t bytesWritten;
     if (!newSecret.isEmpty() && (newSecret.length() == NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putString(NVRAM_PERFS_AIoT_DEVICE_SECRET_PROP, newSecret);
+      bytesWritten = _preferences.putString(NVRAM_PERFS_AIoT_DEVICE_SECRET_PROP, newSecret);
       _preferences.end();
+      if (bytesWritten == 0)
+      {
+
+        std::string str = std::format("Unkown Error  Device AIoT SECRET, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) "chars;not empty got length {}",
+                                      newSecret.length());
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog(
           " Device AIoT SECRET updated and saved to NVRAM.");
       return "";
@@ -1346,7 +1482,7 @@ namespace UtilityFunctions
     else
     {
 
-      std::string str = std::format("Invalid Device AIoT SECRET, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) "chars;not empty got length:{}",
+      std::string str = std::format("Invalid Device AIoT SECRET, must be " STRINGIFY(NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) "chars;not empty got length {}",
                                     newSecret.length());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1372,6 +1508,7 @@ namespace UtilityFunctions
   String saveRelayIOPin(int newPinIO)
   {
 
+    size_t bytesWritten;
     if (loadRelayEnableFlag() && loadServoEnableFlag() && (newPinIO == loadServoIOPin()))
     {
       std::string str = std::format(
@@ -1390,8 +1527,18 @@ namespace UtilityFunctions
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putInt(NVRAM_PERFS_RELAY_IO_PROP, newPinIO);
+      bytesWritten = _preferences.putInt(NVRAM_PERFS_RELAY_IO_PROP, newPinIO);
       _preferences.end();
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error in save Only use on ESP32S3 RelayIO pin gpio.1, gpio.2, gpio.5, gpio.6, gpio.7, gpio.8, "
+            "gpio.9, gpio.15 ,gpio.16 ,gpio.17 ,gpio.18, gpio.21 got {}",
+            newPinIO);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("relayIO pin num updated and saved to NVRAM.");
       return "";
     }
@@ -1424,12 +1571,25 @@ namespace UtilityFunctions
   // Save relay action hold from NVRAM
   String saveRelayActionHold(uint16_t newHold)
   {
+
+    size_t bytesWritten;
     if (((newHold >= 1) && (newHold <= NVRAM_PERFS_RELAY_ACTION_HOLD_MAX)))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putUInt(NVRAM_PERFS_RELAY_ACTION_HOLD_PROP, newHold);
+      bytesWritten = _preferences.putUInt(NVRAM_PERFS_RELAY_ACTION_HOLD_PROP, newHold);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkown Error ins save Relay Action HOLD must be between 1 and " STRINGIFY(NVRAM_PERFS_RELAY_ACTION_HOLD_MAX) " ms 1000 ms = 1 sec; got {}",
+            newHold);
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
+
       UtilityFunctions::debugLog("Relay action HOLD updated and saved to NVRAM.");
       return "";
     }
@@ -1461,19 +1621,30 @@ namespace UtilityFunctions
   // Save servo enable flag from NVRAM
   String saveServoEnableFlag(bool flag)
   {
+    size_t bytesWritten;
     if ((flag && loadServoIOPin() != loadRelayIOPin()) || (!flag))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putBool(NVRAM_PERFS_SERVO_ENBALED_PROP, flag);
+      bytesWritten = _preferences.putBool(NVRAM_PERFS_SERVO_ENBALED_PROP, flag);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+        std::string str = std::format(
+            "Unkonwn Error Cannot Enable Servo ServoIO Pin  {} and Relay IO PIN {}",
+            loadServoIOPin(), loadRelayIOPin());
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("Servo enable flag updated and saved to NVRAM.");
       return "";
     }
     else
     {
       std::string str = std::format(
-          "Cannot Enable Servo as ServoIO Pin  {} and Relay IO PIN () are same",
+          "Cannot Enable Servo as ServoIO Pin  {} and Relay IO PIN {} are same",
           loadServoIOPin(), loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1498,24 +1669,68 @@ namespace UtilityFunctions
   // Save relay action hold from NVRAM
   String saveRelayEnableFlag(bool flag)
   {
+    size_t bytesWritten;
     if ((flag && (loadServoIOPin() != loadRelayIOPin())) || (!flag))
     {
       Preferences _preferences;
       _preferences.begin(NVRAM_PERFS, false);
-      _preferences.putBool(NVRAM_PERFS_RELAY_ENABLED_PROP, flag);
+      bytesWritten = _preferences.putBool(NVRAM_PERFS_RELAY_ENABLED_PROP, flag);
       _preferences.end();
+
+      if (bytesWritten == 0)
+      {
+
+        std::string str = std::format(
+            "Unknown Error Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN {}",
+            loadServoIOPin(), loadRelayIOPin());
+        String Astr = String(str.c_str());
+        debugLog(Astr);
+        return Astr;
+      }
       UtilityFunctions::debugLog("Relay enable flag updated and saved to NVRAM.");
       return "";
     }
     else
     {
       std::string str = std::format(
-          "Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN () are same",
+          "Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN {} are same",
           loadServoIOPin(), loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
       return Astr;
     }
+  }
+
+  // Load sync AIoT with BLE device pair flag
+  bool loadSyncAIoTWithBLEDevice()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_SYNC_AIOT_WITH_BLUETOOTH_CONECT_PROP,
+                                     NVRAM_PERFS_SYNC_AIOT_WITH_BLUETOOTH_CONECT_DEFAULT);
+    _preferences.end();
+    //UtilityFunctions::debugLogf("loaded sync AIoT with BLE device pair flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save sync AIoT with BLE device pair flag
+  String saveSyncAIoTWithBLEDevice(bool flag)
+  {
+    size_t bytesWritten;
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bytesWritten = _preferences.putBool(NVRAM_PERFS_SYNC_AIOT_WITH_BLUETOOTH_CONECT_PROP, flag);
+    _preferences.end();
+    if (bytesWritten == 0)
+    {
+      std::string str = std::format(
+          "Unkown Error Cannot update sync AIoT with BLE device pair flag updated and saved to NVRAM. bytes written{}", bytesWritten);
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+    return "";
   }
 
   String getBuildTimeVersion()
@@ -1524,8 +1739,8 @@ namespace UtilityFunctions
     return String(str.c_str());
   }
 
-  // get the current cloud projector vallue
-  String getProjecterValue()
+  // get the current cloud projector value
+  String getAIoTProjectorVarValue()
   {
 
     std::string s_input = std::string((magic_enum::enum_name((InputValue)projector.getInputValue())));
@@ -1537,7 +1752,6 @@ namespace UtilityFunctions
   // save the old log in nvram and restart
   void ESP32Restart()
   {
-
 
     UtilityFunctions::debugLog("......REBOOTING.....EOF.");
     Preferences _preferences;

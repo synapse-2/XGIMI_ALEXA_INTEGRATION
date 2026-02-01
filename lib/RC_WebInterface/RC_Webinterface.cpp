@@ -131,6 +131,9 @@ void RC_WebInterface::refreshGlobalJS()
 
   globalJS = globalJS + "const relayEnableFlag =  " +
              UtilityFunctions::loadRelayEnableFlag() + ";\n";
+  
+   globalJS = globalJS + "const syncAIoTBLEDevEnableFlag =  " +
+             UtilityFunctions::loadSyncAIoTWithBLEDevice() + ";\n";
 
   String chipInfo = UtilityFunctions::chipInfo();
   chipInfo.replace("\n", "<br>\\\n");
@@ -140,7 +143,7 @@ void RC_WebInterface::refreshGlobalJS()
   ledCInfo.replace("\n", "<br>\\\n");
   String partitionInfo = UtilityFunctions::partitionInfo();
   partitionInfo.replace("\n", "<br>\\\n");
-  String cloudInfo = UtilityFunctions::getProjecterValue();
+  String cloudInfo = UtilityFunctions::getAIoTProjectorVarValue();
   cloudInfo.replace("\n", "<br>\\\n");
   String preBootLog = UtilityFunctions::getPreBootWebLog();
   preBootLog.replace("\n", "<br>\\\n");
@@ -861,6 +864,29 @@ void RC_WebInterface::setupRoutes()
                {
                   _server.send(200, "plain/txt",
                  "{ \"success\": false, \"message\": \"Unable to Enable Servo -" +
+                     sucess + "\" }");
+               } });
+
+
+    _server.on("/update-syncAIoT-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("SyncAIoT_enabled");
+               UtilityFunctions::debugLog("Sync AIoT var to BLE device pairing change requested to: " + arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveSyncAIoTWithBLEDevice(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to set Sync AIoT var to BLE device pairing  flag -" +
                      sucess + "\" }");
                } });
 
