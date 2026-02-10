@@ -222,7 +222,13 @@ void loop()
   RelayRemoteDecoder.start();
   UtilityFunctions::debugLog("Relay SERVER started ... ");
 
+  // timer for the wifi disconnect reboot.
   Wifi_Disconnect_Start_Time = 0;
+
+  //variable to sync AIOT projector vraiable with BLE device paring to prevent when projecotr is on/off and Alexia thinks it is not and vice versa
+  bool syncAIoTVariableWithBLEConnect = false; 
+  syncAIoTVariableWithBLEConnect = UtilityFunctions::loadSyncAIoTWithBLEDevice();
+  UtilityFunctions::debugLogf("Sync AIOT vriable with BLE paried device is set to:{}",syncAIoTVariableWithBLEConnect);
 
   for (;;) // infinite loop
   {
@@ -292,6 +298,7 @@ void loop()
     ArduinoCloud.update();
 
     // check if we need to update the cloud variable based on the BLE device connected
+    
     if (UtilityFunctions::loadSyncAIoTWithBLEDevice())
     {
       if (BLEDevice::getNumBonds() != 0)
