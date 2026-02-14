@@ -7,6 +7,7 @@
 #include "Servo_Decoder.h"
 #include "Relay_Decoder.h"
 #include "UtilityFunctions.h"
+#include "WebLogPrint.h"
 #include "WiFiManager.h"
 #include "defaults.h"
 #include "magicEnum/magic_enum.hpp"
@@ -36,7 +37,9 @@ AcloudIOT_Decoder aIOT;
 inline BLE_Remote_Decoder bleRemoteDecoder;
 inline Servo_Decoder ServoRemoteDecoder;
 inline Relay_Decoder RelayRemoteDecoder;
-WiFiManager wm;
+
+// have the wifi managwer log to the web logger
+WiFiManager wm = WiFiManager(*(new WebLogPrint()));
 RC_WebInterface *rc_web;
 uint64_t Wifi_Disconnect_Start_Time = 0;
 
@@ -97,6 +100,16 @@ void setup()
   Serial.begin(115200);
   while (!Serial)
     ; // wait for serial attach
+
+  //also log the esp 32 errors to the log
+  //esp_log_level_set("*", ESP_LOG_VERBOSE);
+  
+  // have the ESP logs go to weblog
+  esp_log_set_vprintf(UtilityFunctions::webLogPrintf);
+
+  // set the arduino cloud debug to weblogPrint stream
+  Debug.setDebugOutputStream(new WebLogPrint());
+
   Serial.setDebugOutput(true);
   UtilityFunctions::debugLog("Initializing ALEXA XIGIMI...");
   UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
@@ -228,7 +241,7 @@ void loop()
   //variable to sync AIOT projector vraiable with BLE device paring to prevent when projecotr is on/off and Alexia thinks it is not and vice versa
   bool syncAIoTVariableWithBLEConnect = false; 
   syncAIoTVariableWithBLEConnect = UtilityFunctions::loadSyncAIoTWithBLEDevice();
-  UtilityFunctions::debugLogf("Sync AIOT vriable with BLE paried device is set to:{}",syncAIoTVariableWithBLEConnect);
+  UtilityFunctions::debugLogf("Sync AIOT vriable with BLE paried device is set to:%i\n",syncAIoTVariableWithBLEConnect);
 
   for (;;) // infinite loop
   {
@@ -298,8 +311,12 @@ void loop()
     ArduinoCloud.update();
 
     // check if we need to update the cloud variable based on the BLE device connected
-    
-    if (UtilityFunctions::loadSyncAIoTWithBLEDevice())
+    if (syncAIoTVariableWithBLEConnect != UtilityFunctions::loadSyncAIoTWithBLEDevice()){
+      // we do not want so mnt debug messages so UtilityFunctions::loadSyncAIoTWithBLEDevice does not log so we have to do this
+      UtilityFunctions::debugLogf("Sync AIoT vriable flag changed from:%i to :%i \n",syncAIoTVariableWithBLEConnect,UtilityFunctions::loadSyncAIoTWithBLEDevice());
+      syncAIoTVariableWithBLEConnect = UtilityFunctions::loadSyncAIoTWithBLEDevice();
+    }
+    if (syncAIoTVariableWithBLEConnect)
     {
       if (BLEDevice::getNumBonds() != 0)
       {
@@ -330,7 +347,7 @@ void loop()
       }
       else
       {
-        UtilityFunctions::debugLogf("Asked to sync BLE device connect status with AIoT cloud var, but no BLE devices paired, Stored bonds:{}, Pair a devicce to make this work \n", NimBLEDevice::getNumBonds());
+        UtilityFunctions::debugLogf("Asked to sync BLE device connect status with AIoT cloud var, but no BLE devices paired, Stored bonds:%i, Pair a devicce to make this work \n", NimBLEDevice::getNumBonds());
       }
     }
 

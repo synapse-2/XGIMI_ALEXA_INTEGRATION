@@ -2,6 +2,7 @@
 #pragma once
 #include "defaults.h"
 #include <FastLED.h>
+#include <Print.h>
 
 namespace UtilityFunctions
 {
@@ -38,6 +39,9 @@ namespace UtilityFunctions
   void debugLog(String message);
   void debugLog();
   void debugLogf(const char *format, ...);
+  void finalLog(char* temp);
+  void finalLog(char temp);
+  int webLogPrintf(const char *format, va_list args);
 
   String chipInfo();
   String taskInfo();

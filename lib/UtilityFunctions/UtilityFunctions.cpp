@@ -73,6 +73,36 @@ namespace UtilityFunctions
         return String(buffer_, size_);
       }
 
+      // Add a char to the buffer, overwriting if necessary
+      void pushChar(const char charIN)
+      {
+        int len = 1;
+
+        if (len > capacity_)
+        {
+          // we do  not have space
+          return;
+        }
+
+        //  do we have space in the buffer
+        if ((size_ + len + 1) > capacity_)
+        {
+          // we are over capacity so find out how many bytes in the front have to be discarded
+          int discardNum = (size_ + len + 1) - capacity_; // one more byte for the num string
+          strcpy(buffer_, &buffer_[discardNum]);          // discard num contains the one byte for null
+          buffer_[capacity_ - len - 1] = charIN;
+          buffer_[capacity_ - len] = 0;
+          size_ = capacity_ - 1;
+        }
+        else
+        {
+          // we are with capacity so cp the bytes in the buffer
+          buffer_[size_ + 1] = charIN;
+          buffer_[size_ + 2] = 0;
+          size_ = size_ + len;
+        }
+      }
+
       // Add a string to the buffer, overwriting if necessary
       void pushString(const char *str)
       {
@@ -802,8 +832,7 @@ namespace UtilityFunctions
     String _localHostname = _preferences.getString(
         NVRAM_PERFS_HOSTNAME_LOCAL_PROP, NVRAM_PERFS_HOSTNAME_LOCAL_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n",
-                                _localHostname.c_str());
+    // UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n", _localHostname.c_str());
 
     return _localHostname;
   }
@@ -849,8 +878,7 @@ namespace UtilityFunctions
     String newBlueName = _preferences.getString(
         NVRAM_PERFS_BLUETOOTH_NAME_PROP, NVRAM_PERFS_BLUETOOTH_NAME_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n",
-                                newBlueName.c_str());
+    // UtilityFunctions::debugLogf("loaded local hostname from NVRAM. %s\n",newBlueName.c_str());
 
     return newBlueName;
   }
@@ -896,7 +924,7 @@ namespace UtilityFunctions
     int wolNum = _preferences.getInt(NVRAM_PERFS_WAKE_PACKET_PROP,
                                      NVRAM_PERFS_WAKE_PACKET_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded WOL Packet num from NVRAM. %i\n", wolNum);
+    // UtilityFunctions::debugLogf("loaded WOL Packet num from NVRAM. %i\n", wolNum);
 
     return wolNum;
   }
@@ -959,17 +987,14 @@ namespace UtilityFunctions
   }
   void debugLogf(const char *format, ...)
   {
-    char loc_buf[64];
+    char loc_buf[512];
     char *temp = loc_buf;
-    va_list arg;
-    va_list copy;
-    va_start(arg, format);
-    va_copy(copy, arg);
-    int len = vsnprintf(temp, sizeof(loc_buf), format, copy);
-    va_end(copy);
+    va_list args;
+    va_start(args, format);
+    int len = vsnprintf(temp, sizeof(loc_buf), format, args);
+    va_end(args);
     if (len < 0)
     {
-      va_end(arg);
       return;
     }
     if (len >=
@@ -978,16 +1003,12 @@ namespace UtilityFunctions
       temp = (char *)malloc(len + 1);
       if (temp == NULL)
       {
-        va_end(arg);
         return;
       }
-      len = vsnprintf(temp, len + 1, format, arg);
+      len = vsnprintf(temp, len + 1, format, args);
     }
-    va_end(arg);
 
-    std::string str = std::format("{}:CORE:{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
-    Serial.printf(str.c_str());
-    webLogBuffer.pushString(str);
+    finalLog(temp);
 
     // len = Serial.write((uint8_t *)temp, len);
     if (temp != loc_buf)
@@ -995,6 +1016,33 @@ namespace UtilityFunctions
       free(temp);
     }
     return;
+  }
+
+  void finalLog(char *temp)
+  {
+    std::string str;
+    str = std::format("{}:CORE:{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
+    Serial.printf(str.c_str());
+    webLogBuffer.pushString(str);
+  }
+
+  // no timestamp log
+  void finalLog(char temp)
+  {
+    Serial.print(temp);
+    webLogBuffer.pushChar(temp);
+  }
+
+  int webLogPrintf(const char *format, va_list args)
+  {
+    char loc_buf[512];
+    char *temp = loc_buf;
+    int len = vsnprintf(temp, sizeof(loc_buf), format, args);
+    if (len > 0)
+    {
+      debugLogf("ESP LOG:%s", temp);
+    }
+    return len;
   }
 
   // Load servoIO pin  num  from NVRAM
@@ -1005,8 +1053,7 @@ namespace UtilityFunctions
     int servoIOPin = _preferences.getInt(NVRAM_PERFS_SERVO_IO_PROP,
                                          NVRAM_PERFS_SERVO_IO_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded servoIO pin num from NVRAM. %i\n",
-                                servoIOPin);
+    // UtilityFunctions::debugLogf("loaded servoIO pin num from NVRAM. %i\n",servoIOPin);
 
     return servoIOPin;
   }
@@ -1071,8 +1118,7 @@ namespace UtilityFunctions
         _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_PROP,
                              NVRAM_PERFS_SERVO_PWM_MIN_WIDTH_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded servo Min Width in us 500 = 0.5 us from NVRAM. %i\n", minWidth);
+    // UtilityFunctions::debugLogf("loaded servo Min Width in us 500 = 0.5 us from NVRAM. %i\n", minWidth);
 
     return minWidth;
   }
@@ -1118,8 +1164,7 @@ namespace UtilityFunctions
         _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_PROP,
                              NVRAM_PERFS_SERVO_PWM_MAX_WIDTH_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded servo max Width in us 500 = 0.5 us from NVRAM. %i\n", maxWidth);
+    // UtilityFunctions::debugLogf("loaded servo max Width in us 500 = 0.5 us from NVRAM. %i\n", maxWidth);
 
     return maxWidth;
   }
@@ -1166,7 +1211,7 @@ namespace UtilityFunctions
     uint32_t freq = _preferences.getUInt(NVRAM_PERFS_SERVO_PWM_FREQ_PROP,
                                          NVRAM_PERFS_SERVO_PWM_FREQ_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded servo freq from NVRAM. %i\n", freq);
+    // UtilityFunctions::debugLogf("loaded servo freq from NVRAM. %i\n", freq);
 
     return freq;
   }
@@ -1213,7 +1258,7 @@ namespace UtilityFunctions
     uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_MAX_ANGLE_PROP,
                                           NVRAM_PERFS_SERVO_MAX_ANGLE_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded servo max angle from NVRAM. %i\n", angle);
+    // UtilityFunctions::debugLogf("loaded servo max angle from NVRAM. %i\n", angle);
 
     return angle;
   }
@@ -1258,8 +1303,7 @@ namespace UtilityFunctions
     uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_ACTION_ANGLE_PROP,
                                           NVRAM_PERFS_SERVO_ACTION_ANGLE_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded servo action angle from NVRAM. %i\n",
-                                angle);
+    //  UtilityFunctions::debugLogf("loaded servo action angle from NVRAM. %i\n", angle);
 
     return angle;
   }
@@ -1306,8 +1350,7 @@ namespace UtilityFunctions
     uint16_t angle = _preferences.getUInt(NVRAM_PERFS_SERVO_REST_ANGLE_PROP,
                                           NVRAM_PERFS_SERVO_REST_ANGLE_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded servo rest angle from NVRAM. %i\n",
-                                angle);
+    // UtilityFunctions::debugLogf("loaded servo rest angle from NVRAM. %i\n", angle);
 
     return angle;
   }
@@ -1353,8 +1396,7 @@ namespace UtilityFunctions
     uint16_t hold = _preferences.getUInt(NVRAM_PERFS_SERVO_ACTION_HOLD_PROP,
                                          NVRAM_PERFS_SERVO_ACTION_HOLD_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded servo action hold time in ms from NVRAM. %i\n", hold);
+    // UtilityFunctions::debugLogf( "loaded servo action hold time in ms from NVRAM. %i\n", hold);
 
     return hold;
   }
@@ -1401,8 +1443,7 @@ namespace UtilityFunctions
     String newDeviceID = _preferences.getString(
         NVRAM_PERFS_AIoT_DEVICE_ID_PROP, NVRAM_PERFS_AIoT_DEVICE_ID_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded Device AIoT ID from NVRAM. %s\n",
-                                newDeviceID.c_str());
+    // UtilityFunctions::debugLogf("loaded Device AIoT ID from NVRAM. %s\n",  newDeviceID.c_str());
 
     return newDeviceID;
   }
@@ -1450,8 +1491,7 @@ namespace UtilityFunctions
         _preferences.getString(NVRAM_PERFS_AIoT_DEVICE_SECRET_PROP,
                                NVRAM_PERFS_AIoT_DEVICE_SECRET_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded Device AIoT SECRET from NVRAM. %s\n",
-                                newSecret.c_str());
+    // UtilityFunctions::debugLogf("loaded Device AIoT SECRET from NVRAM. %s\n", newSecret.c_str());
 
     return newSecret;
   }
@@ -1498,8 +1538,7 @@ namespace UtilityFunctions
     int relayIOPin = _preferences.getInt(NVRAM_PERFS_RELAY_IO_PROP,
                                          NVRAM_PERFS_RELAY_IO_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf("loaded RelayIO pin num from NVRAM. %i\n",
-                                relayIOPin);
+    // UtilityFunctions::debugLogf("loaded RelayIO pin num from NVRAM. %i\n", relayIOPin);
 
     return relayIOPin;
   }
@@ -1562,8 +1601,7 @@ namespace UtilityFunctions
     uint16_t hold = _preferences.getUInt(NVRAM_PERFS_RELAY_ACTION_HOLD_PROP,
                                          NVRAM_PERFS_RELAY_ACTION_HOLD_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded relay action hold time in ms from NVRAM. %i\n", hold);
+    // UtilityFunctions::debugLogf( "loaded relay action hold time in ms from NVRAM. %i\n", hold);
 
     return hold;
   }
@@ -1612,8 +1650,7 @@ namespace UtilityFunctions
     bool flag = _preferences.getBool(NVRAM_PERFS_SERVO_ENBALED_PROP,
                                      NVRAM_PERFS_SERVO_ENABLED_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded servo enable flag from NVRAM. %i\n", flag);
+    // UtilityFunctions::debugLogf( "loaded servo enable flag from NVRAM. %i\n", flag);
 
     return flag;
   }
@@ -1660,8 +1697,7 @@ namespace UtilityFunctions
     bool flag = _preferences.getBool(NVRAM_PERFS_RELAY_ENABLED_PROP,
                                      NVRAM_PERFS_RELAY_ENABLED_DEFAULT);
     _preferences.end();
-    UtilityFunctions::debugLogf(
-        "loaded relay enable flag from NVRAM. %i\n", flag);
+    // UtilityFunctions::debugLogf( "loaded relay enable flag from NVRAM. %i\n", flag);
 
     return flag;
   }
@@ -1709,7 +1745,8 @@ namespace UtilityFunctions
     bool flag = _preferences.getBool(NVRAM_PERFS_SYNC_AIOT_WITH_BLUETOOTH_CONECT_PROP,
                                      NVRAM_PERFS_SYNC_AIOT_WITH_BLUETOOTH_CONECT_DEFAULT);
     _preferences.end();
-    //UtilityFunctions::debugLogf("loaded sync AIoT with BLE device pair flag from NVRAM. %i\n", flag);
+    // no debug as this gets called in very loop so reduce the logs written
+    // UtilityFunctions::debugLogf("loaded sync AIoT with BLE device pair flag from NVRAM. %i\n", flag);
 
     return flag;
   }
