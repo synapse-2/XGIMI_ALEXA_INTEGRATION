@@ -2,6 +2,7 @@
 #include "UtilityFunctions.h"
 #include "WebLogPrint.h"
 
+
 WebLogPrint::WebLogPrint()
 {
 }
@@ -14,7 +15,7 @@ size_t WebLogPrint::write(uint8_t data)
         newLineSeen = true;
 
         // no timestamp log
-        UtilityFunctions::finalLog((char)data);
+        UtilityFunctions::finalLog((char)data,false);
         return 1;
     }
 
@@ -23,14 +24,14 @@ size_t WebLogPrint::write(uint8_t data)
         newLineSeen = false;
 
         // this will generate a time stamp log
-        UtilityFunctions::debugLogf("%c", data);
+        UtilityFunctions::finalLog((char)data,true);
         return 1;
     }
     else
     {
 
         // no time stamp log
-        UtilityFunctions::finalLog((char)data);
+        UtilityFunctions::finalLog((char)data  ,false);
         return 1;
     }
 }

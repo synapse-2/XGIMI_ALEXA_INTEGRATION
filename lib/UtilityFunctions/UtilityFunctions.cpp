@@ -32,9 +32,12 @@ auto to_integer(magic_enum::Enum<E> value) -> int
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
-CRGB UtilityFunctions::leds[NUMPIXELS];
+// CRGB UtilityFunctions::leds[NUMPIXELS];
+
 namespace UtilityFunctions
 {
+  CRGB leds[NUMPIXELS];
+  bool newLineSeenForESPLog = true;
 
   namespace
   {
@@ -447,7 +450,7 @@ namespace UtilityFunctions
 
     char s[51];
 
-    strftime(s, 50, "%a, %b %d %Y %H:%M:%S", &timeinfo);
+    strftime(s, 50, "%m-%d-%y %H:%M:%S", &timeinfo);
 
     return String(s);
   }
@@ -1018,21 +1021,40 @@ namespace UtilityFunctions
     return;
   }
 
-  void finalLog(char *temp)
+  void finalLog(char *temp, bool timestamp)
   {
-    std::string str;
-    str = std::format("{}:CORE:{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
-    Serial.printf(str.c_str());
-    webLogBuffer.pushString(str);
+    if (timestamp)
+    {
+      std::string str;
+      str = std::format("{}:C{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
+      Serial.printf(str.c_str());
+      webLogBuffer.pushString(str);
+    }
+    else
+    {
+      Serial.print(temp);
+      webLogBuffer.pushString(temp);
+    }
   }
 
-  // no timestamp log
-  void finalLog(char temp)
+  void finalLog(char temp, bool timestamp)
   {
-    Serial.print(temp);
-    webLogBuffer.pushChar(temp);
+    if (timestamp)
+    {
+      std::string str;
+      str = std::format("{}:C{}:{}", getDateTimeUTC().c_str(), xPortGetCoreID(), temp);
+      Serial.printf(str.c_str());
+      webLogBuffer.pushString(str);
+    }
+    else
+    {
+      Serial.print(temp);
+      //Serial.printf(":%x:",temp);
+      webLogBuffer.pushChar(temp);
+    }
   }
 
+  // used for arduino esp logs
   int webLogPrintf(const char *format, va_list args)
   {
     char loc_buf[512];
@@ -1040,7 +1062,27 @@ namespace UtilityFunctions
     int len = vsnprintf(temp, sizeof(loc_buf), format, args);
     if (len > 0)
     {
-      debugLogf("ESP LOG:%s", temp);
+
+      // see if there is a new line if so set newLineSeenForESPLog to true else set to false
+      if (newLineSeenForESPLog)
+      {
+        //shows timestamp
+        debugLogf("%s", temp);
+        newLineSeenForESPLog = false;
+      }
+      else
+      {
+        // no timestamp log
+        UtilityFunctions::finalLog(temp,false);
+      }
+      for (int i = 0; i < len; i++)
+      {
+        if (temp[i] == '\n')
+        {
+         newLineSeenForESPLog = true;
+          break;
+        }
+      }
     }
     return len;
   }

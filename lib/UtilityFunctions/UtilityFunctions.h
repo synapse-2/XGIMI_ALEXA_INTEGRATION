@@ -1,5 +1,7 @@
 // filepath: d:\Documents\XGIMI_ALEXA_INTEGRATION\src\UtilityFunctions.h
-#pragma once
+#ifndef UtilityFunctions_H
+#define UtilityFunctions_H
+
 #include "defaults.h"
 #include <FastLED.h>
 #include <Print.h>
@@ -7,7 +9,6 @@
 namespace UtilityFunctions
 {
 
-  extern CRGB leds[NUMPIXELS];
 
   void delay(long waitMills);
   void waitTillInitComplete();
@@ -39,8 +40,10 @@ namespace UtilityFunctions
   void debugLog(String message);
   void debugLog();
   void debugLogf(const char *format, ...);
-  void finalLog(char* temp);
-  void finalLog(char temp);
+  void finalLog(char *temp, bool timestamp = true);
+  void finalLog(char temp, bool timestamp = true);
+
+  // used for arduino cloud and wifi manager log
   int webLogPrintf(const char *format, va_list args);
 
   String chipInfo();
@@ -171,3 +174,5 @@ namespace UtilityFunctions
   String getPreBootWebLog();
 
 }
+
+#endif

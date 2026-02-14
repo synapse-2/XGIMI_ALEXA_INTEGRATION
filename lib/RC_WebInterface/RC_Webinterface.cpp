@@ -146,10 +146,16 @@ void RC_WebInterface::refreshGlobalJS()
   String cloudInfo = UtilityFunctions::getAIoTProjectorVarValue();
   cloudInfo.replace("\n", "<br>\\\n");
   String preBootLog = UtilityFunctions::getPreBootWebLog();
-  preBootLog.replace("\n", "<br>\\\n");
+  preBootLog.replace("\r",""); // remove the carriage returns as it causes issues in js code
+  preBootLog.replace("\"","\\\"");  // escape out the double quotes
+  preBootLog.replace("\n", "<br>\\\n"); // replace \n with <br>/ tag 
+  
 
   String webLog = UtilityFunctions::webLog();
-  webLog.replace("\n", "<br>\\\n");
+  webLog.replace("\r",""); // remove the carriage returns as it causes issues in js code
+  webLog.replace("\"","\\\"");  // escape out the double quotes
+  webLog.replace("\n", "<br>\\\n"); // replace \n with <br>/ tag 
+  
 
   globalJS = globalJS + "const statusTxt =  \"<strong>" + UtilityFunctions::getBuildTimeVersion() + "</strong><br>\\\n" +
              chipInfo + "<br>\\\n" +
