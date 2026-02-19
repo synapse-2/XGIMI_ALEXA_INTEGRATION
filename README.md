@@ -42,7 +42,7 @@ You need
 07. Associate the thing with the device you created in step 3 (on the things page)
 08. Select the smart home integration as Alexa (on the things page)
 09. Go to Alexa app on the phone etc and add the alexa skill for arduino and the device you want refer to this guide: https://docs.arduino.cc/arduino-cloud/guides/alexa/
-10. Compile and flash the binary to the ESP32S3
+10. Compile and flash the binary to the ESP32S3 (using vs code (https://code.visualstudio.com/) and pioarduino extension (https://marketplace.visualstudio.com/search?term=pioarduino&target=VSCode&category=All%20categories&sortBy=Relevance) )
 11. Make sure you also flash the file system from the PIO command "Upload filesystem image"
 12. On initial start the ESP will be in AP mode, it will create a wifi network called "ESP_XXXXXX" 
 13. join to it
