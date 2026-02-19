@@ -1,10 +1,3 @@
-/**
- * @file UtilityFunctions.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #include "defaults.h"
 // #include <Wire.h>
 #include "UtilityFunctions.h"
@@ -36,24 +29,6 @@ template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
 {
   // magic_enum::Enum<E> - C++17 Concept for enum type.
-/**
- * @brief Brief description of static_cast<magic_enum::underlying_type_t<E>>.
- *
- * @param value Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
@@ -98,25 +73,6 @@ namespace UtilityFunctions
           return ""; // Buffer is empty, nothing to pop
         }
 
-/**
- * @brief Brief description of String.
- *
- * @param buffer_ Describe this parameter.
- * @param size_ Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         return String(buffer_, size_);
       }
 
@@ -219,24 +175,6 @@ namespace UtilityFunctions
     bool initPerformed = false;
 
     SemaphoreHandle_t xLedMutex;
-/**
- * @brief Brief description of webLogBuffer.
- *
- * @param WEB_STATUS_LOG_BUFFER Describe this parameter.
- * @return AutoPopCharBuffer Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     AutoPopCharBuffer webLogBuffer(WEB_STATUS_LOG_BUFFER);
 
   } // namespace
@@ -247,24 +185,6 @@ namespace UtilityFunctions
 
     for (; !initPerformed;)
     {
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(30);
     }
   }
@@ -378,24 +298,6 @@ namespace UtilityFunctions
 
     UtilityFunctions::ledGreen(); // Turn on the LED to indicate a change has
                                   // been received
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(30);
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 
@@ -414,24 +316,6 @@ namespace UtilityFunctions
 
     UtilityFunctions::ledRed(); // Turn on the LED to indicate a change has been
                                 // received
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(30);
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 
@@ -450,24 +334,6 @@ namespace UtilityFunctions
 
     UtilityFunctions::ledYellow(); // Turn on the LED to indicate a change has
                                    // been received
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(30);
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 
@@ -485,24 +351,6 @@ namespace UtilityFunctions
     CRGB currColor = leds[0];
     UtilityFunctions::ledBlue(); // Turn on the LED to indicate a change has
                                  // been received
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(30);
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
 
@@ -520,79 +368,9 @@ namespace UtilityFunctions
 
     for (int i = 0; i < 10; i++)
     {
-/**
- * @brief Brief description of ledGreen.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledGreen();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(30);
-/**
- * @brief Brief description of ledStop.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledStop();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(30);
     }
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
@@ -611,79 +389,9 @@ namespace UtilityFunctions
 
     for (int i = 0; i < 10; i++)
     {
-/**
- * @brief Brief description of ledRed.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledRed();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(30);
-/**
- * @brief Brief description of ledStop.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledStop();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(30);
     }
     UtilityFunctions::ledStop(); // Turn off the LED after processing the change
@@ -744,24 +452,6 @@ namespace UtilityFunctions
 
     strftime(s, 50, "%m-%d-%y %H:%M:%S", &timeinfo);
 
-/**
- * @brief Brief description of String.
- *
- * @param s Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(s);
   }
 
@@ -870,24 +560,6 @@ namespace UtilityFunctions
 #else
     str = "Free RTOS TASKS NOT CONFIGURED :\n";
 #endif
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       return String(str.c_str());
     }
   } // namespace UtilityFunctions
@@ -919,24 +591,6 @@ namespace UtilityFunctions
     str = str + std::format("Total heap: {} KB \n", ESP.getHeapSize() / 1024);
     str = str + std::format("Free heap: {} KB \n", ESP.getFreeHeap() / 1024);
     str = str + std::format("Total Flash Chip Mode: {} \n",
-/**
- * @brief Brief description of enum_name.
- *
- * @param param Describe this parameter.
- * @return magic_enum:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                             magic_enum::enum_name(ESP.getFlashChipMode()));
     str = str + std::format("Fash Chip Speed {} MHz \n",
                             ESP.getFlashChipSpeed() / (1000 * 1000));
@@ -977,24 +631,6 @@ namespace UtilityFunctions
     str = str + "\n\nIn order to RESET and ERASE NVRAM press BOOT key 3 times within "
                 "3 seconds";
 
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
   }
 
@@ -1039,24 +675,6 @@ namespace UtilityFunctions
       str = str + std::format("Timer {}: Freq={} {} Hz\n", timer, ((freq == 259) ? "Not Init" : ""), freq);
     }
 
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
   }
 
@@ -1094,24 +712,6 @@ namespace UtilityFunctions
     str = str + std::format("{: <17}{:#04X} {:#04X}\n{:#010X} {:#010X} {:0>4}Kb {: <1} {: <1}\n",
                             p->label, (uint32_t)p->type, (uint32_t)p->subtype, p->address, p->size, p->size / 1024, p->encrypted, p->readonly);
 
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
   }
 
@@ -1127,42 +727,7 @@ namespace UtilityFunctions
     if (xLedMutex == NULL)
     {
       // Handle mutex creation error
-/**
- * @brief Brief description of debugLog.
- *
- * @param restarting..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Failed to create LED mute restarting...");
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     }
     FastLED.addLeds<RGBCHIP, LED_BUILTINIO, RGB_DATA_ORDER>(leds, NUMPIXELS);
@@ -1176,24 +741,6 @@ namespace UtilityFunctions
     // start debug log
     debugLog();
 
-/**
- * @brief Brief description of chipInfo.
- *
- * @param ) Describe this parameter.
- * @return debugLog( Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     debugLog(chipInfo());
 
     // Extract the last two bytes
@@ -1313,24 +860,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
       return "";
     }
@@ -1377,24 +906,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("hostname updated and saved to NVRAM.");
       return "";
     }
@@ -1441,24 +952,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("WOl packet num updated and saved to NVRAM.");
       return "";
     }
@@ -1580,25 +1073,6 @@ namespace UtilityFunctions
       else
       {
         // no timestamp log
-/**
- * @brief Brief description of finalLog.
- *
- * @param temp Describe this parameter.
- * @param false Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::finalLog(temp,false);
       }
       for (int i = 0; i < len; i++)
@@ -1634,24 +1108,6 @@ namespace UtilityFunctions
     {
       std::string str = std::format(
           "ServerIO pin cannot be same as RelayIO PIN got {} and RelayIO pin is {}",
-/**
- * @brief Brief description of loadRelayIOPin.
- *
- * @param ) Describe this parameter.
- * @return newPinIO, Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           newPinIO, loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -1679,24 +1135,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("servoIO pin num updated and saved to NVRAM.");
       return "";
     }
@@ -1746,24 +1184,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("servo Min Width updated and saved to NVRAM.");
       return "";
     }
@@ -1811,24 +1231,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("servo Max Width updated and saved to NVRAM.");
       return "";
     }
@@ -1876,24 +1278,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Servo Freq updated and saved to NVRAM.");
       return "";
     }
@@ -1940,24 +1324,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Servo max angle updated and saved to NVRAM.");
       return "";
     }
@@ -2050,24 +1416,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Servo rest angle updated and saved to NVRAM.");
       return "";
     }
@@ -2115,24 +1463,6 @@ namespace UtilityFunctions
         return Astr;
       }
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Servo action HOLD updated and saved to NVRAM.");
       return "";
     }
@@ -2179,24 +1509,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog(" Device AIoT ID updated and saved to NVRAM.");
       return "";
     }
@@ -2282,24 +1594,6 @@ namespace UtilityFunctions
     {
       std::string str = std::format(
           "RelayIO pin cannot be same as ServoIO PIN got {} and ServoIO pin is {}",
-/**
- * @brief Brief description of loadServoIOPin.
- *
- * @param ) Describe this parameter.
- * @return newPinIO, Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           newPinIO, loadServoIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -2326,24 +1620,6 @@ namespace UtilityFunctions
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("relayIO pin num updated and saved to NVRAM.");
       return "";
     }
@@ -2394,24 +1670,6 @@ namespace UtilityFunctions
         return Astr;
       }
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Relay action HOLD updated and saved to NVRAM.");
       return "";
     }
@@ -2454,47 +1712,11 @@ namespace UtilityFunctions
       {
         std::string str = std::format(
             "Unkonwn Error Cannot Enable Servo ServoIO Pin  {} and Relay IO PIN {}",
-/**
- * @brief Brief description of loadRelayIOPin.
- *
- * @param ) Describe this parameter.
- * @return loadServoIOPin(), Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             loadServoIOPin(), loadRelayIOPin());
         String Astr = String(str.c_str());
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Servo enable flag updated and saved to NVRAM.");
       return "";
     }
@@ -2502,24 +1724,6 @@ namespace UtilityFunctions
     {
       std::string str = std::format(
           "Cannot Enable Servo as ServoIO Pin  {} and Relay IO PIN {} are same",
-/**
- * @brief Brief description of loadRelayIOPin.
- *
- * @param ) Describe this parameter.
- * @return loadServoIOPin(), Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           loadServoIOPin(), loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -2556,47 +1760,11 @@ namespace UtilityFunctions
 
         std::string str = std::format(
             "Unknown Error Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN {}",
-/**
- * @brief Brief description of loadRelayIOPin.
- *
- * @param ) Describe this parameter.
- * @return loadServoIOPin(), Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             loadServoIOPin(), loadRelayIOPin());
         String Astr = String(str.c_str());
         debugLog(Astr);
         return Astr;
       }
-/**
- * @brief Brief description of debugLog.
- *
- * @param NVRAM." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Relay enable flag updated and saved to NVRAM.");
       return "";
     }
@@ -2604,24 +1772,6 @@ namespace UtilityFunctions
     {
       std::string str = std::format(
           "Cannot Eanable Relay as ServoIO Pin  {} and Relay IO PIN {} are same",
-/**
- * @brief Brief description of loadRelayIOPin.
- *
- * @param ) Describe this parameter.
- * @return loadServoIOPin(), Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           loadServoIOPin(), loadRelayIOPin());
       String Astr = String(str.c_str());
       debugLog(Astr);
@@ -2665,24 +1815,6 @@ namespace UtilityFunctions
   String getBuildTimeVersion()
   {
     std::string str = std::format("Build Time: {} {}", __DATE__, __TIME__);
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
   }
 
@@ -2693,24 +1825,6 @@ namespace UtilityFunctions
     std::string s_input = std::string((magic_enum::enum_name((InputValue)projector.getInputValue())));
     std::string s_play = std::string((magic_enum::enum_name((PlaybackCommands)projector.getPlaybackCommand())));
     std::string str = std::format("On_OFF:{} Volume:{} Mute:{} channel:{} Input:{} Playback_Cmd:{} \n", projector.getSwitch(), projector.getVolume(), projector.getMute(), projector.getChannel(), s_input, s_play);
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
   }
 
@@ -2718,24 +1832,6 @@ namespace UtilityFunctions
   void ESP32Restart()
   {
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param "......REBOOTING.....EOF." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("......REBOOTING.....EOF.");
     Preferences _preferences;
     _preferences.begin(NVRAM_PERFS, false);
@@ -2763,25 +1859,6 @@ namespace UtilityFunctions
     _preferences.getBytes(NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_PROP, buffer, size);
 
     _preferences.end();
-/**
- * @brief Brief description of String.
- *
- * @param buffer Describe this parameter.
- * @param size Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(buffer, size);
     ;
   }

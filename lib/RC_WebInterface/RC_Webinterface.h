@@ -1,8 +1,9 @@
-/**
- * @file RC_Webinterface.h
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
+/*
+ * Overview:
+ * This file is part of the BluetoothESP32 device project.
+ * It contains code used to handle hardware, BLE, WiFi, or web UI
+ * interactions for the device. Comments marked with [AUTO-DOC] were
+ * added automatically; please refine them to be more specific.
  */
 
 #ifndef RC_WebInterface_H
@@ -17,53 +18,53 @@
 class RC_WebInterface {
 public:
     RC_WebInterface();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of begin.
+ * @brief Initializes or starts begin.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void begin();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of handleClient.
+ * @brief Performs handle Client operations.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void handleClient();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of commandProcessorTask.
+ * @brief Performs command Processor Task operations.
  *
  * @param pvParameters Describe this parameter.
  * @return static void Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
@@ -77,35 +78,35 @@ protected:
     String _adminPassword;
     String globalJS;
 
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of loadAdminPassword.
+ * @brief Performs load Admin Password operations.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void loadAdminPassword();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of saveAdminPassword.
+ * @brief Performs save Admin Password operations.
  *
  * @param newPassword Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
@@ -113,51 +114,51 @@ protected:
  */
     void saveAdminPassword(String newPassword);
     bool checkAdminAuth(); // Modified to work with synchronous server
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setupRoutes.
+ * @brief Initializes or starts setup Routes.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void setupRoutes();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of handleRemotePress.
+ * @brief Performs handle Remote Press operations.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void handleRemotePress();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of handleUpdatePassword.
+ * @brief Performs handle Update Password operations.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
@@ -165,54 +166,54 @@ protected:
  */
     void handleUpdatePassword();
 
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of refreshGlobalJS.
+ * @brief Performs refresh Global JS operations.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     void refreshGlobalJS();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of wifiSignalStrengthDecoder.
+ * @brief Performs wifi Signal Strength Decoder operations.
  *
  * @param rssi Describe this parameter.
  * @return String Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
     String wifiSignalStrengthDecoder(int8_t rssi);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of enQueueCmd.
+ * @brief Performs en Queue Cmd operations.
  *
  * @param cmd Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)

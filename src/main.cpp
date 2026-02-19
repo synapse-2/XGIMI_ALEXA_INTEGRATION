@@ -1,10 +1,14 @@
-/**
- * @file main.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
+#/*******************************************************************************
+#  Overview:
+#  This program runs on a small computer (ESP32). Think of it as a BluetoothESP32 device.
+#  - It connects to the home WiFi so it can talk to the cloud (like the internet).
+#  - It listens to a tiny remote (Bluetooth), a web page, and the cloud (Alexa).
+#  - When someone presses buttons or tells Alexa, this BluetoothESP32 device tells the projector,
+#    servos, and relays what to do (turn on/off, move, etc.).
+#
+#  The comments below explain each part in plain words and give a short note
+#  about how each function works so anyone (even a kid) can get the idea.
+#*******************************************************************************/
 
 #include "AcloudIOT_Decoder.h"
 #include "BLE_Remote_Decoder.h"
@@ -34,24 +38,6 @@ template <typename E>
 auto to_integer(magic_enum::Enum<E> value) -> int
 {
   // magic_enum::Enum<E> - C++17 Concept for enum type.
-/**
- * @brief Brief description of static_cast<magic_enum::underlying_type_t<E>>.
- *
- * @param value Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
@@ -71,11 +57,31 @@ uint64_t Wifi_Disconnect_Start_Time = 0;
 String getSSID() { return wm.getWiFiSSID(); }
 String getPSK() { return wm.getWiFiPass(); }
 
+/**
+ * @brief Check whether the physical reset/boot button was pressed.
+ *
+ * Plain words: if the BluetoothESP32 device is the boss (master) and someone presses the
+ * tiny boot button 3 times, the BluetoothESP32 device will forget saved WiFi and settings
+ * and then restart itself.  This is useful when you want to make it like
+ * new again.
+ *
+ * Algorithm (simple):
+ * - If we are the master device, check the reset button state.
+ * - If pressed, count how many times it was pressed recently.
+ * - If fewer than 3 presses: ignore (clear the press). If 3 or more:
+ *   - Erase WiFi settings and NVRAM, blink an LED a few times, wait, then
+ *     restart the board.
+ *
+ * Loops: a small for-loop blinks an LED 5 times to show the reset action.
+ */
 void checkResetPressed()
 {
+  // If this device is configured as the master, check whether the
+  // physical reset/boot button was pressed and handle a factory reset
+  // sequence (erase settings, blink LED, restart).
   if (UtilityFunctions::isMaster())
   {
-    // only check the boot button is pressed if we are the master
+    // only check the boot button if we are the master device
 
     if (UtilityFunctions::isResetPressed())
     {
@@ -83,184 +89,31 @@ void checkResetPressed()
           "Boot pressed num time: %i need 3 to reset system count goees to "
           "zero after 3 secs reset detected at mills %i\n",
           UtilityFunctions::numTimesResetPressed(),
-/**
- * @brief Brief description of resetMills.
- *
- * @param ) Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           UtilityFunctions::resetMills());
 
       if (UtilityFunctions::numTimesResetPressed() < 3)
       {
-/**
- * @brief Brief description of unpressRest.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+        // Not enough presses yet: clear and wait for more
         UtilityFunctions::unpressRest();
         return;
       }
 
+      // Enough presses: erase settings and restart to factory-like state
       wm.resetSettings(); // Reset WiFi settings
       nvs_flash_erase();
-/**
- * @brief Brief description of debugLog.
- *
- * @param settings..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Resetting ALL NVRAM settings...");
+      // Blink the yellow LED 5 times to indicate an imminent full reset.
+      // Purpose: provide a visible warning before erasing settings.
+      // Exit condition: loop ends after 5 iterations.
       for (int i = 0; i < 5; i++)
       {
-/**
- * @brief Brief description of ledYellow.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledYellow();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::delay(30);
-/**
- * @brief Brief description of ledStop.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledStop();
-/**
- * @brief Brief description of delay.
- *
- * @param 30 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::delay(30);
       }
-      UtilityFunctions::delay(1000); // Wait for a second before restarting
-/**
- * @brief Brief description of debugLog.
- *
- * @param ESP..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+      UtilityFunctions::delay(1000); // short pause before restart
       UtilityFunctions::debugLog("Restarting ESP...");
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     }
   }
@@ -281,6 +134,9 @@ void setup()
 {
 
   Serial.begin(115200);
+  // Wait for the serial console to be ready. This is a blocking spin-wait
+  // that exits once `Serial` becomes available (host opens serial terminal).
+  // Exit condition: `Serial` evaluates true.
   while (!Serial)
     ; // wait for serial attach
 
@@ -294,50 +150,39 @@ void setup()
   Debug.setDebugOutputStream(new WebLogPrint());
 
   Serial.setDebugOutput(true);
-/**
- * @brief Brief description of debugLog.
- *
- * @param XIGIMI..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Initializing ALEXA XIGIMI...");
   UtilityFunctions::UtilityFunctionsInit(); // Initialize utility functions
 
   // Create a ring buffer of 16 bytes with no-split type
-/**
- * @brief Brief description of initCmdRingBuffer.
- *
- * @return CmdRingBuffer:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   CmdRingBuffer::initCmdRingBuffer();
 
   // Check if the device is in master or slave mode
+  // If device is master: initialize cloud/WiFi functionality, otherwise
+  // run in BLE-only (slave) mode. Exit from this block when setup
+  // completes or after a restart is triggered on failure.
   if (UtilityFunctions::isMaster())
   {
+
+    /**
+    * @brief Setup (what happens once when the BluetoothESP32 device wakes up)
+    *
+    * Plain words: This function runs one time when the BluetoothESP32 device starts. It
+    * turns on the console (so we can see messages), sets up WiFi (if we are
+    * the boss/master), starts the little web server that helps configure
+    * the BluetoothESP32 device, and gets everything ready for the repeating work in
+    * `loop()`.
+     *
+     * Important steps:
+     * - Start serial console for debug messages
+     * - Redirect ESP logs to the web logger so logs are viewable remotely
+     * - Initialize utility code and the command ring buffer
+     * - If master: start WiFiManager to connect to WiFi or create an AP
+     * - Create the web server so users can interact through a browser
+     *
+     * Loops: this function does not contain repeated loops except possible
+     * short LED blink loops to show activity.
+     */
+
 
 #ifdef XIGIMI_DEBUG_WIFI_OFF
     UtilityFunctions::debugLog(
@@ -357,43 +202,8 @@ void setup()
     // awaiting configuration and will return success result
 
     bool res;
-/**
- * @brief Brief description of ledRed.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::ledRed();
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param WiFiManager..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Starting WiFiManager...");
     wm.setDebugOutput(true, WIFIDEBUG);
     wm.setConfigPortalBlocking(true);
@@ -410,167 +220,28 @@ void setup()
     // res = wm.autoConnect("AutoConnectAP","password"); // password protected
     // ap
 
+    // If connection to WiFi failed after the config portal timeout,
+    // indicate failure (long red blink) and restart to retry the
+    // initialization flow. Else, continue normal startup.
     if (!res)
     {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param init Describe this parameter.
- * @param sec:%i\n" Describe this parameter.
- * @param AP_CONNECT_TIMEOUT Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Failed to connect to wifi in startup init, and no one connected to AP in sec:%i\n", AP_CONNECT_TIMEOUT);
-/**
- * @brief Brief description of ledBlinkRedLong.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledBlinkRedLong();
-/**
- * @brief Brief description of debugLog.
- *
- * @param RESTARTING" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Failed to connect to wifi ssid in start up init: RESTARTING");
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     }
     else
     {
       // if you get here you have connected to the WiFi
       WiFi.setAutoReconnect(true);
-/**
- * @brief Brief description of debugLog.
- *
- * @param :)" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Connected to WIFI Network...yeey :)");
-/**
- * @brief Brief description of ledStop.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledStop();
-/**
- * @brief Brief description of ledBlinkGreenLong.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledBlinkGreenLong();
     }
 
     // create webserver
     rc_web = new RC_WebInterface();
     rc_web->begin();
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Web SERVER started ... ");
 
 #endif
@@ -583,27 +254,32 @@ void loop()
   // yield(); // for the watchdog timer on core 0
   // UtilityFunctions::delay(1000);
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param Running..." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+  /**
+   * @brief Main loop (this runs forever)
+   *
+   * Plain words: This is the BluetoothESP32 device's heartbeat — it keeps running again and
+   * again. The loop checks for Bluetooth remote commands, handles cloud and
+   * WiFi status, updates the web server, and makes sure the projector and
+   * other parts are kept in sync. Think of it as "look, listen, and act" in
+   * a small repeating cycle.
+   *
+   * Algorithm (high-level):
+   * - Wait a short time (so we don't use too much energy)
+   * - Blink a blue LED to show we're alive
+   * - Check if any remote (BLE) command is waiting and, if so, process it
+   * - If master: handle AIoT/cloud tasks and keep WiFi alive
+   * - Keep the web server running and update LEDs to show status
+   *
+   * Loops: The function contains an infinite `for(;;)` loop which repeatedly
+   * polls for commands and handles timeouts. Inner loops are small and used
+   * for retrying or blinking LEDs.
+   */
+
   UtilityFunctions::debugLog("LOOP TASK Running...");
 
   // Check if the device is in master or slave mode
+  // If this device is configured as master, start AIoT cloud services and
+  // register callbacks; otherwise operate in BLE-only mode.
   if (UtilityFunctions::isMaster())
   {
     UtilityFunctions::debugLog(
@@ -623,137 +299,29 @@ void loop()
     // ArduinoCloud.addCallback(ArduinoIoTCloudEvent::DISCONNECT,
     // onNetworkError);
     aIOT.start();
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("AIoT SERVER started ... ");
 
 #endif
   }
   else
   {
-/**
- * @brief Brief description of debugLog.
- *
- * @param mode." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Device is in BLE_Remote_Decoder mode.");
   }
 
   UtilityFunctions::waitTillInitComplete(); // master core will do the init we
                                             // wait till then
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("BLE Init COMPLETE ");
 
   bleRemoteDecoder = BLE_Remote_Decoder();
   bleRemoteDecoder.start();
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("BLE SERVER started ... ");
 
   ServoRemoteDecoder = Servo_Decoder();
   ServoRemoteDecoder.start();
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Servo SERVER started ... ");
 
   RelayRemoteDecoder = Relay_Decoder();
   RelayRemoteDecoder.start();
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Relay SERVER started ... ");
 
   // timer for the wifi disconnect reboot.
@@ -762,92 +330,27 @@ void loop()
   // variable to sync AIOT projector vraiable with BLE device paring to prevent when projecotr is on/off and Alexia thinks it is not and vice versa
   bool syncAIoTVariableWithBLEConnect = false;
   syncAIoTVariableWithBLEConnect = UtilityFunctions::loadSyncAIoTWithBLEDevice();
-/**
- * @brief Brief description of debugLogf.
- *
- * @param to:%i\n" Describe this parameter.
- * @param syncAIoTVariableWithBLEConnect Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Sync AIOT vriable with BLE paried device is set to:%i\n", syncAIoTVariableWithBLEConnect);
 
   bool AIOTLogOutput = false;
+  // Main worker loop: continuously polls for BLE commands, cloud and
+  // WiFi status, and handles timeouts. Intended to run indefinitely.
+  // Exit condition: only stops when the device is reset or powered off.
   for (;;) // infinite loop
   {
 
     /// bluetooth handle
-/**
- * @brief Brief description of delay.
- *
- * @param AIOT_POLL_TIME Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(AIOT_POLL_TIME);
-/**
- * @brief Brief description of ledBlinkBlue.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::ledBlinkBlue();
 
     ServerDecoder::Remote_Cmd *cmd;
     cmd = CmdRingBuffer::peekCmd();
+    // If a remote (BLE) command is waiting in the ring buffer, process it
+    // by dispatching to AIoT, BLE handlers, relay, and servo decoders.
+    // Exit: once processed, the command is dequeued and memory freed.
     if (cmd != NULL)
     {
       // start of command
-/**
- * @brief Brief description of ledWhite.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledWhite();
 #ifdef XIGIMI_DEBUG_WIFI_OFF
 #else
@@ -857,45 +360,10 @@ void loop()
       bleRemoteDecoder.doCmd(cmd);
       RelayRemoteDecoder.doCmd(cmd);
       ServoRemoteDecoder.doCmd(cmd);
-/**
- * @brief Brief description of ledStop.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledStop();
       // end of command
 
       // free up the memory of the cmd in ring buffer
-/**
- * @brief Brief description of dequeueCmd.
- *
- * @param cmd Describe this parameter.
- * @return CmdRingBuffer:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       CmdRingBuffer::dequeueCmd(cmd);
     }
 
@@ -905,27 +373,11 @@ void loop()
     UtilityFunctions::debugLog(
         "WIFI is truned off for  DEBUG via #define XIGIMI_DEBUG_WIFI_OFF");
 #else
-/**
- * @brief Brief description of delay.
- *
- * @param AIOT_POLL_TIME Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(AIOT_POLL_TIME);
 
-    // check if we are connected to Wifi
+    // Check WiFi connection: if disconnected, start/track a disconnect
+    // timer and reboot the device if it remains disconnected longer than
+    // `WIFI_DISCONNET_TIMEOUT_SEC`. Exit: when connected the timer resets.
     if (WiFi.status() != WL_CONNECTED)
     {
       // we are disconnected.
@@ -942,46 +394,7 @@ void loop()
         if (time_elapsed > (WIFI_DISCONNET_TIMEOUT_SEC * 1000000))
         {
           // greater than s secs (s * 1000 * 1000)
-/**
- * @brief Brief description of debugLogf.
- *
- * @param secs Describe this parameter.
- * @param time:%llu\n" Describe this parameter.
- * @param WIFI_DISCONNET_TIMEOUT_SEC Describe this parameter.
- * @param time_elapsed Describe this parameter.
- * @param Wifi_Disconnect_Start_Time Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           UtilityFunctions::debugLogf("Wifi is NOT CONNECTED for atleast %i secs, REBOOTING time elapsed:%llu and start time:%llu\n", WIFI_DISCONNET_TIMEOUT_SEC, time_elapsed, Wifi_Disconnect_Start_Time);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           UtilityFunctions::ESP32Restart();
         }
       }
@@ -995,33 +408,20 @@ void loop()
     checkResetPressed(); // Check if the reset button has been pressed
     ArduinoCloud.update();
 
-    // check if we need to update the cloud variable based on the BLE device connected
+    // Detect changes to the "sync AIoT with BLE" configuration flag and
+    // update the local copy. Purpose: avoid spamming logs inside the called
+    // helper which suppresses its own logs.
     if (syncAIoTVariableWithBLEConnect != UtilityFunctions::loadSyncAIoTWithBLEDevice())
     {
       // we do not want so many debug messages so UtilityFunctions::loadSyncAIoTWithBLEDevice does not log so we have to do this
-/**
- * @brief Brief description of debugLogf.
- *
- * @param \n" Describe this parameter.
- * @param syncAIoTVariableWithBLEConnect Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Sync AIoT vriable flag changed from:%i to :%i \n", syncAIoTVariableWithBLEConnect, UtilityFunctions::loadSyncAIoTWithBLEDevice());
       syncAIoTVariableWithBLEConnect = UtilityFunctions::loadSyncAIoTWithBLEDevice();
     }
+    // If user enabled syncing AIoT cloud state with BLE connection status,
+    // check whether any bonded BLE device is currently connected. If one or
+    // more clients are connected, set the `projector` cloud variable to
+    // ON; otherwise set it to OFF. If no bonded devices exist, log a single
+    // message asking the user to pair a device.
     if (syncAIoTVariableWithBLEConnect)
     {
       if (BLEDevice::getNumBonds() != 0)
@@ -1039,25 +439,6 @@ void loop()
           {
             projector.setSwitch(true);
             aIOT.setOldProjectorSwitch(false); // make the old value differnt so that when new command comes we will action it
-/**
- * @brief Brief description of debugLog.
- *
- * @param connected Describe this parameter.
- * @param TRUE" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLog("Projector is connected, but AIOT var is false setting to TRUE");
           }
         }
@@ -1068,25 +449,6 @@ void loop()
           {
             projector.setSwitch(false);
             aIOT.setOldProjectorSwitch(true); // make the old value differnt so that when new command comes we will action it
-/**
- * @brief Brief description of debugLog.
- *
- * @param connected Describe this parameter.
- * @param FALSE" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLog("Projector is NOT connected, but AIOT var is true setting to FALSE");
           }
         }
@@ -1095,28 +457,6 @@ void loop()
       {
         if (!AIOTLogOutput)
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param var Describe this parameter.
- * @param paired Describe this parameter.
- * @param bonds:%i Describe this parameter.
- * @param \n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
           UtilityFunctions::debugLogf("Asked to sync BLE device connect status with AIoT cloud var, but no BLE devices paired, Stored bonds:%i, Pair a devicce to make this work \n", NimBLEDevice::getNumBonds());
           AIOTLogOutput = true; // this will prrevent more log output till we reboot
         }
@@ -1128,70 +468,22 @@ void loop()
       rc_web->handleClient(); // do the web serv tasks
     }
 
+    // Update status LEDs based on AIoT connection and whether the first
+    // cloud synchronization has completed. Green = connected and synced,
+    // Yellow = connected but first sync pending, Red = not connected.
     if (aIOT.isConnectOK())
     {
       if (aIOT.hasFirstCloudSyncHasHappened())
       {
-/**
- * @brief Brief description of ledBlinkGreen.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledBlinkGreen();
       }
       else
       {
-/**
- * @brief Brief description of ledBlinkYellow.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledBlinkYellow();
       }
     }
     else
     {
-/**
- * @brief Brief description of ledBlinkRed.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ledBlinkRed();
     }
 

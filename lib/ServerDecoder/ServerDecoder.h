@@ -1,8 +1,9 @@
-/**
- * @file ServerDecoder.h
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
+/*
+ * Overview:
+ * This file is part of the BluetoothESP32 device project.
+ * It contains code used to handle hardware, BLE, WiFi, or web UI
+ * interactions for the device. Comments marked with [AUTO-DOC] were
+ * added automatically; please refine them to be more specific.
  */
 
 #pragma once

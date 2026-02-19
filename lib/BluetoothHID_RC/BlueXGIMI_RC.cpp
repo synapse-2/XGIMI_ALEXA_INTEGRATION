@@ -1,10 +1,3 @@
-/**
- * @file BlueXGIMI_RC.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 
 #include <Arduino.h>
 #include "UtilityFunctions.h"
@@ -155,47 +148,11 @@ void BlueXGIMI_RC::startStandardAdv()
 
   if (advertising->start(HID_ADV_STD_ID))
   {
-/**
- * @brief Brief description of debugLog.
- *
- * @param STARTED" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("ADV MAIN STARTED");
   }
   else
   {
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param START" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("ADV MAIN DID NOT START");
   }
 
@@ -205,66 +162,11 @@ void BlueXGIMI_RC::startStandardAdv()
 BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 {
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param startup!" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("In XIGIMI RC HID startup!");
 
-/**
- * @brief Brief description of setDeviceName.
- *
- * @param param Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setDeviceName(std::string(UtilityFunctions::loadBlueToothName().c_str()));
 
   // seems this is by default what xgimi listens on
-/**
- * @brief Brief description of setDefaultPhy.
- *
- * @param BLE_GAP_LE_PHY_1M_MASK Describe this parameter.
- * @param BLE_GAP_LE_PHY_1M_MASK Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setDefaultPhy(BLE_GAP_LE_PHY_1M_MASK, BLE_GAP_LE_PHY_1M_MASK);
 
   m_CustomService1 = server->createService(BLEUUID("0000D1FF-3C17-D293-8E48-14FE2E4DA212")); // uuid 0000D1FF-3C17-D293-8E48-14FE2E4DA212
@@ -309,24 +211,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
 
   // set the manufacturer name
 
-/**
- * @brief Brief description of std::string.
- *
- * @param 15) Describe this parameter.
- * @return setManufacturer( Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   setManufacturer(std::string(HID_MANUFACTURER_NAME).substr(0, 15));
   m_modelNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a24, NIMBLE_PROPERTY::BLE_READ);         // uuid 0x2a24
   m_SerialNumberCharacteristic = getDeviceInfoService()->createCharacteristic((uint16_t)0x2a25, NIMBLE_PROPERTY::BLE_READ);        // uuid 0x2a25
@@ -358,24 +242,6 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   if (m_CustomService1 == NULL)
   {
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param 1" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("In XIGIMI RC HID startup info set level 2 after unable to create service 1");
   }
 
@@ -439,127 +305,17 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   // BLE_SM_PAIR_AUTHREQ_BOND  - bond yes
   // BLE_SM_PAIR_AUTHREQ_MITM  - man in middle NO
   // BLE_SM_PAIR_AUTHREQ_SC - secure connection yes
-/**
- * @brief Brief description of setSecurityAuth.
- *
- * @param true Describe this parameter.
- * @param false Describe this parameter.
- * @param false Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setSecurityAuth(true, false, false);
-/**
- * @brief Brief description of setSecurityIOCap.
- *
- * @param BLE_HS_IO_NO_INPUT_OUTPUT Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setSecurityIOCap(BLE_HS_IO_NO_INPUT_OUTPUT);
   // BLE_SM_PAIR_KEY_DIST_ENC LTK key
   // BLE_SM_PAIR_KEY_DIST_ID  IRK key
   // BLE_SM_PAIR_KEY_DIST_SIGN CRSK key
-/**
- * @brief Brief description of setSecurityInitKey.
- *
- * @param BLE_SM_PAIR_KEY_DIST_SIGN Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setSecurityInitKey(BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID | BLE_SM_PAIR_KEY_DIST_SIGN);
-/**
- * @brief Brief description of setSecurityRespKey.
- *
- * @param BLE_SM_PAIR_KEY_DIST_SIGN Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   NimBLEDevice::setSecurityRespKey(BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID | BLE_SM_PAIR_KEY_DIST_SIGN);
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param services" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Starting HID services");
   startServices(); // HID start service - must be called after all charstics have been built
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param Advertising" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Setting up Advertising");
 
   initStandardAdvData();
@@ -572,47 +328,12 @@ BlueXGIMI_RC::BlueXGIMI_RC(BLEServer *server) : BluetoothHID_RC(server)
   uint8_t batteryLevel = 100;    // battery lvel can only be set AFTER advitsment and server start
   setBatteryLevel(batteryLevel); // set initial battery level to 100%
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param started...." Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Advertising started....");
 }
 
 void BlueXGIMI_RC::startServices()
 {
   // UtilityFunctions::debugLogf("BLE server dump %s\n", BLE_server->toString().c_str());
-/**
- * @brief Brief description of BluetoothHID_RC::startServices.
- *
- * @return BlueRC:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   BlueRC::BluetoothHID_RC::startServices();
   m_CustomService1->start();
   m_CustomService2->start();
@@ -633,114 +354,24 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
 
     case ServerDecoder::RC_Cmd_Action::Raw_2Byte:
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %0X Describe this parameter.
- * @param %0X\n" Describe this parameter.
- * @param command.cmds.codeData[0] Describe this parameter.
- * @param command.cmds.codeData[1] Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Sending RAW 2 byte button %0X,%0X\n", command.cmds.codeData[0], command.cmds.codeData[1]);
       thirdDeviceInput_03->setValue(command.cmds.codeData, 2);
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("RAW 2 byte button Notify failed");
       }
       break;
 
     case ServerDecoder::RC_Cmd_Action::Raw_8Byte:
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X Describe this parameter.
- * @param %0X\n" Describe this parameter.
- * @param command.cmds.codeData[0] Describe this parameter.
- * @param command.cmds.codeData[1] Describe this parameter.
- * @param command.cmds.codeData[2] Describe this parameter.
- * @param command.cmds.codeData[3] Describe this parameter.
- * @param command.cmds.codeData[4] Describe this parameter.
- * @param command.cmds.codeData[5] Describe this parameter.
- * @param command.cmds.codeData[6] Describe this parameter.
- * @param command.cmds.codeData[7] Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Sending RAW 8 byte button %0X,%0X,%0X,%0X,%0X,%0X,%0X,%0X\n", command.cmds.codeData[0], command.cmds.codeData[1], command.cmds.codeData[2], command.cmds.codeData[3], command.cmds.codeData[4], command.cmds.codeData[5], command.cmds.codeData[6], command.cmds.codeData[7]);
       keyboardInput_01->setValue(command.cmds.codeData, 8);
       btnPressedType = 1;
       // tell value has changed
       if (!keyboardInput_01->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("RAW 8 byte button Notify failed");
       }
       break;
@@ -771,48 +402,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
       //     Value: 0000
       //         [Expert Info (Note/Undecoded): Undecoded]
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending back button");
       thirdDeviceInput_03->setValue(HID_REP03_BACK_CMD, sizeof(HID_REP03_BACK_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("back button Notify failed");
       }
       break;
@@ -820,48 +415,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // OK_btn = 237
     case ServerDecoder::RC_Cmd_Action::Ok_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending OK button");
       thirdDeviceInput_03->setValue(HID_REP03_OK_CMD, sizeof(HID_REP03_OK_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Ok button Notify failed");
       }
       break;
@@ -869,48 +428,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Up_Btn = 238
     case ServerDecoder::RC_Cmd_Action::Up_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending up button");
       thirdDeviceInput_03->setValue(HID_REP03_UP_CMD, sizeof(HID_REP03_UP_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("UP button Notify failed");
       }
       break;
@@ -918,48 +441,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Right_Btn = 239,
     case ServerDecoder::RC_Cmd_Action::Right_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending right button");
       thirdDeviceInput_03->setValue(HID_REP03_RIGHT_CMD, sizeof(HID_REP03_RIGHT_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Right button Notify failed");
       }
       break;
@@ -967,48 +454,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Left_Btn = 240,
     case ServerDecoder::RC_Cmd_Action::Left_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending left button");
       thirdDeviceInput_03->setValue(HID_REP03_LEFT_CMD, sizeof(HID_REP03_LEFT_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Left button Notify failed");
       }
       break;
@@ -1016,48 +467,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Down_Btn = 241,
     case ServerDecoder::RC_Cmd_Action::Down_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending down button");
       thirdDeviceInput_03->setValue(HID_REP03_DOWN_CMD, sizeof(HID_REP03_DOWN_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Down button Notify failed");
       }
 
@@ -1066,48 +481,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Vol_Up_Btn = 242,
     case ServerDecoder::RC_Cmd_Action::Vol_Up_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending vol up  button");
       thirdDeviceInput_03->setValue(HID_REP03_VOL_UP_CMD, sizeof(HID_REP03_VOL_UP_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Down vol up Notify failed");
       }
       break;
@@ -1115,48 +494,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
       // Vol_Dn_Btn = 243,
     case ServerDecoder::RC_Cmd_Action::Vol_Dn_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending vol down button");
       thirdDeviceInput_03->setValue(HID_REP03_VOL_DOWN_CMD, sizeof(HID_REP03_VOL_DOWN_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Down vol down Notify failed");
       }
       break;
@@ -1164,48 +507,12 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Home_Btn = 246,
     case ServerDecoder::RC_Cmd_Action::Home_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending home button");
       thirdDeviceInput_03->setValue(HID_REP03_HOME_CMD, sizeof(HID_REP03_HOME_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Home Notify failed");
       }
       break;
@@ -1213,240 +520,60 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
     // Options_Btn = 247,
     case ServerDecoder::RC_Cmd_Action::Options_Btn:
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending options button");
       thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_OPTIONS_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Options Notify failed");
       }
       break;
 
       // Channel_Up_Btn
     case ServerDecoder::RC_Cmd_Action::Channel_Up_Btn:
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending ch up as vol up button");
       thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_VOL_UP_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Options Notify failed");
       }
       break;
 
       // Channel_dn_Btn
     case ServerDecoder::RC_Cmd_Action::Channel_Dn_Btn:
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending ch dn as vol dn button");
       thirdDeviceInput_03->setValue(HID_REP03_OPTIONS_CMD, sizeof(HID_REP03_VOL_DOWN_CMD));
       btnPressedType = 3;
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Options Notify failed");
       }
       break;
 
       // projector settings button
     case ServerDecoder::RC_Cmd_Action::Projector_Setting_Btn:
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending prrojector settings button");
       keyboardInput_01->setValue(HID_REP01_PROJ_SET_CMD, sizeof(HID_REP01_PROJ_SET_CMD));
       btnPressedType = 1;
       // tell value has changed
       if (!keyboardInput_01->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Options Notify failed");
       }
       break;
 
       // settings button
     case ServerDecoder::RC_Cmd_Action::Settings_Btn:
-/**
- * @brief Brief description of debugLog.
- *
- * @param button" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending settings button");
       keyboardInput_01->setValue(HID_REP01_SETTING_CMD, sizeof(HID_REP01_SETTING_CMD));
       btnPressedType = 1;
       // tell value has changed
       if (!keyboardInput_01->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Options Notify failed");
       }
       break;
@@ -1455,156 +582,30 @@ void BlueXGIMI_RC::doButtons(ServerDecoder::Remote_Cmd command)
 
     if (btnPressedType == 3)
     {
-/**
- * @brief Brief description of delay.
- *
- * @param HID_KEY_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(HID_KEY_DELAY);
-/**
- * @brief Brief description of debugLog.
- *
- * @param null" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending button null");
       thirdDeviceInput_03->setValue(HID_REP03_NULL_CMD, sizeof(HID_REP03_NULL_CMD));
       // tell value has changed
       if (!thirdDeviceInput_03->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("On off button Notify failed");
       }
     }
 
     if (btnPressedType == 1)
     {
-/**
- * @brief Brief description of delay.
- *
- * @param HID_KEY_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(HID_KEY_DELAY);
-/**
- * @brief Brief description of debugLog.
- *
- * @param null" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("Sending button null");
       keyboardInput_01->setValue(HID_REP01_NULL_CMD, sizeof(HID_REP01_NULL_CMD));
       // tell value has changed
       if (!keyboardInput_01->notify())
       {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("On off button Notify failed");
       }
     }
   }
   else
   {
-/**
- * @brief Brief description of debugLog.
- *
- * @param push" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("BLE NOT conneccted ignoring button push");
   }
 }
@@ -1616,25 +617,6 @@ void BlueXGIMI_RC::doCMD_ON()
   {
     // ok we are connedted to the projector so the projector must me ON
     // So ignore ass we are already on
-/**
- * @brief Brief description of debugLog.
- *
- * @param received Describe this parameter.
- * @param !!" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("ON cmd received, but already connected to projector via BLE ignoring the command !!");
   }
   else
@@ -1649,24 +631,6 @@ void BlueXGIMI_RC::doCMD_ON()
     while (advertising->isActive(HID_ADV_STD_ID))
     {
       advertising->stop(HID_ADV_STD_ID);
-/**
- * @brief Brief description of delay.
- *
- * @param 1000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(1000);
     }
 
@@ -1692,66 +656,12 @@ void BlueXGIMI_RC::doCMD_ON()
     advertising->setMaxInterval(60);
     advertising->start(500);
 #endif
-/**
- * @brief Brief description of debugLog.
- *
- * @param started" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("On button type 1 advertisment started");
-/**
- * @brief Brief description of delay.
- *
- * @param 1000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(1000);
 
     while (advertising->isActive(HID_ADV_ONDATA1_ID))
     {
       advertising->stop(HID_ADV_ONDATA1_ID);
-/**
- * @brief Brief description of delay.
- *
- * @param 1000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(1000);
     }
 
@@ -1780,67 +690,12 @@ void BlueXGIMI_RC::doCMD_ON()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-/**
- * @brief Brief description of debugLogf.
- *
- * @param started\n" Describe this parameter.
- * @param f Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Cycle num:%i - On button type 2 advertisment started\n", f);
-/**
- * @brief Brief description of delay.
- *
- * @param 500 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA2_ID))
       {
         advertising->stop(HID_ADV_ONDATA2_ID);
-/**
- * @brief Brief description of delay.
- *
- * @param 1000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::delay(1000);
       }
 
@@ -1867,110 +722,19 @@ void BlueXGIMI_RC::doCMD_ON()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-/**
- * @brief Brief description of debugLogf.
- *
- * @param started" Describe this parameter.
- * @param f Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("Cycle num:%i - On button type 3 advertisment started", f);
-/**
- * @brief Brief description of delay.
- *
- * @param 500 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA3_ID))
       {
         advertising->stop(HID_ADV_ONDATA3_ID);
-/**
- * @brief Brief description of delay.
- *
- * @param 1000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::delay(1000);
       }
     } // end for
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param COMPLETE" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("On button advertisment COMPLETE");
 
     // we wait for 5 secs for projector to connect back
-/**
- * @brief Brief description of delay.
- *
- * @param 5000 Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(5000);
 
     if (wasAdvertisingSTDpkt)
@@ -2004,116 +768,25 @@ void BlueXGIMI_RC::doCMD_OFF()
     // tell value has changed
     if (!keyboardInput_01->notify())
     {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("On off button Notify failed");
     }
-/**
- * @brief Brief description of delay.
- *
- * @param HID_KEY_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(HID_KEY_DELAY);
     keyboardInput_01->setValue(HID_REP01_NULL_CMD, sizeof(HID_REP01_NULL_CMD));
     // tell value has changed
     if (!keyboardInput_01->notify())
     {
-/**
- * @brief Brief description of debugLog.
- *
- * @param failed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLog("On off button Notify failed");
     }
 
     // now send ok button
     ServerDecoder::Remote_Cmd command;
     command.cmds.cmd = ServerDecoder::RC_Cmd_Action::Ok_Btn;
-/**
- * @brief Brief description of delay.
- *
- * @param HID_KEY_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::delay(HID_KEY_DELAY);
     doButtons(command);
   }
   else
   {
     // we are not connected to the projector but we got off command so we ignore 
-/**
- * @brief Brief description of debugLog.
- *
- * @param received Describe this parameter.
- * @param !!" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("OFF cmd received, but not connected to projector via BLE ignoring the command !!");
   }
 }
@@ -2156,26 +829,6 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
 {
   std::string s_cmd = std::string(magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)command.cmds.cmd));
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @param command.cmds.cmd Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("XIGIMI Remote received command %s amd in int %i\n", s_cmd.c_str(), command.cmds.cmd);
   bool cmdExecuted = false;
   switch (command.cmds.cmd)
@@ -2219,25 +872,6 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
     if (steps == 0)
       break;
     steps = (steps < 0) ? -steps : steps;
-/**
- * @brief Brief description of debugLogf.
- *
- * @param \n" Describe this parameter.
- * @param steps Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLogf("XIGIMI Remote step function of steps %i \n", steps);
     while (steps > 0)
     {
@@ -2251,25 +885,6 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
 
         newCMD.cmds.cmd = (command.cmds.cmd == ServerDecoder::RC_Cmd_Action::Volume) ? ServerDecoder::RC_Cmd_Action::Vol_Up_Btn : ServerDecoder::RC_Cmd_Action::Channel_Up_Btn;
       }
-/**
- * @brief Brief description of debugLogf.
- *
- * @param \n" Describe this parameter.
- * @param steps Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("XIGIMI Remote while function of steps %i \n", steps);
       doButtons(newCMD);
       steps--;
@@ -2278,27 +893,6 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
     break;
   }
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @param command.cmds.cmd Describe this parameter.
- * @param cmdExecuted Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("XIGIMI Remote receied command %s in int %i and execution status is %i\n", s_cmd.c_str(), command.cmds.cmd, cmdExecuted);
 }
 
@@ -2306,472 +900,61 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
 void BlueXGIMI_RC::onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("UUID ");
-/**
- * @brief Brief description of debugLog.
- *
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
 
   NimBLEAttValue val = pCharacteristic->getValue();
   std::string value = NimBLEUtils::dataToHexString(val.data(), val.length());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data received HEX %s\n", value.c_str());
   if (val.length() > 0)
   {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLogf("Data received RAW %s\n", pCharacteristic->getValue());
   }
 }
 
 void BlueXGIMI_RC::onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("UUID ");
-/**
- * @brief Brief description of debugLog.
- *
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
 
   NimBLEAttValue val = pCharacteristic->getValue();
   std::string value = NimBLEUtils::dataToHexString(val.data(), val.length());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data SENT HEX %s\n", value.c_str());
   if (val.length() > 0)
   {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLogf("Data received RAW %s\n", pCharacteristic->getValue());
   }
 }
 
 void BlueXGIMI_RC::onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("UUID ");
-/**
- * @brief Brief description of debugLog.
- *
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("CODE RAW %i\n", code);
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %02x\n" Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("CODE HEX %02x\n", code);
 }
 void BlueXGIMI_RC::onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("UUID ");
-/**
- * @brief Brief description of debugLog.
- *
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(pCharacteristic->getUUID().toString().c_str());
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Data length %i\n", pCharacteristic->getLength());
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("SUBValue RAW %i\n", subValue);
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %02x\n" Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("SUBValue HEX %02x\n", subValue);
 }
 
 void BlueXGIMI_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of onConnect.
- *
- * @param pServer Describe this parameter.
- * @param connInfo Describe this parameter.
- * @return BluetoothHID_RC:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   BluetoothHID_RC::onConnect(pServer, connInfo);
 }
 
 void BlueXGIMI_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason)
 {
-/**
- * @brief Brief description of onDisconnect.
- *
- * @param pServer Describe this parameter.
- * @param connInfo Describe this parameter.
- * @param reason Describe this parameter.
- * @return BluetoothHID_RC:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   BluetoothHID_RC::onDisconnect(pServer, connInfo, reason);
 }
 
@@ -2781,94 +964,22 @@ BlueXGIMI_RC::~BlueXGIMI_RC() {}
 //  BLECharacteristicCallbacks
 void BlueXGIMI_RC::ReportInput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_01_onRead - passing to default handler");
   onRead(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_01_onWrite - passing to default handler");
   onWrite(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_01_onStatus - passing to default handler");
   onStatus(pCharacteristic, code);
 }
 
 void BlueXGIMI_RC::ReportInput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_01_onSubscribe - passing to default handler");
   onSubscribe(pCharacteristic, connInfo, subValue);
 }
@@ -2877,93 +988,21 @@ void BlueXGIMI_RC::ReportInput_01_onSubscribe(NimBLECharacteristic *pCharacteris
 //  BLECharacteristicCallbacks
 void BlueXGIMI_RC::ReportOutput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_01_onRead - passing to default handler");
   onRead(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportOutput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_01_onWrite - passing to default handler");
   onWrite(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportOutput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_01_onStatus - passing to default handler");
   onStatus(pCharacteristic, code);
 }
 void BlueXGIMI_RC::ReportOutput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_01_onSubscribe - passing to default handler");
   onSubscribe(pCharacteristic, connInfo, subValue);
 }
@@ -2972,93 +1011,21 @@ void BlueXGIMI_RC::ReportOutput_01_onSubscribe(NimBLECharacteristic *pCharacteri
 // BLECharacteristicCallbacks
 void BlueXGIMI_RC::ReportInput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_30_onRead - passing to default handler");
   onRead(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_30_onWrite - passing to default handler");
   onWrite(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_30_onStatus - passing to default handler");
   onStatus(pCharacteristic, code);
 }
 void BlueXGIMI_RC::ReportInput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_30_onSubscribe - passing to default handler");
   onSubscribe(pCharacteristic, connInfo, subValue);
 }
@@ -3067,93 +1034,21 @@ void BlueXGIMI_RC::ReportInput_30_onSubscribe(NimBLECharacteristic *pCharacteris
 //  BLECharacteristicCallbacks
 void BlueXGIMI_RC::ReportOutput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_30_onRead - passing to default handler");
   onRead(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportOutput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_30_onWrite - passing to default handler");
   onWrite(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportOutput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_30_onStatus - passing to default handler");
   onStatus(pCharacteristic, code);
 }
 void BlueXGIMI_RC::ReportOutput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportOutput_30_onSubscribe - passing to default handler");
   onSubscribe(pCharacteristic, connInfo, subValue);
 }
@@ -3162,93 +1057,21 @@ void BlueXGIMI_RC::ReportOutput_30_onSubscribe(NimBLECharacteristic *pCharacteri
 // BLECharacteristicCallbacks
 void BlueXGIMI_RC::ReportInput_03_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_03_onRead - passing to default handler");
   onRead(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_03_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_03_onWrite - passing to default handler");
   onWrite(pCharacteristic, connInfo);
 }
 void BlueXGIMI_RC::ReportInput_03_onStatus(NimBLECharacteristic *pCharacteristic, int code)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_03_onStatus - passing to default handler");
   onStatus(pCharacteristic, code);
 }
 void BlueXGIMI_RC::ReportInput_03_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param handler" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(" IN ReportInput_03_onSubscribe - passing to default handler");
   onSubscribe(pCharacteristic, connInfo, subValue);
 }

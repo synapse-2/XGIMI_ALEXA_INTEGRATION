@@ -1,8 +1,9 @@
-/**
- * @file BlueRC.h
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
+/*
+ * Overview:
+ * This file is part of the BluetoothESP32 device project.
+ * It contains code used to handle hardware, BLE, WiFi, or web UI
+ * interactions for the device. Comments marked with [AUTO-DOC] were
+ * added automatically; please refine them to be more specific.
  */
 
 #pragma once
@@ -49,173 +50,174 @@ namespace BlueRC
         BluetoothHID_RC(BLEServer *server);
 
         // we donot have these in NibmeBLE NimBLEDevice so we need to ADD !!!
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setDeviceAppreance.
+ * @brief Handles set Device Appreance.
  *
  * @param appearance Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void setDeviceAppreance(uint16_t appearance);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of sendButtonPress.
+ * @brief Performs send Button Press operations.
  *
  * @param command Describe this parameter.
  * @return virtual void Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         virtual void sendButtonPress(ServerDecoder::Remote_Cmd command);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of canHandleButtonPress.
+ * @brief Performs can Handle Button Press operations.
  *
  * @param command Describe this parameter.
  * @return virtual bool Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         virtual bool canHandleButtonPress(ServerDecoder::Remote_Cmd command);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of startStandardAdv.
+ * @brief Initializes or starts start Standard Adv.
  *
  * @return virtual void Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         virtual void startStandardAdv();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of initStandardAdvData.
+ * @brief Initializes or starts init Standard Adv Data.
  *
  * @return virtual void Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         virtual void initStandardAdvData();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of startServices.
+ * @brief Initializes or starts start Services.
  *
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void startServices();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of BluetoothHID_RC.
+ * @brief Performs Bluetooth HID RC operations.
  *
  * @return virtual ~ Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         virtual ~BluetoothHID_RC();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setReportMap.
+ * @brief Handles set Report Map.
  *
- * @param param Describe this parameter.
+ * @param *map Describe this parameter.
  * @param uint16_t Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void setReportMap(uint8_t *map, uint16_t);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setManufacturer.
+ * @brief Handles set Manufacturer.
  *
- * @param param Describe this parameter.
+ * @param &name Describe this parameter.
  * @return bool Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         bool setManufacturer(const std::string &name);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setPnp.
+ * @brief Handles set Pnp.
  *
  * @param sig Describe this parameter.
  * @param vid Describe this parameter.
@@ -223,380 +225,379 @@ namespace BlueRC
  * @param version Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void setPnp(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setHidInfo.
+ * @brief Handles set Hid Info.
  *
  * @param country Describe this parameter.
  * @param flags Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void setHidInfo(uint8_t country, uint8_t flags);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of setBatteryLevel.
+ * @brief Handles set Battery Level.
  *
  * @param level Describe this parameter.
  * @param false Describe this parameter.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         void setBatteryLevel(uint8_t level, bool notify = false);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getBatteryLevel.
+ * @brief Handles get Battery Level.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getBatteryLevel();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getReportMap.
+ * @brief Handles get Report Map.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getReportMap();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getHidControl.
+ * @brief Handles get Hid Control.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getHidControl();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getInputReport.
+ * @brief Handles get Input Report.
  *
  * @param reportId Describe this parameter.
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getInputReport(uint8_t reportId);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getOutputReport.
+ * @brief Handles get Output Report.
  *
  * @param reportId Describe this parameter.
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getOutputReport(uint8_t reportId);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getFeatureReport.
+ * @brief Handles get Feature Report.
  *
  * @param reportId Describe this parameter.
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getFeatureReport(uint8_t reportId);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getProtocolMode.
+ * @brief Handles get Protocol Mode.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getProtocolMode();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getBootInput.
+ * @brief Handles get Boot Input.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getBootInput();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getBootOutput.
+ * @brief Handles get Boot Output.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getBootOutput();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getPnp.
+ * @brief Handles get Pnp.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getPnp();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getHidInfo.
+ * @brief Handles get Hid Info.
  *
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLECharacteristic *getHidInfo();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getDeviceInfoService.
+ * @brief Handles get Device Info Service.
  *
  * @return NimBLEService * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLEService *getDeviceInfoService();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getHidService.
+ * @brief Handles get Hid Service.
  *
  * @return NimBLEService * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLEService *getHidService();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getBatteryService.
+ * @brief Handles get Battery Service.
  *
  * @return NimBLEService * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLEService *getBatteryService();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getConnectedCount.
+ * @brief Handles get Connected Count.
  *
  * @return uint8_t Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         uint8_t getConnectedCount();
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getPeerDevices.
+ * @brief Handles get Peer Devices.
  *
  * @return std::vector<uint16_t> Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         std::vector<uint16_t> getPeerDevices() const;
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of getPeerInfo.
+ * @brief Handles get Peer Info.
  *
  * @param handle Describe this parameter.
  * @return NimBLEConnInfo Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
  * - Space: O(...)
  */
         NimBLEConnInfo getPeerInfo(uint8_t handle);
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of disconnect.
+ * @brief Performs disconnect operations.
  *
  * @param connHandle Describe this parameter.
  * @param reason Describe this parameter.
  * @return bool Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)
@@ -618,20 +619,20 @@ namespace BlueRC
         NimBLECharacteristic *m_protocolModeChr{nullptr}; // 0x2a4e
         NimBLECharacteristic *m_batteryLevelChr{nullptr}; // 0x2a19
 
+/* [AUTO-DOC] */
 /**
- * @brief Brief description of locateReportCharacteristicByIdAndType.
+ * @brief Performs locate Report Characteristic By Id And Type operations.
  *
  * @param reportId Describe this parameter.
  * @param reportType Describe this parameter.
  * @return NimBLECharacteristic * Describe the return value.
  *
  * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
+ * - High-level steps the function performs.
+ * - Mention important side-effects (WiFi, BLE, hardware).
  *
  * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
+ * - Describe each loop purpose and termination condition here.
  *
  * Complexity:
  * - Time: O(...)

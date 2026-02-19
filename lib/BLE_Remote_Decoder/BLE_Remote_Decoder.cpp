@@ -1,10 +1,3 @@
-/**
- * @file BLE_Remote_Decoder.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 #include <UtilityFunctions.h> // Custom utility functions
@@ -34,25 +27,6 @@ bool BLE_Remote_Decoder::disconnectAllClients()
         // Returns a vector of connection handles (uint16_t)
         std::vector<uint16_t> handles = rcHID->getPeerDevices();
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param disconnect:%i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLogf("Ble peers for disconnect:%i\n", handles.size());
 
         for (uint16_t handle : handles)
@@ -61,50 +35,14 @@ bool BLE_Remote_Decoder::disconnectAllClients()
             if (!rcHID->disconnect(handle, BLE_ERR_REM_USER_CONN_TERM))
             {
                 sucess = false;
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param handle Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLogf("Unable to disconnect handle %i\n", handle);
             }
         }
     }
 
+    // [AUTO-ANNOTATED] If-condition (!BLEDevice::deleteAllBonds()): this branch handles the case when condition is true.
     if (!BLEDevice::deleteAllBonds()){
         sucess = false;
-/**
- * @brief Brief description of debugLog.
- *
- * @param bonds" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Unable to delete all bonds");
     }
     return sucess;
@@ -120,25 +58,6 @@ String BLE_Remote_Decoder::getConnectedDevicesTable()
         // Returns a vector of connection handles (uint16_t)
         std::vector<uint16_t> handles = rcHID->getPeerDevices();
 
-/**
- * @brief Brief description of debugLogf.
- *
- * @param peers:%i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLogf("Ble peers:%i\n", handles.size());
 
         str = str + std::format("{: <3}{: <4}{: <18}{: <7}{: <4}{: <5}{: <4}\n",
@@ -154,25 +73,6 @@ String BLE_Remote_Decoder::getConnectedDevicesTable()
             for (uint16_t handle : handles)
             {
                 // Fetch detailed info using the handle
-/**
- * @brief Brief description of debugLogf.
- *
- * @param handle:%i\n" Describe this parameter.
- * @param handle Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLogf("BLE info get handle:%i\n", handle);
                 NimBLEConnInfo info = rcHID->getPeerInfo(handle);
 
@@ -191,24 +91,6 @@ String BLE_Remote_Decoder::getConnectedDevicesTable()
         }
     }
 
-/**
- * @brief Brief description of String.
- *
- * @param param Describe this parameter.
- * @return return Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     return String(str.c_str());
 }
 
@@ -216,125 +98,19 @@ void BLE_Remote_Decoder::start()
 {
     // need to make the Bluetooth client
 
-/**
- * @brief Brief description of init.
- *
- * @param param Describe this parameter.
- * @return NimBLEDevice:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     NimBLEDevice::init(std::string(UtilityFunctions::loadBlueToothName().c_str()));
     NimBLEServer *pServer = NimBLEDevice::createServer();
     if (pServer == NULL)
     {
-/**
- * @brief Brief description of debugLog.
- *
- * @param " Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::debugLog("Null BLE devide server created stopping BLE ");
-/**
- * @brief Brief description of ledBlinkRedLong.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledBlinkRedLong();
-/**
- * @brief Brief description of ledBlinkRed.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         UtilityFunctions::ledBlinkRed();
         return;
     }
-/**
- * @brief Brief description of debugLog.
- *
- * @param created" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("BLE server created");
     rcHID = new BlueXGIMI_RC(pServer);
 
     // if you get here you have connected to the WiFi
-/**
- * @brief Brief description of debugLog.
- *
- * @param :)" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Bluetooth started...yeey :)");
 }
 
@@ -356,26 +132,6 @@ void BLE_Remote_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
         // debug log if the cmd was not handled as not all remotes handle all commands
         if (!cmdhandled)
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param \n" Describe this parameter.
- * @param param Describe this parameter.
- * @param cmd->cmds.cmd Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("By BLE remote decoder - Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
         }
     }

@@ -1,10 +1,3 @@
-/**
- * @file RC_Webinterface.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #include "RC_WebInterface.h"
 #include "BLE_Remote_Decoder.h"
 #include "BlueRC.h"
@@ -41,24 +34,6 @@ RC_WebInterface::RC_WebInterface() : _server(80)
           UtilityFunctions::loadLocalHostname()))
   { // Set the hostname to
     // "alexa_esp32.local"
-/**
- * @brief Brief description of debugLog.
- *
- * @param responder!" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Error setting up MDNS responder!");
     while (1)
     {
@@ -70,25 +45,6 @@ RC_WebInterface::RC_WebInterface() : _server(80)
   MDNS.addService("http", "tcp", 80);
   UtilityFunctions::debugLogf(
       "Webserver: mDNS responder started Local name:%s and IP:%s\n",
-/**
- * @brief Brief description of loadLocalHostname.
- *
- * @param ) Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::loadLocalHostname(), WiFi.localIP().toString().c_str());
 }
 String RC_WebInterface::wifiSignalStrengthDecoder(int8_t rssi)
@@ -235,24 +191,6 @@ void RC_WebInterface::begin()
     return;
   }
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param OK" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Webserver: Mounted FFat OK");
   loadAdminPassword();
 
@@ -296,24 +234,6 @@ bool RC_WebInterface::checkAdminAuth()
         (String("Default username ") + String(NVRAM_PERFS_ADMIN_NAME) +
          String(" password ") + String(NVRAM_PERFS_ADMIN_PASS_DEFAULT))
             .c_str());
-/**
- * @brief Brief description of debugLog.
- *
- * @param FAILED" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Webserver: auth FAILED");
     return false;
   }
@@ -321,24 +241,6 @@ bool RC_WebInterface::checkAdminAuth()
 }
 void RC_WebInterface::enQueueCmd(ServerDecoder::Remote_Cmd cmd)
 {
-/**
- * @brief Brief description of enQueueCmd.
- *
- * @param cmd Describe this parameter.
- * @return CmdRingBuffer:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   CmdRingBuffer::enQueueCmd(cmd);
 }
 // Handle remote control button presses by sending to ring buffer
@@ -358,24 +260,6 @@ void RC_WebInterface::handleRemotePress()
   if (_server.hasArg("cmd"))
   {
     action = _server.arg("cmd");
-/**
- * @brief Brief description of debugLog.
- *
- * @param action Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Webserver: Received guest command: " + action);
 
     if (action.equals("power"))
@@ -517,24 +401,6 @@ void RC_WebInterface::handleRemotePress()
   {
     _server.send(200, "plain/txt", "{ \"success\": true }");
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param action Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Webserver: SUCESS guest command: " + action);
   }
   else
@@ -542,24 +408,6 @@ void RC_WebInterface::handleRemotePress()
     _server.send(200, "plain/txt",
                  "{ \"success\": false, \"message\": \"command not found-" +
                      action + "\" }");
-/**
- * @brief Brief description of debugLog.
- *
- * @param action Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Webserver: ERROR guest command: " + action);
   }
 }
@@ -629,25 +477,6 @@ void RC_WebInterface::setupRoutes()
 
   // Handle button presses
   _server.on("/remote-action", HTTP_GET,
-/**
- * @brief Brief description of bind.
- *
- * @param param Describe this parameter.
- * @param this) Describe this parameter.
- * @return std:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
              std::bind(&RC_WebInterface::handleRemotePress, this));
 
   // Admin settings page (requires auth)
@@ -691,25 +520,6 @@ void RC_WebInterface::setupRoutes()
 
   // Handle password change (requires auth)
   _server.on("/change-password", HTTP_POST,
-/**
- * @brief Brief description of bind.
- *
- * @param param Describe this parameter.
- * @param this) Describe this parameter.
- * @return std:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
              std::bind(&RC_WebInterface::handleUpdatePassword, this));
 
   // Handle forms
@@ -724,24 +534,6 @@ void RC_WebInterface::setupRoutes()
                if ((projector >= 0) && (projector < projectorWakeList.size()))
                {
 
-/**
- * @brief Brief description of saveWakePacketNum.
- *
- * @param projector Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                  UtilityFunctions::saveWakePacketNum(projector);
                }
 
@@ -764,24 +556,6 @@ void RC_WebInterface::setupRoutes()
                  return;
                String hex2byte = _server.arg("hex2byte");
                // Add logic here to process the 2-byte hex value
-/**
- * @brief Brief description of debugLog.
- *
- * @param hex2byte Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                UtilityFunctions::debugLog("Received 2-byte hex: " + hex2byte);
                if (hex2byte.length() == 4)
                {
@@ -792,27 +566,6 @@ void RC_WebInterface::setupRoutes()
                   sscanf(hex2byte.substring(f*2,(f*2)+2).c_str(), "%2x",&rcCmd.cmds.codeData[f]);
                   }
                   enQueueCmd(rcCmd);
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %02x Describe this parameter.
- * @param %02x\n" Describe this parameter.
- * @param rcCmd.cmds.codeData[0] Describe this parameter.
- * @param rcCmd.cmds.codeData[1] Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLogf("Hex 2-byte packet sent with bytes %02x,%02x\n",rcCmd.cmds.codeData[0],rcCmd.cmds.codeData[1]);
                  _server.send(200, "text/plain", "2-byte hex received and queeued!");
                }
@@ -827,24 +580,6 @@ void RC_WebInterface::setupRoutes()
                  return;
                String hex8byte = _server.arg("hex8byte");
                // Add logic here to process the 8-byte hex value
-/**
- * @brief Brief description of debugLog.
- *
- * @param hex8byte Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                UtilityFunctions::debugLog("Received 8-byte hex: " + hex8byte);
                if (hex8byte.length() == 16)
                {
@@ -856,39 +591,6 @@ void RC_WebInterface::setupRoutes()
                    sscanf(hex8byte.substring(f * 2, (f * 2) + 2).c_str(), "%2x", &rcCmd.cmds.codeData[f]);
                  }
                  enQueueCmd(rcCmd);
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x Describe this parameter.
- * @param %02x\n" Describe this parameter.
- * @param rcCmd.cmds.codeData[0] Describe this parameter.
- * @param rcCmd.cmds.codeData[1] Describe this parameter.
- * @param rcCmd.cmds.codeData[2] Describe this parameter.
- * @param rcCmd.cmds.codeData[3] Describe this parameter.
- * @param rcCmd.cmds.codeData[4] Describe this parameter.
- * @param rcCmd.cmds.codeData[5] Describe this parameter.
- * @param rcCmd.cmds.codeData[6] Describe this parameter.
- * @param rcCmd.cmds.codeData[7] Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                  UtilityFunctions::debugLogf("Hex 8-byte packet sent with bytes %02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n", rcCmd.cmds.codeData[0], rcCmd.cmds.codeData[1], rcCmd.cmds.codeData[2], rcCmd.cmds.codeData[3], rcCmd.cmds.codeData[4], rcCmd.cmds.codeData[5], rcCmd.cmds.codeData[6], rcCmd.cmds.codeData[7]);
                  _server.send(200, "text/plain", "8-byte hex received and queeued!");
                }
@@ -902,64 +604,11 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newHostname = _server.arg("newHostname");
-/**
- * @brief Brief description of debugLog.
- *
- * @param newHostname Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Hostname change requested to: " + newHostname);
     String sucess = UtilityFunctions::saveLocalHostname(newHostname);
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "Hostname updated! Restarting...");
-/**
- * @brief Brief description of delay.
- *
- * @param WEB_ESP_RESTART_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "Hostname FAILED to update:" + sucess);
@@ -975,42 +624,7 @@ void RC_WebInterface::setupRoutes()
     String sucess = UtilityFunctions::saveBlueToothName(newBlueName);
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "BlueTooth name updated! Restarting...");
-/**
- * @brief Brief description of delay.
- *
- * @param WEB_ESP_RESTART_DELAY Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "BlueTooth FAILED to update:" + sucess);
@@ -1021,24 +635,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoIOPIN");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Servo IO PIN  change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -1050,23 +646,6 @@ void RC_WebInterface::setupRoutes()
       if (sucess.isEmpty()) {
         _server.send(200, "text/plain", "Servo IO PIN Updated...");
    delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
       } else {
         _server.send(200, "text/plain",
@@ -1079,24 +658,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoMAXAngle");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Servo Max Angle change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -1119,24 +680,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newservoRESTAngle");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Servo REST Angle change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -1210,46 +753,11 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String newDevID = _server.arg("newdeviceID");
-/**
- * @brief Brief description of debugLog.
- *
- * @param newDevID Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Device ID change requested to: " + newDevID);
     String sucess = UtilityFunctions::saveAIoTDeviceID(newDevID);
     if (sucess.isEmpty()) {
       _server.send(200, "text/plain", "DEVICE ID updated! Restarting...");
       delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain", "DEVICE ID update FAILED ..." + sucess);
@@ -1268,23 +776,6 @@ void RC_WebInterface::setupRoutes()
       _server.send(200, "text/plain",
                    "DEVICE SECRET ID updated! Restarting...");
       delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
     } else {
       _server.send(200, "text/plain",
@@ -1296,24 +787,6 @@ void RC_WebInterface::setupRoutes()
     if (!checkAdminAuth())
       return;
     String arg = _server.arg("newrelayIOPIN");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Relay IO PIN  change requested to: " + arg);
     int num = arg.toInt();
     if (num == 0) {
@@ -1325,23 +798,6 @@ void RC_WebInterface::setupRoutes()
       if (sucess.isEmpty()) {
         _server.send(200, "text/plain", "Relay IO PIN Updated...");
    delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::ESP32Restart();
       } else {
         _server.send(200, "text/plain",
@@ -1379,24 +835,6 @@ void RC_WebInterface::setupRoutes()
                if (!checkAdminAuth())
                  return;
                String arg = _server.arg("relay_enabled");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                UtilityFunctions::debugLog("Relay is enabled change requested to: " + arg);
                 arg.toLowerCase();
                bool check = ( arg.equals("true")) ? true : false;
@@ -1430,23 +868,6 @@ void RC_WebInterface::setupRoutes()
 
               _server.send(200, "plain/txt", "{ \"success\": true }");
                 delay(WEB_ESP_RESTART_DELAY);
-/**
- * @brief Brief description of ESP32Restart.
- *
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::ESP32Restart();
               }else
                {
@@ -1460,24 +881,6 @@ void RC_WebInterface::setupRoutes()
                if (!checkAdminAuth())
                  return;
                String arg = _server.arg("SyncAIoT_enabled");
-/**
- * @brief Brief description of debugLog.
- *
- * @param arg Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                UtilityFunctions::debugLog("Sync AIoT var to BLE device pairing change requested to: " + arg);
                 arg.toLowerCase();
                bool check = ( arg.equals("true")) ? true : false;
@@ -1501,24 +904,6 @@ void RC_WebInterface::setupRoutes()
                if (!checkAdminAuth())
                  return;
       
-/**
- * @brief Brief description of debugLog.
- *
- * @param Clients" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                UtilityFunctions::debugLog("Request to disconnect all BLE Clients");
                
                bool sucess = bleRemoteDecoder.disconnectAllClients();
@@ -1540,46 +925,9 @@ void RC_WebInterface::setupRoutes()
               if (!checkAdminAuth()) return;
               _server.sendHeader("Connection", "close");
               if (Update.hasError()) {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
                 _server.send(200, "plain/txt", "{ \"success\": false, \"message\": \"OTA Firmware Error-" + String(Update.errorString()) + "\" }");
               } else {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Success" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLog("OTA Firmware Update Success");
                 _server.send(200, "plain/txt", "{ \"success\": true }");
               delay(WEB_ESP_RESTART_DELAY);
@@ -1590,114 +938,19 @@ void RC_WebInterface::setupRoutes()
               if (!checkAdminAuth()) return; // no unauth access to upload
               HTTPUpload& upload = _server.upload();
               if (upload.status == UPLOAD_FILE_START) {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLogf("OTA Firmware Update: %s\n", upload.filename.c_str());
                 if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_FLASH)) {  //start with max available size U_FLASH = app, U_FATFS = first fat partition
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                    UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
                 }
               } else if (upload.status == UPLOAD_FILE_WRITE) {
                 /* flashing firmware to ESP*/
                 if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                    UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
                 }
               } else if (upload.status == UPLOAD_FILE_END) {
                 if (Update.end(true)) {  //true to set the size to the current progress
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %u\nRebooting...\n" Describe this parameter.
- * @param upload.totalSize Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLogf("OTA Firmware Update Success: %u\nRebooting...\n", upload.totalSize);
                 } else {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLog("OTA Firmware Update Failed, Error: " + String(Update.errorString()));
                 }
               } });
@@ -1709,46 +962,9 @@ void RC_WebInterface::setupRoutes()
               if (!checkAdminAuth()) return;
               _server.sendHeader("Connection", "close");
               if (Update.hasError()) {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
                 _server.send(200, "plain/txt", "{ \"success\": false, \"message\": \"OTA FS firmware Error-" + String(Update.errorString()) + "\" }");
               } else {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Success" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLog("OTA FS firmware Update Success");
                 _server.send(200, "plain/txt", "{ \"success\": true }");
               delay(WEB_ESP_RESTART_DELAY);
@@ -1759,69 +975,13 @@ void RC_WebInterface::setupRoutes()
               if (!checkAdminAuth()) return; // no unauth access to upload
               HTTPUpload& upload = _server.upload();
               if (upload.status == UPLOAD_FILE_START) {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                 UtilityFunctions::debugLogf("FS firmware Update: %s\n", upload.filename.c_str());
                 if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_FATFS)) {  //start with max available size U_FLASH = app, U_FATFS = first fat partition
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                    UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
                 }
                 // add the wear buffer of 0x1000 (4096) of zeros or this gives an error !BUG! in Update FAT image
                 byte* data_buffer = (byte*)malloc(1);
                 if (data_buffer == NULL) {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param bytes\n" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLogf("OTA FS firmware Update FAILED to allocate buffer for 4096 bytes\n");
                   return; // Stop if allocation fails
                 }else {
@@ -1834,69 +994,12 @@ void RC_WebInterface::setupRoutes()
               } else if (upload.status == UPLOAD_FILE_WRITE) {
                 /* flashing firmware to ESP*/
                 if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                    UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
                 }
               } else if (upload.status == UPLOAD_FILE_END) {
                 if (Update.end(true)) {  //true to set the size to the current progress
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %u\nRebooting...\n" Describe this parameter.
- * @param upload.totalSize Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLogf("OTA FS firmware Update Success: %u\nRebooting...\n", upload.totalSize);
                 } else {
-/**
- * @brief Brief description of debugLog.
- *
- * @param Failed Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
                   UtilityFunctions::debugLog("OTA FS firmware Update Failed, Error: " + String(Update.errorString()));
                 }
               } });
