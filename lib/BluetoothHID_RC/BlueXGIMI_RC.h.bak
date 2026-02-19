@@ -1,10 +1,3 @@
-/**
- * @file BlueXGIMI_RC.h
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #pragma once
 #include "defaults.h"
 #include "UtilityFunctions.h"
@@ -408,92 +401,10 @@ public:
     void sendButtonPress(ServerDecoder::Remote_Cmd command) override;
     bool canHandleButtonPress(ServerDecoder::Remote_Cmd command) override;
     void initStandardAdvData() override;
-/**
- * @brief Brief description of startServices.
- *
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void startServices();
-/**
- * @brief Brief description of doCMD_OFF.
- *
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void doCMD_OFF();
-/**
- * @brief Brief description of doCMD_ON.
- *
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void doCMD_ON();
-/**
- * @brief Brief description of doButtons.
- *
- * @param command Describe this parameter.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void doButtons(ServerDecoder::Remote_Cmd command);
-/**
- * @brief Brief description of BlueXGIMI_RC.
- *
- * @return virtual ~ Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual ~BlueXGIMI_RC();
 
     friend class Callback_handler_Rep_Inp_01;
@@ -584,39 +495,7 @@ protected:
     BLECharacteristic *m_0x6287Characteristic; // uuid 00006387-3C17-D293-8E48-14FE2E4DA212
     BLECharacteristic *m_0x6387Characteristic; // uuid 00006487-3C17-D293-8E48-14FE2E4DA212
 
-/**
- * @brief Brief description of initOnButtonAdvData.
- *
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void initOnButtonAdvData();
-/**
- * @brief Brief description of startStandardAdv.
- *
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     void startStandardAdv();
 
     // BLEServerCallbacks
@@ -630,422 +509,37 @@ protected:
 
     // report id call backs for Report#01 Input i.e bytes sent from esp32 to the projector/computer
     //  BLECharacteristicCallbacks
-/**
- * @brief Brief description of ReportInput_01_onRead.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_01_onWrite.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_01_onStatus.
- *
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code);
-/**
- * @brief Brief description of ReportInput_01_onSubscribe.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
 
     // report id call backs for Report#01 Output i.e bytes sent from projector/computer to theesp32
     //  BLECharacteristicCallbacks
-/**
- * @brief Brief description of ReportOutput_01_onRead.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_01_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportOutput_01_onWrite.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_01_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportOutput_01_onStatus.
- *
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_01_onStatus(NimBLECharacteristic *pCharacteristic, int code);
-/**
- * @brief Brief description of ReportOutput_01_onSubscribe.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_01_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
 
     // report id call backs for Report#30 Input i.e bytes sent from esp32 to the projector/computer
     // BLECharacteristicCallbacks
-/**
- * @brief Brief description of ReportInput_30_onRead.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_30_onWrite.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_30_onStatus.
- *
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code);
-/**
- * @brief Brief description of ReportInput_30_onSubscribe.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
 
     // report id call backs for Report#30 Output i.e bytes sent from projector/computer to theesp32
     //  BLECharacteristicCallbacks
-/**
- * @brief Brief description of ReportOutput_30_onRead.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_30_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportOutput_30_onWrite.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_30_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportOutput_30_onStatus.
- *
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_30_onStatus(NimBLECharacteristic *pCharacteristic, int code);
-/**
- * @brief Brief description of ReportOutput_30_onSubscribe.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportOutput_30_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
 
     // report id call backs for Report#03 Input i.e bytes sent from esp32 to the projector/computer
     // BLECharacteristicCallbacks
-/**
- * @brief Brief description of ReportInput_03_onRead.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_03_onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_03_onWrite.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_03_onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
-/**
- * @brief Brief description of ReportInput_03_onStatus.
- *
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_03_onStatus(NimBLECharacteristic *pCharacteristic, int code);
-/**
- * @brief Brief description of ReportInput_03_onSubscribe.
- *
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return virtual void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     virtual void ReportInput_03_onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue);
 };
 
@@ -1067,25 +561,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 01 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1097,25 +572,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 01 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1127,26 +583,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 01 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
         }
     }
@@ -1158,26 +594,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 01 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
         }
     }
@@ -1201,25 +617,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 30 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1231,25 +628,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 30 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1261,26 +639,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 30 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
         }
     }
@@ -1292,26 +650,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 30 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
         }
     }
@@ -1335,25 +673,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 03 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1365,25 +684,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 03 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1395,26 +695,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 03 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
         }
     }
@@ -1426,26 +706,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Input report 03 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
         }
     }
@@ -1469,25 +729,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 01 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1499,25 +740,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 01 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1529,26 +751,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("output report 01 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
         }
     }
@@ -1560,26 +762,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 01 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
         }
     }
@@ -1603,25 +785,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 30 handler called onRead but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1633,25 +796,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 30 handler called onWrite but parent is null %s", pCharacteristic->toString().c_str());
         }
     }
@@ -1663,26 +807,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param code Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("output report 30 handler called onStaus but parent is null %s and codevalue %i", pCharacteristic->toString().c_str(), code);
         }
     }
@@ -1694,26 +818,6 @@ public:
         }
         else
         {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i" Describe this parameter.
- * @param param Describe this parameter.
- * @param subValue Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
             UtilityFunctions::debugLogf("Output report 30 handler called onSubscrive but parent is null %s and subvalue %i", pCharacteristic->toString().c_str(), subValue);
         }
     }

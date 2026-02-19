@@ -1,10 +1,3 @@
-/**
- * @file BlueRC.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #include "UtilityFunctions.h"
 #include "BlueRC.h"
 #include "services/gap/ble_svc_gap.h"
@@ -55,24 +48,6 @@ bool BlueRC::BluetoothHID_RC::disconnect(uint16_t connHandle, uint8_t reason) co
 BlueRC::BluetoothHID_RC::BluetoothHID_RC(NimBLEServer *server)
 {
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param startup!" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("In Virtual HID startup!");
 
   BLE_server = server;
@@ -111,26 +86,6 @@ void BlueRC::BluetoothHID_RC::setDeviceAppreance(uint16_t appearance)
   int rc = ble_svc_gap_device_appearance_set(appearance);
   if (rc != 0)
   {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param appearance Describe this parameter.
- * @param %d" Describe this parameter.
- * @param rc Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLogf("Failed to set device appearance, error code: %d", rc);
     return;
   }
@@ -146,94 +101,19 @@ BlueRC::BluetoothHID_RC::~BluetoothHID_RC()
     delete advertising;
   }
   // delete BLE_server;
-/**
- * @brief Brief description of debugLog.
- *
- * @param destroyed" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("BluetoothHID_RC destroyed");
 }
 
 void BlueRC::BluetoothHID_RC::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
 {
   connected = true;
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %s\n" Describe this parameter.
- * @param param Describe this parameter.
- * @param "N" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLogf("Bluetooth Client connected %s bonded %s\n",connInfo.getIdAddress().toString().c_str(), connInfo.isBonded() ? "Y" : "N");
   if (advertising != NULL)
   {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param %i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLogf("State1 of advertising is %i\n", advertising->isAdvertising());
   }
   if ((advertising != NULL) && (advertising->isAdvertising()))
   {
-/**
- * @brief Brief description of debugLog.
- *
- * @param now" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Bluetooth Client connected and we were advertising so we stop advertising now");
   }
 }
@@ -242,45 +122,9 @@ void BlueRC::BluetoothHID_RC::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo
 {
   connected = false;
 
-/**
- * @brief Brief description of debugLog.
- *
- * @param disconnected" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("Bluetooth Client disconnected");
   if ((advertising != NULL) && (!advertising->isAdvertising()))
   {
-/**
- * @brief Brief description of debugLog.
- *
- * @param now" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
     UtilityFunctions::debugLog("Bluetooth Client disconnected and we were  NOT advertising so we start advertising now");
     startStandardAdv();
   }

@@ -1,3 +1,10 @@
+/**
+ * @file CmdRingBufferr.cpp
+ * @brief Brief summary of this file.
+ *
+ * Detailed description of the file and its purpose.
+ */
+
 #include "CmdRingBuffer.h"
 #include "defaults.h"
 #include "BlueRC.h"
@@ -15,7 +22,42 @@ namespace CmdRingBuffer
 
         if (ringBufHandle == NULL)
         {
+/**
+ * @brief Brief description of debugLog.
+ *
+ * @param buffer\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLog("Failed to create ring buffer\n");
+/**
+ * @brief Brief description of ESP32Restart.
+ *
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::ESP32Restart();
         }
     }
@@ -23,6 +65,24 @@ namespace CmdRingBuffer
     {
         if (ringBufHandle == NULL)
         {
+/**
+ * @brief Brief description of debugLog.
+ *
+ * @param ENQUE\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLog("Failed to create ring buffer CANNOT ENQUE\n");
             return;
         }
@@ -30,6 +90,25 @@ namespace CmdRingBuffer
         UBaseType_t res = xRingbufferSend(ringBufHandle, (void *)&cmd, sizeof(cmd), 100);
         if (res != pdTRUE)
         {
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param \n" Describe this parameter.
+ * @param sizefree Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLogf("Failed to enqueue RC cmd SKIPPING free size in ring buffer %i \n", sizefree);
         }
     }
@@ -41,6 +120,24 @@ namespace CmdRingBuffer
 
         if (ringBufHandle == NULL)
         {
+/**
+ * @brief Brief description of debugLog.
+ *
+ * @param PEEK\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLog("Failed to create ring buffer CANNOT PEEK\n");
             return NULL;
         }
@@ -49,6 +146,26 @@ namespace CmdRingBuffer
         if (cmd != NULL)
         {
             std::string s_cmd = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)cmd->cmds.cmd)));
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param \n" Describe this parameter.
+ * @param param Describe this parameter.
+ * @param cmd->cmds.cmd Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLogf("Remote command DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
         }
 
@@ -59,6 +176,24 @@ namespace CmdRingBuffer
     {
         if (ringBufHandle == NULL)
         {
+/**
+ * @brief Brief description of debugLog.
+ *
+ * @param DEQUE\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
             UtilityFunctions::debugLog("Failed to create ring buffer CANNOT DEQUE\n");
             return;
         }

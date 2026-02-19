@@ -1,10 +1,3 @@
-/**
- * @file WebLogPrint.h
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #ifndef WebLogPrint_H
 #define WebLogPrint_H
 

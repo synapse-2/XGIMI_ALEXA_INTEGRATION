@@ -254,6 +254,14 @@
             </form>
         </div>
 
+          <!-- Unit Blutooth dosconnect -->
+        <div class="form-section">
+            <h3>Disconnect All Bluetooth Clients</h3>
+            <form action="/disconnect-blueclients" method="post" onsubmit="submitForm(this); return false;">
+                <input type="submit" value="Disconnect All Bluetooth Clients">
+            </form>
+        </div>
+
         <div class="form-section">
             <h3>Relay Control Settings</h3>
 
@@ -421,7 +429,7 @@
         relayCheckbox.checked = relayEnableFlag;
 
         const syncAIoTCheckbox = document.getElementById("syncAIoTCheckbox");
-        syncAIoTCheckbox.checked = syncAITBLEDevEnableFlag;
+        syncAIoTCheckbox.checked = syncAIoTBLEDevEnableFlag;
 
 
         // Function to toggle the disabled state of related inputs

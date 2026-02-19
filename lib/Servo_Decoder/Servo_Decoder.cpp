@@ -1,3 +1,10 @@
+/**
+ * @file Servo_Decoder.cpp
+ * @brief Brief summary of this file.
+ *
+ * Detailed description of the file and its purpose.
+ */
+
 
 #include <UtilityFunctions.h> // Custom utility functions
 #include "Servo_Decoder.h"
@@ -41,6 +48,24 @@ void Servo_Decoder::start()
 
         // set servo to rest angle
 
+/**
+ * @brief Brief description of UtilityFunctions::loadServoRestAngle.
+ *
+ * @param ) Describe this parameter.
+ * @return iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
         iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, UtilityFunctions::loadServoRestAngle());
         // iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, 10);
     }
@@ -65,6 +90,26 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
 
                 if (actionAngle == restAngle)
                 {
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param same\n" Describe this parameter.
+ * @param actionAngle Describe this parameter.
+ * @param restAngle Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                     UtilityFunctions::debugLogf("Rest:%i and Action:%i Servo angles are same\n", actionAngle, restAngle);
                     return;
                 }
@@ -76,18 +121,108 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
                 for (int i = 0; i < degreeMove; i++)
                 {
                     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle + (dirMove * i));
+/**
+ * @brief Brief description of delay.
+ *
+ * @param delay Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                     UtilityFunctions::delay(delay);
                 }
                 iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle);
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param angle\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                 UtilityFunctions::debugLogf("Servo at action angle\n");
+/**
+ * @brief Brief description of delay.
+ *
+ * @param param Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                 UtilityFunctions::delay(UtilityFunctions::loadServoActionHold());
 
                 for (int i = 0; i < degreeMove; i++)
                 {
                     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle - (dirMove * i));
+/**
+ * @brief Brief description of delay.
+ *
+ * @param delay Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                     UtilityFunctions::delay(delay);
                 }
                 iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param angle\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                 UtilityFunctions::debugLogf("Servo at rest angle\n");
             }
             else if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn)
@@ -96,17 +231,73 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
 
                 iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
 
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param angle\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                 UtilityFunctions::debugLogf("Servo at rest angle\n");
             }
             else
             {
 
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param \n" Describe this parameter.
+ * @param param Describe this parameter.
+ * @param cmd->cmds.cmd Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
                 UtilityFunctions::debugLogf("By Servo decoder Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
             }
         }
     }
     else
     {
-        UtilityFunctions::debugLogf("Server NOT enabled\n");
+/**
+ * @brief Brief description of debugLogf.
+ *
+ * @param enabled\n" Describe this parameter.
+ * @return UtilityFunctions:: Describe the return value.
+ *
+ * Algorithm:
+ * - Outline the high-level algorithm or approach used.
+ * - Mention important data structures or invariants.
+ *
+ * Loops:
+ * - Describe each loop purpose and termination condition.
+ * - Note whether loops are nested and their effect on complexity.
+ *
+ * Complexity:
+ * - Time: O(...)
+ * - Space: O(...)
+ */
+        UtilityFunctions::debugLogf("Servo Server NOT enabled\n");
     }
 }

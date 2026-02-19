@@ -1,10 +1,3 @@
-/**
- * @file AcloudIOT_Decoder.cpp
- * @brief Brief summary of this file.
- *
- * Detailed description of the file and its purpose.
- */
-
 #include "AcloudIOT_Decoder.h" // Master class for I2C master functionality
 #include "BlueRC.h"
 #include "CmdRingBuffer.h"
@@ -15,41 +8,7 @@
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 #include "thingProperties.h"
 
-/**
- * @brief Brief description of onNetworkErrorMain.
- *
- * @return extern void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
 extern void onNetworkErrorMain();
-/**
- * @brief Brief description of onNetworkDisconnectMain.
- *
- * @return extern void Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
 extern void onNetworkDisconnectMain();
 
 AcloudIOT_Decoder::AcloudIOT_Decoder() {}
@@ -66,24 +25,6 @@ bool AcloudIOT_Decoder::hasFirstCloudSyncHasHappened()
 
 void AcloudIOT_Decoder::enQueueCmd(ServerDecoder::Remote_Cmd cmd)
 {
-/**
- * @brief Brief description of enQueueCmd.
- *
- * @param cmd Describe this parameter.
- * @return CmdRingBuffer:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   CmdRingBuffer::enQueueCmd(cmd);
 }
 
@@ -117,24 +58,6 @@ void AcloudIOT_Decoder::start() { ArduinoCloud.begin(*iot_connector); }
 
 void AcloudIOT_Decoder::onNetworkConnect()
 {
-/**
- * @brief Brief description of debugLog.
- *
- * @param network" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog(">>>> CONNECTED to ArduinoIoT network");
   isConnectOkState = true;
 }
@@ -175,24 +98,6 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
   }
   UtilityFunctions::debugLogf(" firstCloudSyncHasHappened %i \n",
                               firstCloudSyncHasHappened);
-/**
- * @brief Brief description of debugLog.
- *
- * @param cloud" Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
   UtilityFunctions::debugLog("update received from cloud");
 
   if (oldProjector_value.getSwitch() != newPrj.getSwitch())
@@ -271,24 +176,6 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
     // Playback value has changed
     // for the playbac change event in ring buffer
     String cmd =
-/**
- * @brief Brief description of magic_enum::enum_name.
- *
- * @param param Describe this parameter.
- * @return String(( Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
         String((magic_enum::enum_name(newPrj.getPlaybackCommand())).data());
     rcCmd.cmds.cmd = (ServerDecoder::RC_Cmd_Action)newPrj.getPlaybackCommand();
     enQueueCmd(rcCmd);
@@ -336,54 +223,10 @@ void AcloudIOT_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
       }
       enQueueCmd(rcCmd);
       std::string s_cmd_add = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)rcCmd.cmds.cmd)));
-/**
- * @brief Brief description of debugLogf.
- *
- * @param var:%i\n" Describe this parameter.
- * @param param Describe this parameter.
- * @param cmd->cmds.cmd Describe this parameter.
- * @param oldProjState Describe this parameter.
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @param param Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("By AIOT decoder received cmd Str:%s INt:%i cloud variable state:%i added command %s in queue new sate of cloud var:%i and cache copy var:%i\n", s_cmd.c_str(), cmd->cmds.cmd, oldProjState, s_cmd_add.c_str(), projector.getSwitch(), oldProjector_value.getSwitch());
     }
     else
     {
-/**
- * @brief Brief description of debugLogf.
- *
- * @param \n" Describe this parameter.
- * @param param Describe this parameter.
- * @param cmd->cmds.cmd Describe this parameter.
- * @return UtilityFunctions:: Describe the return value.
- *
- * Algorithm:
- * - Outline the high-level algorithm or approach used.
- * - Mention important data structures or invariants.
- *
- * Loops:
- * - Describe each loop purpose and termination condition.
- * - Note whether loops are nested and their effect on complexity.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
       UtilityFunctions::debugLogf("By AIOT decoder Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
     }
   }
