@@ -167,6 +167,7 @@ namespace UtilityFunctions
   // get the current cloud projector value
   String getAIoTProjectorVarValue();
 
+
   // save the old log in nvram and restart
   void ESP32Restart();
 

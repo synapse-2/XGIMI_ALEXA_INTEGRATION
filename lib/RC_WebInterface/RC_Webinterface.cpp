@@ -181,14 +181,14 @@ void RC_WebInterface::refreshGlobalJS()
 }
 
 // Public begin method to start the web interface
-void RC_WebInterface::begin()
+bool RC_WebInterface::begin()
 {
 
   if (!FFat.begin(true))
   {
     UtilityFunctions::debugLog(
         "Webserver: An Error has occurred while mounting FFat");
-    return;
+    return false;
   }
 
   UtilityFunctions::debugLog("Webserver: Mounted FFat OK");
@@ -196,6 +196,8 @@ void RC_WebInterface::begin()
 
   setupRoutes();
   _server.begin();
+
+  return true;
 }
 
 // Public handleClient method to be called in the main loop

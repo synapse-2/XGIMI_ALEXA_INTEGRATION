@@ -164,13 +164,13 @@ void setup()
   {
 
     /**
-    * @brief Setup (what happens once when the BluetoothESP32 device wakes up)
-    *
-    * Plain words: This function runs one time when the BluetoothESP32 device starts. It
-    * turns on the console (so we can see messages), sets up WiFi (if we are
-    * the boss/master), starts the little web server that helps configure
-    * the BluetoothESP32 device, and gets everything ready for the repeating work in
-    * `loop()`.
+     * @brief Setup (what happens once when the BluetoothESP32 device wakes up)
+     *
+     * Plain words: This function runs one time when the BluetoothESP32 device starts. It
+     * turns on the console (so we can see messages), sets up WiFi (if we are
+     * the boss/master), starts the little web server that helps configure
+     * the BluetoothESP32 device, and gets everything ready for the repeating work in
+     * `loop()`.
      *
      * Important steps:
      * - Start serial console for debug messages
@@ -182,7 +182,6 @@ void setup()
      * Loops: this function does not contain repeated loops except possible
      * short LED blink loops to show activity.
      */
-
 
 #ifdef XIGIMI_DEBUG_WIFI_OFF
     UtilityFunctions::debugLog(
@@ -241,8 +240,14 @@ void setup()
 
     // create webserver
     rc_web = new RC_WebInterface();
-    rc_web->begin();
-    UtilityFunctions::debugLog("Web SERVER started ... ");
+    if (rc_web->begin())
+    {
+      UtilityFunctions::debugLog("Web SERVER started ... ");
+    }
+    else
+    {
+      UtilityFunctions::debugLog("Web SERVER DID NOT START ... ");
+    }
 
 #endif
   }
@@ -405,8 +410,8 @@ void loop()
       Wifi_Disconnect_Start_Time = 0;
     }
 
-    checkResetPressed(); // Check if the reset button has been pressed
-    ArduinoCloud.update();
+    checkResetPressed();   // Check if the reset button has been pressed
+    ArduinoCloud.update(); // check we have updates from AIoT cloud, this will triggger call backs to be called on projector variable update
 
     // Detect changes to the "sync AIoT with BLE" configuration flag and
     // update the local copy. Purpose: avoid spamming logs inside the called
@@ -422,7 +427,8 @@ void loop()
     // more clients are connected, set the `projector` cloud variable to
     // ON; otherwise set it to OFF. If no bonded devices exist, log a single
     // message asking the user to pair a device.
-    if (syncAIoTVariableWithBLEConnect)
+    // we check only if the the ring buffer is empty else we process ALL of the messages first BEFORE syncing the status
+    if ((syncAIoTVariableWithBLEConnect) && (CmdRingBuffer::isEmpty()))
     {
       if (BLEDevice::getNumBonds() != 0)
       {
@@ -438,7 +444,7 @@ void loop()
           if (!projector.getSwitch())
           {
             projector.setSwitch(true);
-            aIOT.setOldProjectorSwitch(false); // make the old value differnt so that when new command comes we will action it
+            aIOT.setOldProjectorSwitch(true); // make the old value same so that when new command comes we will action it
             UtilityFunctions::debugLog("Projector is connected, but AIOT var is false setting to TRUE");
           }
         }
@@ -448,7 +454,7 @@ void loop()
           if (projector.getSwitch())
           {
             projector.setSwitch(false);
-            aIOT.setOldProjectorSwitch(true); // make the old value differnt so that when new command comes we will action it
+            aIOT.setOldProjectorSwitch(false); // make the old value same so that when new command comes we will action it
             UtilityFunctions::debugLog("Projector is NOT connected, but AIOT var is true setting to FALSE");
           }
         }

@@ -1814,7 +1814,7 @@ namespace UtilityFunctions
 
   String getBuildTimeVersion()
   {
-    std::string str = std::format("Build Time: {} {}", __DATE__, __TIME__);
+    std::string str = std::format("Build Time:{} {}", __DATE__, __TIME__);
     return String(str.c_str());
   }
 
@@ -1827,6 +1827,7 @@ namespace UtilityFunctions
     std::string str = std::format("On_OFF:{} Volume:{} Mute:{} channel:{} Input:{} Playback_Cmd:{} \n", projector.getSwitch(), projector.getVolume(), projector.getMute(), projector.getChannel(), s_input, s_play);
     return String(str.c_str());
   }
+
 
   // save the old log in nvram and restart
   void ESP32Restart()

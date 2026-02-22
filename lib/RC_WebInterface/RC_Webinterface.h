@@ -1,9 +1,9 @@
 /*
  * Overview:
- * This file is part of the BluetoothESP32 device project.
- * It contains code used to handle hardware, BLE, WiFi, or web UI
- * interactions for the device. Comments marked with [AUTO-DOC] were
- * added automatically; please refine them to be more specific.
+ * Web interface wrapper used to expose a small HTTP admin UI and
+ * accept remote-control commands from the browser. Routes are
+ * registered by `setupRoutes()` and commands are queued for the
+ * central command processor using `enQueueCmd()`.
  */
 
 #ifndef RC_WebInterface_H
@@ -17,59 +17,30 @@
 
 class RC_WebInterface {
 public:
+    /**
+     * @brief Construct a new RC_WebInterface object.
+     */
     RC_WebInterface();
-/* [AUTO-DOC] */
-/**
- * @brief Initializes or starts begin.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
-    void begin();
-/* [AUTO-DOC] */
-/**
- * @brief Performs handle Client operations.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Initialize the webserver and internal resources.
+     *
+     * Registers HTTP routes and starts any internal tasks needed by
+     * the web interface.
+     */
+    bool begin();
+
+    /**
+     * @brief Poll the HTTP server and process incoming requests.
+     *
+     * Intended to be called frequently from the main loop.
+     */
     void handleClient();
-/* [AUTO-DOC] */
-/**
- * @brief Performs command Processor Task operations.
- *
- * @param pvParameters Describe this parameter.
- * @return static void Describe the return value.
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Background task that dequeues and processes commands.
+     * @param pvParameters FreeRTOS task parameter (unused).
+     */
     static void commandProcessorTask(void* pvParameters);
 
 protected:
@@ -78,147 +49,51 @@ protected:
     String _adminPassword;
     String globalJS;
 
-/* [AUTO-DOC] */
-/**
- * @brief Performs load Admin Password operations.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+    /**
+     * @brief Load the administrator password from persistent storage.
+     */
     void loadAdminPassword();
-/* [AUTO-DOC] */
-/**
- * @brief Performs save Admin Password operations.
- *
- * @param newPassword Describe this parameter.
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Save a new administrator password to persistent storage.
+     * @param newPassword The password to store.
+     */
     void saveAdminPassword(String newPassword);
     bool checkAdminAuth(); // Modified to work with synchronous server
-/* [AUTO-DOC] */
-/**
- * @brief Initializes or starts setup Routes.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+    /**
+     * @brief Register HTTP routes and handlers on the internal server.
+     */
     void setupRoutes();
-/* [AUTO-DOC] */
-/**
- * @brief Performs handle Remote Press operations.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Called when a remote control press arrives via the web UI.
+     *
+     * Converts web input into a `Remote_Cmd` and queues it for
+     * processing.
+     */
     void handleRemotePress();
-/* [AUTO-DOC] */
-/**
- * @brief Performs handle Update Password operations.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief HTTP handler to update the administrator password.
+     */
     void handleUpdatePassword();
 
-/* [AUTO-DOC] */
-/**
- * @brief Performs refresh Global JS operations.
- *
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+    /**
+     * @brief Refresh any generated global JavaScript served by the UI.
+     */
     void refreshGlobalJS();
-/* [AUTO-DOC] */
-/**
- * @brief Performs wifi Signal Strength Decoder operations.
- *
- * @param rssi Describe this parameter.
- * @return String Describe the return value.
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Convert RSSI value into a human-friendly signal string.
+     * @param rssi RSSI in dBm.
+     * @return Human-friendly signal description (e.g., "Excellent").
+     */
     String wifiSignalStrengthDecoder(int8_t rssi);
-/* [AUTO-DOC] */
-/**
- * @brief Performs en Queue Cmd operations.
- *
- * @param cmd Describe this parameter.
- *
- * Algorithm:
- * - High-level steps the function performs.
- * - Mention important side-effects (WiFi, BLE, hardware).
- *
- * Loops:
- * - Describe each loop purpose and termination condition here.
- *
- * Complexity:
- * - Time: O(...)
- * - Space: O(...)
- */
+
+    /**
+     * @brief Enqueue a decoded remote command for processing.
+     * @param cmd Decoded remote command to enqueue (copied).
+     */
     void enQueueCmd(ServerDecoder::Remote_Cmd cmd);
 };
 

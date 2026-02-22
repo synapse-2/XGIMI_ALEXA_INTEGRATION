@@ -188,8 +188,9 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
 
   if (!enQueuedCmd)
   {
-    UtilityFunctions::debugLog("Command received from AIOT but no change in "
-                               "old vs new cloud variable");
+    UtilityFunctions::debugLogf("Command received from AIOT but no change in "
+                               "old vs new cloud variable, cloud var value %s", UtilityFunctions::getAIoTProjectorVarValue().c_str());
+    
   }
 }
 

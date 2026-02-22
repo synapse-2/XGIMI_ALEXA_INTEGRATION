@@ -4,7 +4,6 @@
 #include "UtilityFunctions.h"
 #include <freertos/ringbuf.h>
 
-
 namespace CmdRingBuffer
 {
     RingbufHandle_t ringBufHandle;
@@ -33,6 +32,29 @@ namespace CmdRingBuffer
             UtilityFunctions::debugLogf("Failed to enqueue RC cmd SKIPPING free size in ring buffer %i \n", sizefree);
         }
     }
+
+    bool isEmpty()
+    {
+
+        size_t items_waiting = 0;
+
+        // Get the current status
+        vRingbufferGetInfo(ringBufHandle,
+                           NULL,            // Ignore free size
+                           NULL,            // Ignore queued size
+                           NULL,            // Ignore total size
+                           NULL,            // Ignore max item size
+                           &items_waiting); // Get number of items
+
+        if (items_waiting == 0)
+        {
+            // no elements are available to be read
+            return true;
+        }
+
+        return false;
+    }
+
     ServerDecoder::Remote_Cmd *peekCmd()
     {
 
