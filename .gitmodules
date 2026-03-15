@@ -4,3 +4,6 @@
 [submodule "lib/Time"]
 	path = lib/Time
 	url = https://github.com/synapse-2/Time.git
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/synapse-2/XGIMI_ALEXA_INTEGRATION.wiki.git
