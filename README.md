@@ -19,6 +19,8 @@ There you have it.  Alexa integration via cloning of the Bluetooth factory remot
 
 ## How to set up 
 
+# Wiki for latest Instructions - https://github.com/synapse-2/XGIMI_ALEXA_INTEGRATION/wiki
+
 You need 
 #### Release 1.0
 01. Obtain Esp32S3 dev kit for example : https://www.amazon.com/Hosyond-Development-Dual-Mode-Compatible-ESP32-S3-WROOM-1/dp/B0F5QCK6X5/
