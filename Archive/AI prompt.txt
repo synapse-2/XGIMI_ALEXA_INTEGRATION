@@ -1,0 +1,5 @@
+add code documentation, figure out what the code does and put in comments so that it can be explained to a 5 year old
+do not use the word robot use the word BluetoothESP32 device
+do not put in comments that the explanation is for 5 year old
+if there are loops in the code then at then examine the loops figure out the reason for the loop and its exit conditions, then at the start of the loop put in comments what you figured the loop does
+for any if statements that are longer than 3 lines figure out what they do and add comment in the beginning of if as to what is the code does
