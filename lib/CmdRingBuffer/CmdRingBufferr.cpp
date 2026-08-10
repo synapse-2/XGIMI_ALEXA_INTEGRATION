@@ -71,7 +71,7 @@ namespace CmdRingBuffer
         if (cmd != NULL)
         {
             std::string s_cmd = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)cmd->cmds.cmd)));
-            UtilityFunctions::debugLogf("Remote command DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
+            UtilityFunctions::debugLogf("--Remote command DEQUEUEED in PEEK Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
         }
 
         return (cmd);
@@ -84,6 +84,9 @@ namespace CmdRingBuffer
             UtilityFunctions::debugLog("Failed to create ring buffer CANNOT DEQUE\n");
             return;
         }
+
+        std::string s_cmd = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)cmd->cmds.cmd)));
+        UtilityFunctions::debugLogf("--Remote command DISPOSED in DEQUEUECMD Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
         vRingbufferReturnItem(ringBufHandle, (void *)cmd);
     }
 }

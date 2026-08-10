@@ -201,7 +201,7 @@ void AcloudIOT_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
   if (cmd != NULL)
   {
     std::string s_cmd = std::string((magic_enum::enum_name((ServerDecoder::RC_Cmd_Action)cmd->cmds.cmd)));
-    // UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
+    // UtilityFunctions::debugLogf("Remote cmmand Received Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
     bool oldProjState = oldProjector_value.getSwitch();
     if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_On_Btn)

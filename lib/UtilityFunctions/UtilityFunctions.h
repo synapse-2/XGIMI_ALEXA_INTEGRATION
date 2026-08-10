@@ -134,32 +134,43 @@ namespace UtilityFunctions
   // Load relayIO pin  num  from NVRAM
   int loadRelayIOPin();
 
-  // Save RelayIO pin  num   from NVRAM
+  // Save RelayIO pin  num   to NVRAMM
   String saveRelayIOPin(int newPinIO);
 
   // Load relay action hold from NVRAM
   uint16_t loadRelayActionHold();
 
-  // Save servo action hold from NVRAM
+  // Save servo action hold to NVRAMM
   String saveRelayActionHold(uint16_t newhold);
 
   // Load servo enable flag from NVRAM
   bool loadServoEnableFlag();
 
-  // Save servo action hold from NVRAM
+  // Save servo enable flag to NVRAM
   String saveServoEnableFlag(bool flag);
+
+  // Load servo wait on ble flag from NVRAM
+  bool loadServoWaitOnBleFlag();
+
+  // Save servo wait on ble flag to NVRAM
+  String saveServoWaitOnBleFlag(bool flag);
 
   // Load relay enable flag from NVRAM
   bool loadRelayEnableFlag();
 
-  // Save relay action hold from NVRAM
+  // Save relay enable flag to NVRAM
   String saveRelayEnableFlag(bool flag);
 
+  // Load relay wait on ble flag from NVRAM
+  bool loadRelayWaitOnBleFlag();
+
+  // Save relay wait on ble flag to NVRAM
+  String saveRelayWaitOnBleFlag(bool flag);
 
   // Load sync AaIOt with BLE device pair flag
   bool loadSyncAIoTWithBLEDevice();
 
-  // Save sync AaIOt with BLE device pair flag
+  // Save sync AaIOt with BLE device pair flag to NVRAM
   String saveSyncAIoTWithBLEDevice(bool flag);
 
   String getBuildTimeVersion();

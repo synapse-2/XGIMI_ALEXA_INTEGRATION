@@ -129,8 +129,14 @@ void RC_WebInterface::refreshGlobalJS()
   globalJS = globalJS + "const servoEnableFlag =  " +
              UtilityFunctions::loadServoEnableFlag() + ";\n";
 
+  globalJS = globalJS + "const servoBLEWaitonEnableFlag =  " +
+             UtilityFunctions::loadServoWaitOnBleFlag() + ";\n";
+
   globalJS = globalJS + "const relayEnableFlag =  " +
              UtilityFunctions::loadRelayEnableFlag() + ";\n";
+
+  globalJS = globalJS + "const relayBLEWaitonEnableFlag =  " +
+             UtilityFunctions::loadRelayWaitOnBleFlag() + ";\n";
 
   globalJS = globalJS + "const syncAIoTBLEDevEnableFlag =  " +
              UtilityFunctions::loadSyncAIoTWithBLEDevice() + ";\n";
@@ -170,7 +176,7 @@ void RC_WebInterface::refreshGlobalJS()
              partitionInfo + "<br>\\\n" +
              "<strong>Alexa Cloud variable:</strong><br>\\\n" +
              cloudInfo + "<br>\\\n" +
-             "<strong>BlueTooth Stored Bonds:"+NimBLEDevice::getNumBonds()+"</strong><br>\\\n" +
+             "<strong>BlueTooth Stored Bonds:" + NimBLEDevice::getNumBonds() + "</strong><br>\\\n" +
              "<strong>BlueTooth connected Peers:</strong><br>\\\n" +
              blueInfo + "<br>\\\n" +
              "<strong>Console log:</strong><br>\\\n" +
@@ -262,7 +268,7 @@ void RC_WebInterface::handleRemotePress()
   if (_server.hasArg("cmd"))
   {
     action = _server.arg("cmd");
-    UtilityFunctions::debugLog("Webserver: Received guest command: " + action);
+    UtilityFunctions::debugLog("Webserver: Received command: " + action);
 
     if (action.equals("power"))
     {
@@ -403,14 +409,14 @@ void RC_WebInterface::handleRemotePress()
   {
     _server.send(200, "plain/txt", "{ \"success\": true }");
 
-    UtilityFunctions::debugLog("Webserver: SUCESS guest command: " + action);
+    UtilityFunctions::debugLog("Webserver: SUCESS command: " + action);
   }
   else
   {
     _server.send(200, "plain/txt",
                  "{ \"success\": false, \"message\": \"command not found-" +
                      action + "\" }");
-    UtilityFunctions::debugLog("Webserver: ERROR guest command: " + action);
+    UtilityFunctions::debugLog("Webserver: ERROR command: " + action);
   }
 }
 
@@ -750,6 +756,28 @@ void RC_WebInterface::setupRoutes()
       }
     } });
 
+  _server.on("/update-servo-BLEWait-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("servo_blewait_enabled");
+               UtilityFunctions::debugLog("Servo is BLE WAIT enabled change requested to: " + arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveServoWaitOnBleFlag(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to Change Servo BLE WAIT FLAG -" +
+                     sucess + "\" }");
+               } });
+
   _server.on("/change-deviceID", HTTP_POST, [this]()
              {
     if (!checkAdminAuth())
@@ -831,6 +859,28 @@ void RC_WebInterface::setupRoutes()
                      "Relay ACTION Delay FAILED to update:" + sucess);
       }
     } });
+
+  _server.on("/update-relay-BLEWait-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("relay_blewait_enabled");
+               UtilityFunctions::debugLog("Relay is BLE WAIT enabled change requested to: " + arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveRelayWaitOnBleFlag(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to Change Relay BLE WAIT FLAG -" +
+                     sucess + "\" }");
+               } });
 
   _server.on("/update-relay-enabled", HTTP_POST, [this]()
              {

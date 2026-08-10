@@ -661,14 +661,19 @@ namespace UtilityFunctions
 
     // Iterate through low-speed mode channels
     str = str + std::format("Low-Speed Mode Channels:\n");
-    for (int channel = 0; channel < LEDC_CHANNEL_MAX; channel++)
+    // for (int channel = 0; channel < LEDC_CHANNEL_MAX; channel++)
+    // do only one channel for now to reduce the amt of error logs from the esp framework
+    for (int channel = 0; channel < 1; channel++)
     {
       uint32_t duty = ledc_get_duty(ledc_mode_t::LEDC_LOW_SPEED_MODE,
                                     (ledc_channel_t)channel);
 
       str = str + std::format("Channel {}: Duty={} {}\n", channel, ((duty == 259) ? "Not Init" : ""), duty);
     }
-    for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
+
+    // for (int timer = 0; timer < LEDC_TIMER_MAX; timer++)
+    // do only one tomer for now to reduce the amt of error logs from the esp framework
+    for (int timer = 0; timer < 1; timer++)
     {
       uint32_t freq =
           ledc_get_freq(ledc_mode_t::LEDC_LOW_SPEED_MODE, (ledc_timer_t)timer);
@@ -1049,7 +1054,7 @@ namespace UtilityFunctions
     else
     {
       Serial.print(temp);
-      //Serial.printf(":%x:",temp);
+      // Serial.printf(":%x:",temp);
       webLogBuffer.pushChar(temp);
     }
   }
@@ -1066,20 +1071,20 @@ namespace UtilityFunctions
       // see if there is a new line if so set newLineSeenForESPLog to true else set to false
       if (newLineSeenForESPLog)
       {
-        //shows timestamp
+        // shows timestamp
         debugLogf("%s", temp);
         newLineSeenForESPLog = false;
       }
       else
       {
         // no timestamp log
-        UtilityFunctions::finalLog(temp,false);
+        UtilityFunctions::finalLog(temp, false);
       }
       for (int i = 0; i < len; i++)
       {
         if (temp[i] == '\n')
         {
-         newLineSeenForESPLog = true;
+          newLineSeenForESPLog = true;
           break;
         }
       }
@@ -1731,7 +1736,44 @@ namespace UtilityFunctions
     }
   }
 
-  // Load reley enable flag from NVRAM
+
+// Load servo enable flag from NVRAM
+  bool loadServoWaitOnBleFlag()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_SERVO_WAITonBLE_PROP,
+                                     NVRAM_PERFS_SERVO_WAITonBLE_DEFAULT);
+    _preferences.end();
+    // UtilityFunctions::debugLogf( "loaded servo wait on BLE connnect flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save servo wait on ble flag to NVRAM
+  String saveServoWaitOnBleFlag(bool flag)
+  {
+    size_t bytesWritten;
+
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bytesWritten = _preferences.putBool(NVRAM_PERFS_SERVO_WAITonBLE_PROP, flag);
+    _preferences.end();
+
+    if (bytesWritten == 0)
+    {
+      std::string str = std::format(
+          "Unknown Error Cannot set the Servo to wait on BLE Flag");
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+    UtilityFunctions::debugLog("Servo enable flag updated and saved to NVRAM.");
+    return "";
+  }
+
+
+  // Load relay enable flag from NVRAM
   bool loadRelayEnableFlag()
   {
     Preferences _preferences;
@@ -1777,6 +1819,41 @@ namespace UtilityFunctions
       debugLog(Astr);
       return Astr;
     }
+  }
+
+  // Load reley enable flag from NVRAM
+  bool loadRelayWaitOnBleFlag()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_RELAY_WAITonBLE_PROP,
+                                     NVRAM_PERFS_RELAY_WAITonBLE_DEFAULT);
+    _preferences.end();
+    // UtilityFunctions::debugLogf( "loaded relay wait on BLE connnect flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save relay wait on ble flag to NVRAM
+  String saveRelayWaitOnBleFlag(bool flag)
+  {
+    size_t bytesWritten;
+
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bytesWritten = _preferences.putBool(NVRAM_PERFS_RELAY_WAITonBLE_PROP, flag);
+    _preferences.end();
+
+    if (bytesWritten == 0)
+    {
+      std::string str = std::format(
+          "Unknown Error Cannot set the Relay to wait on BLE Flag");
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+    UtilityFunctions::debugLog("Relay enable flag updated and saved to NVRAM.");
+    return "";
   }
 
   // Load sync AIoT with BLE device pair flag
@@ -1827,7 +1904,6 @@ namespace UtilityFunctions
     std::string str = std::format("On_OFF:{} Volume:{} Mute:{} channel:{} Input:{} Playback_Cmd:{} \n", projector.getSwitch(), projector.getVolume(), projector.getMute(), projector.getChannel(), s_input, s_play);
     return String(str.c_str());
   }
-
 
   // save the old log in nvram and restart
   void ESP32Restart()

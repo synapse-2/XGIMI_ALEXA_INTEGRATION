@@ -656,7 +656,7 @@ void BlueXGIMI_RC::doCMD_ON()
     advertising->setMaxInterval(60);
     advertising->start(500);
 #endif
-    UtilityFunctions::debugLog("On button type 1 advertisment started");
+    UtilityFunctions::debugLog("On button type 1 ble ad started");
     UtilityFunctions::delay(1000);
 
     while (advertising->isActive(HID_ADV_ONDATA1_ID))
@@ -690,7 +690,7 @@ void BlueXGIMI_RC::doCMD_ON()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-      UtilityFunctions::debugLogf("Cycle num:%i - On button type 2 advertisment started\n", f);
+      UtilityFunctions::debugLogf("Cycle num:%i - On button type 2 ble ad started\n", f);
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA2_ID))
@@ -722,7 +722,7 @@ void BlueXGIMI_RC::doCMD_ON()
       advertising->setMaxInterval(60);
       advertising->start(500);
 #endif
-      UtilityFunctions::debugLogf("Cycle num:%i - On button type 3 advertisment started", f);
+      UtilityFunctions::debugLogf("Cycle num:%i - On button type 3 ble ad started\n", f);
       UtilityFunctions::delay(500);
 
       while (advertising->isActive(HID_ADV_ONDATA3_ID))
@@ -732,7 +732,7 @@ void BlueXGIMI_RC::doCMD_ON()
       }
     } // end for
 
-    UtilityFunctions::debugLog("On button advertisment COMPLETE");
+    UtilityFunctions::debugLog("On button ble ad COMPLETE");
 
     // we wait for 5 secs for projector to connect back
     UtilityFunctions::delay(5000);
@@ -893,7 +893,7 @@ void BlueXGIMI_RC::sendButtonPress(ServerDecoder::Remote_Cmd command)
     break;
   }
 
-  UtilityFunctions::debugLogf("XIGIMI Remote receied command %s in int %i and execution status is %i\n", s_cmd.c_str(), command.cmds.cmd, cmdExecuted);
+  UtilityFunctions::debugLogf("XIGIMI Remote received command %s in int %i and execution status is %i \n", s_cmd.c_str(), command.cmds.cmd, cmdExecuted);
 }
 
 // generic handlers

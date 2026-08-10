@@ -78,7 +78,7 @@
 #define AP_CONNECT_TIMEOUT 120 // seconds or 2 mins
 
 #define WEB_ESP_RESTART_DELAY 2000 // mills 2 mins
-#define WEB_STATUS_LOG_BUFFER 5120  /// buffer for log to be shon in the web page
+#define WEB_STATUS_LOG_BUFFER 8192  /// buffer for log to be shon in the web page
 #define NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_PROP "weblogOld"
 #define NVRAM_PERFS_WEB_STATUS_LOG_BUFFER_SIZE_PROP "weblogSize"
 #define RING_BUFF_SIZE_FOR_CMD 5*11 //each server command message is 11 bytes long
@@ -124,8 +124,14 @@
 #define NVRAM_PERFS_SERVO_PWM_FREQ_PROP "ServoPWMFRQ"
 #define NVRAM_PERFS_SERVO_PWM_FREQ_DEFAULT 50
 
+#define NVRAM_PERFS_SERVO_WAITonBLE_PROP "ServoWtOnBLECon"
+#define NVRAM_PERFS_SERVO_WAITonBLE_DEFAULT false
+
 #define NVRAM_PERFS_RELAY_ENABLED_PROP "RelayEN"
 #define NVRAM_PERFS_RELAY_ENABLED_DEFAULT false
+
+#define NVRAM_PERFS_RELAY_WAITonBLE_PROP "RelayWtOnBLECon"
+#define NVRAM_PERFS_RELAY_WAITonBLE_DEFAULT false
 
 #define NVRAM_PERFS_RELAY_IO_PROP "RelayIO"
 #define NVRAM_PERFS_RELAY_IO_DEFAULT 5

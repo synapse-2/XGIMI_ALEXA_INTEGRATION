@@ -362,9 +362,20 @@ void loop()
       // for on-off toggle cmd
       aIOT.doCmd(cmd);
 #endif
-      bleRemoteDecoder.doCmd(cmd);
-      RelayRemoteDecoder.doCmd(cmd);
-      ServoRemoteDecoder.doCmd(cmd);
+      if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn)
+      {
+        // if doing off do revese ie projector is switched off last
+        ServoRemoteDecoder.doCmd(cmd);
+        RelayRemoteDecoder.doCmd(cmd);
+        bleRemoteDecoder.doCmd(cmd);
+      }
+      else
+      {
+        bleRemoteDecoder.doCmd(cmd);
+        RelayRemoteDecoder.doCmd(cmd);
+        ServoRemoteDecoder.doCmd(cmd);
+      }
+
       UtilityFunctions::ledStop();
       // end of command
 

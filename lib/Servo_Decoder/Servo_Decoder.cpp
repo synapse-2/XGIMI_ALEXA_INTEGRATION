@@ -7,6 +7,9 @@
 #include "esp_system.h"
 #include "sdkconfig.h"
 #include "iot_servo.h"
+#include "BLE_Remote_Decoder.h"
+
+extern BLE_Remote_Decoder bleRemoteDecoder;
 
 Servo_Decoder::Servo_Decoder()
 {
@@ -56,57 +59,102 @@ void Servo_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
             // UtilityFunctions::debugLogf("Remote cmmand DEQUEUEED Str:%s INt:%i \n", s_cmd.c_str(),cmd->cmds.cmd );
 
             bool cmdhandled = false;
-            if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_Btn)
+
+            bool servoBLEWaitFlag = UtilityFunctions::loadServoWaitOnBleFlag();
+            uint8_t numBLECnnectedClients = bleRemoteDecoder.getConnectedCount();
+
+            if ((servoBLEWaitFlag && (numBLECnnectedClients != 0)) || (!servoBLEWaitFlag))
             {
-                int actionAngle = UtilityFunctions::loadServoActionAngle();
-                int restAngle = UtilityFunctions::loadServoRestAngle();
 
-                iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
-
-                if (actionAngle == restAngle)
+                if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_Btn)
                 {
-                    UtilityFunctions::debugLogf("Rest:%i and Action:%i Servo angles are same\n", actionAngle, restAngle);
-                    return;
+                    int actionAngle = UtilityFunctions::loadServoActionAngle();
+                    int restAngle = UtilityFunctions::loadServoRestAngle();
+
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+
+                    if (actionAngle == restAngle)
+                    {
+                        UtilityFunctions::debugLogf("Rest:%i and Action:%i Servo angles are same\n", actionAngle, restAngle);
+                        return;
+                    }
+
+                    // int degreeMove = abs(restAngle - actionAngle);
+                    // int dirMove = (restAngle >= actionAngle) ? -1 : 1;
+                    // int delay = 500 / degreeMove;
+
+                    // for (int i = 0; i < degreeMove; i++)
+                    // {
+                    //     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle + (dirMove * i));
+                    //     UtilityFunctions::delay(delay);
+                    // }
+
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle);
+                    UtilityFunctions::debugLogf("Servo at action angle\n");
+                    UtilityFunctions::delay(UtilityFunctions::loadServoActionHold());
+
+                    // for (int i = 0; i < degreeMove; i++)
+                    // {
+                    //     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle - (dirMove * i));
+                    //     UtilityFunctions::delay(delay);
+                    // }
+
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+                    UtilityFunctions::debugLogf("Servo at rest angle\n");
                 }
-
-                int degreeMove = abs(restAngle - actionAngle);
-                int dirMove = (restAngle >= actionAngle) ? -1 : 1;
-                int delay = 500 / degreeMove;
-
-                for (int i = 0; i < degreeMove; i++)
+                else if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn)
                 {
-                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle + (dirMove * i));
-                    UtilityFunctions::delay(delay);
-                }
-                iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle);
-                UtilityFunctions::debugLogf("Servo at action angle\n");
-                UtilityFunctions::delay(UtilityFunctions::loadServoActionHold());
+                    int actionAngle = UtilityFunctions::loadServoActionAngle();
+                    int restAngle = UtilityFunctions::loadServoRestAngle();
 
-                for (int i = 0; i < degreeMove; i++)
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+
+                    if (actionAngle == restAngle)
+                    {
+                        UtilityFunctions::debugLogf("Rest:%i and Action:%i Servo angles are same\n", actionAngle, restAngle);
+                        return;
+                    }
+
+                    // int degreeMove = abs(restAngle - actionAngle);
+                    // int dirMove = (restAngle >= actionAngle) ? -1 : 1;
+                    // int delay = 500 / degreeMove;
+
+                    // for (int i = 0; i < degreeMove; i++)
+                    // {
+                    //     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle + (dirMove * i));
+                    //     UtilityFunctions::delay(delay);
+                    // }
+
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle);
+                    UtilityFunctions::debugLogf("Servo at action angle\n");
+                    UtilityFunctions::delay(UtilityFunctions::loadServoActionHold());
+
+                    // for (int i = 0; i < degreeMove; i++)
+                    // {
+                    //     iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle - (dirMove * i));
+                    //     UtilityFunctions::delay(delay);
+                    // }
+
+                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
+                    UtilityFunctions::debugLogf("Servo at rest angle\n");
+                }
+                else
                 {
-                    iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, actionAngle - (dirMove * i));
-                    UtilityFunctions::delay(delay);
+
+                    UtilityFunctions::debugLogf("By Servo decoder Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
                 }
-                iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
-                UtilityFunctions::debugLogf("Servo at rest angle\n");
-            }
-            else if (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn)
-            {
-                int restAngle = UtilityFunctions::loadServoRestAngle();
-
-                iot_servo_write_angle(ledc_mode_t::LEDC_LOW_SPEED_MODE, 0, restAngle);
-
-                UtilityFunctions::debugLogf("Servo at rest angle\n");
             }
             else
             {
-
-                UtilityFunctions::debugLogf("By Servo decoder Remote cmmand NOT HANDLED Str:%s INt:%i \n", s_cmd.c_str(), cmd->cmds.cmd);
+                if (servoBLEWaitFlag)
+                {
+                    UtilityFunctions::debugLogf("SERVO wait for BLE connected client enabled, but num BLE clients connceted is %i so action NOT DONE\n", numBLECnnectedClients);
+                }
             }
         }
-    }
-    else
-    {
-        UtilityFunctions::debugLogf("Servo Server NOT enabled\n");
+        else
+        {
+            UtilityFunctions::debugLogf("Servo Server NOT enabled\n");
+        }
     }
 }

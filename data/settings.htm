@@ -6,7 +6,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alexa - Blutooth TV Remote</title>
-    
+
     <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="/remote.css">
 
@@ -236,25 +236,27 @@
         <div class="form-section">
             <h3>Change Unit BlueTooth Name</h3>
             <form action="/change-bluename" method="post">
-                <label for="new-BlueName">New BlueTooth Name:</label>
+                <label for="new-bluename">New BlueTooth Name:</label>
                 <input type="text" id="new-bluename" name="newBlueName" required>
                 <input type="submit" value="Change BlueTooth Name">
             </form>
         </div>
 
-         <!-- Sync AIoT var with the device BLE connect Form -->
+        <!-- Sync AIoT var with the device BLE connect Form -->
         <div class="form-section">
-            <h3>Enable AIoT variable to be synced with BLE paired status of device (must pair projector else will not work right)</h3>
+            <h3>Enable AIoT variable to be synced with BLE paired status of device (must pair projector else will not
+                work right)</h3>
             <form id="syncAIoTEnableForm" action="/update-syncAIoT-enabled" method="post">
                 <div class="checkbox-container">
                     <input type="checkbox" id="syncAIoTCheckbox" name="SyncAIoT_enabled" value="true"
                         onchange="submitForm(this.form);">
-                    <label for="syncAIoTCheckbox" style="display: inline; margin: 0;">Enable AIoT variable to be synced with BLE paired status of device</label>
+                    <label for="syncAIoTCheckbox" style="display: inline; margin: 0;">Enable AIoT variable to be synced
+                        with BLE paired status of device</label>
                 </div>
             </form>
         </div>
 
-          <!-- Unit Blutooth dosconnect -->
+        <!-- Unit Blutooth dosconnect -->
         <div class="form-section">
             <h3>Disconnect All Bluetooth Clients</h3>
             <form action="/disconnect-blueclients" method="post" onsubmit="submitForm(this); return false;">
@@ -292,6 +294,18 @@
                     <input type="submit" id="new-relayActionDelaySubmit" value="Change Relay delay">
                 </form>
             </div>
+
+            <!-- Relay BLE conncet  Enable/Disable (Auto-submitting) -->
+            <form id="relayBLEWaitEnableForm" action="/update-relay-BLEWait-enabled" method="post">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="relayBLECheckbox" name="relay_blewait_enabled" value="true"
+                        onchange="updateRelayFields(); submitForm(this.form);">
+                    <label for="relayBLECheckbox" style="display: inline; margin: 0;">Enable Relay to only work if one
+                        or more BLE client is conncted i.e. only if projector is sensed to be on via Bluetooth (In
+                        order for this to work the arduino device needs to be paired with the projector)</label>
+                </div>
+            </form>
+
         </div>
 
         <div class="form-section">
@@ -323,7 +337,7 @@
                 <form action="/change-servoMAXAngle" method="post">
                     <label for="new-servoMAXAngle">New Servo MAX Travel Angle:</label>
                     <input type="number" id="new-servoMAXAngle" name="newservoMAXAngle" required>
-                    <input type="submit" id="new-servoMAXAngleSubmit" value="Change Servo MAX Travel Angle">
+                    <input type="submit" id="new-servoMAXAngleSubmit" value="Change Servo MAX Travel Angle (i.e. how much the servo can move)">
                 </form>
             </div>
 
@@ -347,7 +361,7 @@
                 </form>
             </div>
 
-            <!-- SERVO action dela Change Form -->
+            <!-- SERVO action delta Change Form -->
             <div class="form-section">
                 <h3>Change Servo at Action delay (Typ :100 mili sec)</h3>
                 <form action="/change-servoActionDelay" method="post">
@@ -356,6 +370,18 @@
                     <input type="submit" id="new-servoActionDelaySubmit" value="Change Action delay">
                 </form>
             </div>
+
+
+            <!-- Servo BLE conncet  Enable/Disable (Auto-submitting) -->
+            <form id="servoBLEWaitEnableForm" action="/update-servo-BLEWait-enabled" method="post">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="servoBLECheckbox" name="servo_blewait_enabled" value="true"
+                        onchange="updateServoFields(); submitForm(this.form);">
+                    <label for="servoBLECheckbox" style="display: inline; margin: 0;">Enable SERVO to only work if one
+                        or more BLE client is conncted i.e. only if projector is sensed to be on via Bluetooth (In
+                        order for this to work the arduino device needs to be paired with the projector)</label>
+                </div>
+            </form>
         </div>
         <!-- Device ID Form -->
         <div class="form-section">
@@ -416,6 +442,9 @@
         const servoActionDelayElement = document.getElementById("new-servoActionDelay");
         servoActionDelayElement.value = servoActionDelay;
 
+        const servoBLEElement = document.getElementById("servoBLECheckbox");
+        servoBLEElement.checked = servoBLEWaitonEnableFlag;
+
         const deviceIDElement = document.getElementById("new-deviceID");
         deviceIDElement.value = deviceID;
 
@@ -425,8 +454,11 @@
         const servoCheckbox = document.getElementById("servoCheckbox");
         servoCheckbox.checked = servoEnableFlag;
 
-         const relayCheckbox = document.getElementById("relayCheckbox");
+        const relayCheckbox = document.getElementById("relayCheckbox");
         relayCheckbox.checked = relayEnableFlag;
+
+        const relayBLEElement = document.getElementById("relayBLECheckbox");
+        relayBLEElement.checked = relayBLEWaitonEnableFlag;
 
         const syncAIoTCheckbox = document.getElementById("syncAIoTCheckbox");
         syncAIoTCheckbox.checked = syncAIoTBLEDevEnableFlag;
@@ -438,6 +470,7 @@
             // Disable inputs and submit button if the checkbox is not checked
             relayIOPINElement.disabled = !relayCheckbox.checked;
             relayActionDelayElement.disabled = !relayCheckbox.checked;
+            relayBLEElement.disabled = !relayCheckbox.checked;
 
             document.getElementById("new-relayIOPINSubmit").disabled = !relayCheckbox.checked;
             document.getElementById("new-relayActionDelaySubmit").disabled = !relayCheckbox.checked;
@@ -454,6 +487,7 @@
             servoRESTAngleElement.disabled = !servoCheckbox.checked;
             servoActionAngleElement.disabled = !servoCheckbox.checked;
             servoActionDelayElement.disabled = !servoCheckbox.checked;
+            servoBLEElement.disabled = !servoCheckbox.checked;
 
             document.getElementById("new-servoIOPINSubmit").disabled = !servoCheckbox.checked;
             document.getElementById("new-servoMAXAngleSubmit").disabled = !servoCheckbox.checked;

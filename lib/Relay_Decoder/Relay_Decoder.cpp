@@ -1,9 +1,10 @@
-
-#include <UtilityFunctions.h> // Custom utility functions
 #include "Relay_Decoder.h"
 #include "UtilityFunctions.h" // Utility functions for LED control and other utilities
 #include "CmdRingBuffer.h"
 #include "driver/gpio.h"
+#include "BLE_Remote_Decoder.h"
+
+extern BLE_Remote_Decoder bleRemoteDecoder;
 
 Relay_Decoder::Relay_Decoder()
 {
@@ -34,14 +35,28 @@ void Relay_Decoder::doCmd(ServerDecoder::Remote_Cmd *cmd)
             bool cmdhandled = false;
             if ((cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::On_Btn) || (cmd->cmds.cmd == ServerDecoder::RC_Cmd_Action::Off_Btn))
             {
-                int ioPIN = UtilityFunctions::loadRelayIOPin();
+                bool relayBLEWaitFlag = UtilityFunctions::loadRelayWaitOnBleFlag();
+                uint8_t numBLECnnectedClients = bleRemoteDecoder.getConnectedCount();
 
-                gpio_set_level((gpio_num_t)ioPIN, 1);
-                UtilityFunctions::debugLogf("Relay Pin HIGH\n");
-                UtilityFunctions::delay(UtilityFunctions::loadRelayActionHold());
+                if ((relayBLEWaitFlag && (numBLECnnectedClients != 0)) || (!relayBLEWaitFlag))
+                {
+                    int ioPIN = UtilityFunctions::loadRelayIOPin();
 
-                gpio_set_level((gpio_num_t)ioPIN, 0);
-                UtilityFunctions::debugLogf("Relay Pin LOW\n");
+                    UtilityFunctions::debugLogf("Relay sequence starting, num connected clients %i and Wait on BLE for relay flag is %s\n", numBLECnnectedClients, ((relayBLEWaitFlag) ? "true" : "false"));
+                    gpio_set_level((gpio_num_t)ioPIN, 1);
+                    UtilityFunctions::debugLogf("Relay Pin HIGH\n");
+                    UtilityFunctions::delay(UtilityFunctions::loadRelayActionHold());
+
+                    gpio_set_level((gpio_num_t)ioPIN, 0);
+                    UtilityFunctions::debugLogf("Relay Pin LOW\n");
+                }
+                else
+                {
+                    if (relayBLEWaitFlag)
+                    {
+                        UtilityFunctions::debugLogf("Relay wait for BLE connected client enabled, but num BLE clients connceted is %i so action NOT DONE\n", numBLECnnectedClients);
+                    }
+                }
             }
             else
             {
