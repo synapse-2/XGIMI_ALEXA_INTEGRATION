@@ -1768,10 +1768,45 @@ namespace UtilityFunctions
       debugLog(Astr);
       return Astr;
     }
-    UtilityFunctions::debugLog("Servo enable flag updated and saved to NVRAM.");
+    UtilityFunctions::debugLog("Servo enable wait on BLE connnect flag updated and saved to NVRAM.");
     return "";
   }
 
+
+  // Load servo enable push button toggle from NVRAM
+  bool loadServoTogglePushFlag()
+  {
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bool flag = _preferences.getBool(NVRAM_PERFS_SERVO_TOGGLE_PUSH_PROP,
+                                     NVRAM_PERFS_SERVO_TOGGLE_PUS_DEFAULT);
+    _preferences.end();
+    // UtilityFunctions::debugLogf( "loaded servo enable push button toggle flag from NVRAM. %i\n", flag);
+
+    return flag;
+  }
+
+  // Save servo enable push button toggle NVRAM
+  String saveServoTogglePushFlag(bool flag)
+  {
+    size_t bytesWritten;
+
+    Preferences _preferences;
+    _preferences.begin(NVRAM_PERFS, false);
+    bytesWritten = _preferences.putBool(NVRAM_PERFS_SERVO_TOGGLE_PUSH_PROP, flag);
+    _preferences.end();
+
+    if (bytesWritten == 0)
+    {
+      std::string str = std::format(
+          "Unknown Error Cannot set the Servo to enable push button toggle Flag");
+      String Astr = String(str.c_str());
+      debugLog(Astr);
+      return Astr;
+    }
+    UtilityFunctions::debugLog("Servo enable enable push button toggle flag updated and saved to NVRAM.");
+    return "";
+  }
 
   // Load relay enable flag from NVRAM
   bool loadRelayEnableFlag()

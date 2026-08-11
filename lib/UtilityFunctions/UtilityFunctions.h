@@ -125,21 +125,27 @@ namespace UtilityFunctions
   // Save servo action hold from NVRAM
   String saveServoActionHold(uint16_t newhold);
 
-  String loadAIoTDeviceID();
-  String saveAIoTDeviceID(String newDeviceID);
+    // Save servo action hold to NVRAMM
+  String saveRelayActionHold(uint16_t newhold);
 
-  String loadAIoTDeviceSECRET();
-  String saveAIoTDeviceSECRET(String newSecret);
+  // Load servo enable flag from NVRAM
+  bool loadServoEnableFlag();
 
-  // Load relayIO pin  num  from NVRAM
-  int loadRelayIOPin();
+  // Save servo enable flag to NVRAM
+  String saveServoEnableFlag(bool flag);
 
-  // Save RelayIO pin  num   to NVRAMM
-  String saveRelayIOPin(int newPinIO);
+  // Load servo wait on ble flag from NVRAM
+  bool loadServoWaitOnBleFlag();
 
-  // Load relay action hold from NVRAM
-  uint16_t loadRelayActionHold();
+  // Save servo wait on ble flag to NVRAM
+  String saveServoWaitOnBleFlag(bool flag);
 
+   // Load servo enable push button toggle from NVRAM
+  bool loadServoTogglePushFlag();
+  
+  // Save servo enable push button toggle NVRAM
+  String saveServoTogglePushFlag(bool flag);  
+  
   // Save servo action hold to NVRAMM
   String saveRelayActionHold(uint16_t newhold);
 
@@ -154,6 +160,27 @@ namespace UtilityFunctions
 
   // Save servo wait on ble flag to NVRAM
   String saveServoWaitOnBleFlag(bool flag);
+
+   // Load servo enable push button toggle from NVRAM
+  bool loadServoTogglePushFlag();
+  
+  // Save servo enable push button toggle NVRAM
+  String saveServoTogglePushFlag(bool flag);
+
+  String loadAIoTDeviceID();
+  String saveAIoTDeviceID(String newDeviceID);
+
+  String loadAIoTDeviceSECRET();
+  String saveAIoTDeviceSECRET(String newSecret);
+
+  // Load relayIO pin  num  from NVRAM
+  int loadRelayIOPin();
+
+  // Save RelayIO pin  num   to NVRAMM
+  String saveRelayIOPin(int newPinIO);
+
+  // Load relay action hold from NVRAM
+  uint16_t loadRelayActionHold();
 
   // Load relay enable flag from NVRAM
   bool loadRelayEnableFlag();

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <!-- Load the file with globals first as a classic script -->
-<script src="/globals.js"></script>
+<script id="refreshable-app-logic" src="/globals.js"></script>
+
+<!-- Load the main script as a module so it can access the globals -->
+<script type="module" src="/script.js"></script>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -147,13 +150,42 @@
 </head>
 
 <body>
-
     <div class="remote-container">
-        <h1 id="main-heading">ESP32 Projector Control</h1>
-        <script>
-            const mainHeadingElement = document.getElementById("main-heading");
-            mainHeadingElement.textContent = "TV Remote:" + headingTxt;
-        </script>
+        <!-- New status bar for icons -->
+        <div class="status-bar">
+            <div></div>
+            <span class="status-text">
+                <h1 id="main-heading">TV Remote</h1>
+            </span>
+            <script>
+                const mainHeadingElement = document.getElementById("main-heading");
+                mainHeadingElement.textContent = "TV Remote:" + headingTxt;
+            </script>
+            <div id="Wifi-icon" class="wifi-icon wifi-low">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <!-- Separate paths with space between each bar -->
+                    <!-- Smallest bar (dot) -->
+                    <path class="bar-1" fill="#000000" d="M12 19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    <!-- Second bar -->
+                    <path class="bar-2" fill="#000000"
+                        d="M12 15c-3.31 0-6 2.69-6 6h2c0-2.21 1.79-4 4-4s4 1.79 4 4h2c0-3.31-2.69-6-6-6z" />
+                    <!-- Third bar -->
+                    <path class="bar-3 fill=" #000000"
+                        d="M12 11c-5.52 0-10 4.48-10 10h2c0-4.41 3.59-8 8-8s8 3.59 8 8h2c0-5.52-4.48-10-10-10z" />
+                    <!-- Largest bar -->
+                    <path class="bar-4" fill="#000000"
+                        d="M12 7c-7.73 0-14 6.27-14 14h2c0-6.63 5.37-12 12-12s12 5.37 12 12h2c0-7.73-6.27-14-14-14z" />
+                    <title id="wifi-title">Arduino IOT connected</title>
+                </svg>
+            </div>
+            <svg id="bluetooth-icon" class="status-icon bt-advertising" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <title>Blue = Connected; Yellow = Advertising</title>
+                <path d="M7 7l10 10-5 5V2l5 5L7 17" />
+            </svg>
+        </div>
+
         <!-- Projector Wake Packet Form -->
         <div class="form-section">
             <h3>Projector Wake Packet</h3>
@@ -296,16 +328,20 @@
             </div>
 
             <!-- Relay BLE conncet  Enable/Disable (Auto-submitting) -->
-            <form id="relayBLEWaitEnableForm" action="/update-relay-BLEWait-enabled" method="post">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="relayBLECheckbox" name="relay_blewait_enabled" value="true"
-                        onchange="updateRelayFields(); submitForm(this.form);">
-                    <label for="relayBLECheckbox" style="display: inline; margin: 0;">Enable Relay to only work if one
-                        or more BLE client is conncted i.e. only if projector is sensed to be on via Bluetooth (In
-                        order for this to work the arduino device needs to be paired with the projector)</label>
-                </div>
-            </form>
-
+            <div class="form-section">
+                <form id="relayBLEWaitEnableForm" action="/update-relay-BLEWait-enabled" method="post">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="relayBLECheckbox" name="relay_blewait_enabled" value="true"
+                            onchange="updateRelayFields(); submitForm(this.form);">
+                        <label for="relayBLECheckbox" style="display: inline; margin: 0;">Relay BLE Wait ENABLE Flag:If
+                            ENABLE Relay to only work if
+                            one or more BLE client is conncted i.e. only only if flag is ENABLED and projector is sensed
+                            to be on via Bluetooth
+                            (In
+                            order for this to work the arduino device needs to be paired with the projector)</label>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="form-section">
@@ -330,6 +366,23 @@
                 </form>
             </div>
 
+            <!-- Servo Toggle push button  Enable/Disable (Auto-submitting) -->
+            <div class="form-section">
+                <form id="servoTogglePushEnableForm" action="/update-servo-TogglePush-enabled" method="post">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="servoTogglePushCheckbox" name="servo_togglepush_enabled" value="true"
+                            onchange="updateServoFields(); submitForm(this.form);">
+                        <label for="servTogglePushCheckbox" style="display: inline; margin: 0;">Servo Push Enable
+                            Flag:If ENABLED servo behabes as a push button on both ON and OFF button commands i.e. goes
+                            from rest angle position to action angle position waits for action hold time and then return
+                            to rest angle position.
+                            if DISABLED the serve behaves as toggle on ON command it goes to action hold angle and stays
+                            there, on OFF command it goes to rest angle and stays there.
+                            Note: on boot up servo is always reset to reast angle position.
+                        </label>
+                    </div>
+                </form>
+            </div>
 
             <!-- SERVO max angle Change Form -->
             <div class="form-section">
@@ -337,7 +390,8 @@
                 <form action="/change-servoMAXAngle" method="post">
                     <label for="new-servoMAXAngle">New Servo MAX Travel Angle:</label>
                     <input type="number" id="new-servoMAXAngle" name="newservoMAXAngle" required>
-                    <input type="submit" id="new-servoMAXAngleSubmit" value="Change Servo MAX Travel Angle (i.e. how much the servo can move)">
+                    <input type="submit" id="new-servoMAXAngleSubmit"
+                        value="Change Servo MAX Travel Angle (i.e. how much the servo can move)">
                 </form>
             </div>
 
@@ -373,15 +427,20 @@
 
 
             <!-- Servo BLE conncet  Enable/Disable (Auto-submitting) -->
-            <form id="servoBLEWaitEnableForm" action="/update-servo-BLEWait-enabled" method="post">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="servoBLECheckbox" name="servo_blewait_enabled" value="true"
-                        onchange="updateServoFields(); submitForm(this.form);">
-                    <label for="servoBLECheckbox" style="display: inline; margin: 0;">Enable SERVO to only work if one
-                        or more BLE client is conncted i.e. only if projector is sensed to be on via Bluetooth (In
-                        order for this to work the arduino device needs to be paired with the projector)</label>
-                </div>
-            </form>
+            <div class="form-section">
+                <form id="servoBLEWaitEnableForm" action="/update-servo-BLEWait-enabled" method="post">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="servoBLECheckbox" name="servo_blewait_enabled" value="true"
+                            onchange="updateServoFields(); submitForm(this.form);">
+                        <label for="servoBLECheckbox" style="display: inline; margin: 0;">Servo BLE Wait ENABLE
+                            Flag:Enable SERVO to only work if
+                            one
+                            or more BLE client is conncted i.e. only if flag is ENABLED and projector is sensed to be on
+                            via Bluetooth (In
+                            order for this to work the arduino device needs to be paired with the projector)</label>
+                    </div>
+                </form>
+            </div>
         </div>
         <!-- Device ID Form -->
         <div class="form-section">
@@ -402,14 +461,15 @@
                 <input type="submit" value="Change AIOT Device Secret ID">
             </form>
         </div>
+    </div>
 
-        <div class="footer">
-            <a href="/">Home</a>
-            <a href="/settings.htm">Settings</a>
-            <a href="/status.htm">Status</a>
-            <a href="/ota.htm">Update</a>
-        </div>
-        <div id="error-message" style="color: red; font-weight: bold;"></div>
+    <div class="footer">
+        <a href="/">Home</a>
+        <a href="/settings.htm">Settings</a>
+        <a href="/status.htm">Status</a>
+        <a href="/ota.htm">Update</a>
+    </div>
+    <div id="error-message" style="color: red; font-weight: bold;"></div>
     </div>
 
 
@@ -444,6 +504,9 @@
 
         const servoBLEElement = document.getElementById("servoBLECheckbox");
         servoBLEElement.checked = servoBLEWaitonEnableFlag;
+
+        const servoTogglePushElement = document.getElementById("servoTogglePushCheckbox");
+        servoTogglePushElement.checked = servoTogglePushFlag;
 
         const deviceIDElement = document.getElementById("new-deviceID");
         deviceIDElement.value = deviceID;
@@ -488,6 +551,7 @@
             servoActionAngleElement.disabled = !servoCheckbox.checked;
             servoActionDelayElement.disabled = !servoCheckbox.checked;
             servoBLEElement.disabled = !servoCheckbox.checked;
+            servoTogglePushElement.disabled = !servoCheckbox.checked;
 
             document.getElementById("new-servoIOPINSubmit").disabled = !servoCheckbox.checked;
             document.getElementById("new-servoMAXAngleSubmit").disabled = !servoCheckbox.checked;

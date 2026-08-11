@@ -58,7 +58,7 @@ String BLE_Remote_Decoder::getConnectedDevicesTable()
         // Returns a vector of connection handles (uint16_t)
         std::vector<uint16_t> handles = rcHID->getPeerDevices();
 
-        UtilityFunctions::debugLogf("Ble peers:%i\n", handles.size());
+        //UtilityFunctions::debugLogf("Ble peers:%i\n", handles.size());
 
         str = str + std::format("{: <3}{: <4}{: <18}{: <7}{: <4}{: <5}{: <4}\n",
                                 "#", "M/S", "ADDR", "Bonded", "Enc", "Auth", "Key");
@@ -73,7 +73,7 @@ String BLE_Remote_Decoder::getConnectedDevicesTable()
             for (uint16_t handle : handles)
             {
                 // Fetch detailed info using the handle
-                UtilityFunctions::debugLogf("BLE info get handle:%i\n", handle);
+                //UtilityFunctions::debugLogf("BLE info get handle:%i\n", handle);
                 NimBLEConnInfo info = rcHID->getPeerInfo(handle);
 
                 if (info.getConnHandle() != BLE_HS_CONN_HANDLE_NONE)

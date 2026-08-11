@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Load the file with globals first as a classic script -->
-<script src="/globals.js"></script>
+<script id="refreshable-app-logic" src="/globals.js"></script>
 
 <!-- Load the main script as a module so it can access the globals -->
 <script type="module" src="/script.js"></script>
@@ -174,35 +174,54 @@
         <div id="error-message" style="color: red; font-weight: bold;"></div>
 
         <script>
+
+            var btnEnabled = true;
             /**
              * Sends a command to the ESP32 server.
              * @param {string} command - The command string to send (e.g., 'power', 'volume_up').
              */
             function sendCommand(command) {
 
+                if (btnEnabled) {
+                    fetch(`./remote-action?cmd=${command}`, {
+                        signal: AbortSignal.timeout(5000)
+                    })
+                        .then((response) => {
+                            if (!response.ok) { // Don't forget this part!
+                                throw new Error(`HTTP error ${response.status}`);
+                            }
+                            return response.text();
+                        })
+                        .then((responseData) => {
+                            console.log("response txt:", responseData);
+                            const answer = JSON.parse(responseData); // we are sending json response (success and error-message tags) from the server, so we need to parse it
+                            if (answer.success == false) {
+                                document.getElementById('error-message').textContent = answer.message;
+                            } else {
+                                /// we sucedded so reoad the globals as the blutooth may have changed connection
+                                document.getElementById('error-message').textContent = '';
 
-                fetch(`./remote-action?cmd=${command}`, {
-                    signal: AbortSignal.timeout(5000)
-                })
-                    .then((response) => {
-                        if (!response.ok) { // Don't forget this part!
-                            throw new Error(`HTTP error ${response.status}`);
-                        }
-                        return response.text();
-                    })
-                    .then((responseData) => {
-                        console.log("txt:", responseData);
-                        const answer = JSON.parse(responseData); // we are sending json response (success and error-message tags) from the server, so we need to parse it
-                        if (answer.success == false) {
-                            document.getElementById('error-message').textContent = answer.message;
-                        } else {
-                            document.getElementById('error-message').textContent = '';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Failed to fetch:', error);
-                        document.getElementById('error-message').textContent = '⚠️ Failed to send command. ERROR:' + error.textContent;
-                    });
+                                if (command == "power") {
+                                    document.getElementById('error-message').textContent = ' - WAIT -';
+                                    btnEnabled = false;
+                                    setTimeout(() => {
+                                        // this is called when 10 secs are done
+                                        console.log(`calling global refesh of js`);
+                                        reloadGlobalJS();
+                                        updateWiFiandBleIcon();
+                                        btnEnabled = true;
+                                        document.getElementById('error-message').textContent = '';
+                                    }, 16000); // 16000ms = 16s; // wait for the projector to power off 
+                                    //note this is non blocking wait so we get here before 10 secs are done
+                                }
+
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Failed to fetch:', error);
+                            document.getElementById('error-message').textContent = '⚠️ Failed to send command. ERROR:' + error.textContent;
+                        });
+                }
             }
 
 

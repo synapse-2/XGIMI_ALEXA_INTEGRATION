@@ -73,7 +73,7 @@ String RC_WebInterface::wifiSignalStrengthDecoder(int8_t rssi)
 void RC_WebInterface::refreshGlobalJS()
 {
   globalJS = "//start of file \n";
-  globalJS = globalJS + "const projectorList = [ \n";
+  globalJS = globalJS + "var projectorList = [ \n";
   for (size_t i = 0; i < projectorWakeList.size(); ++i)
   {
     globalJS = globalJS + "[ \"" +
@@ -83,62 +83,65 @@ void RC_WebInterface::refreshGlobalJS()
   }
   globalJS = globalJS + "]; \n";
 
-  globalJS = globalJS + "const headingTxt = '" +
+  globalJS = globalJS + "var headingTxt = '" +
              UtilityFunctions::loadBlueToothName() + "';\n";
   int8_t rssi = WiFi.RSSI();
-  globalJS = globalJS + "const wifiStrength =  \"" +
+  globalJS = globalJS + "var wifiStrength =  \"" +
              wifiSignalStrengthDecoder(rssi) + "\";\n";
-  globalJS = globalJS + "const bluetoothStatus = \"" +
+  globalJS = globalJS + "var bluetoothStatus = \"" +
              ((bleRemoteDecoder.getConnectedCount() != 0) ? "bt-connected"
                                                           : "bt-advertising") +
              "\";\n";
-  globalJS = globalJS + "const WifiRssi = " + String(rssi) + ";\n";
-  globalJS = globalJS + "const projSelected =  " +
+  globalJS = globalJS + "var WifiRssi = " + String(rssi) + ";\n";
+  globalJS = globalJS + "var projSelected =  " +
              String(UtilityFunctions::loadWakePacketNum()) + ";\n";
-  globalJS = globalJS + "const devHostname =  \"" +
+  globalJS = globalJS + "var devHostname =  \"" +
              UtilityFunctions::loadLocalHostname() + "\";\n";
-  globalJS = globalJS + "const devBlueName =  \"" +
+  globalJS = globalJS + "var devBlueName =  \"" +
              UtilityFunctions::loadBlueToothName() + "\";\n";
 
-  globalJS = globalJS + "const deviceID =  \"" +
+  globalJS = globalJS + "var deviceID =  \"" +
              UtilityFunctions::loadAIoTDeviceID() + "\";\n";
 
-  globalJS = globalJS + "const secretID =  \"" +
+  globalJS = globalJS + "var secretID =  \"" +
              UtilityFunctions::loadAIoTDeviceSECRET() + "\";\n";
 
   globalJS = globalJS +
-             "const servoIOPIN =  " + UtilityFunctions::loadServoIOPin() +
+             "var servoIOPIN =  " + UtilityFunctions::loadServoIOPin() +
              ";\n";
   globalJS = globalJS +
-             "const servoMAXAngle =  " + UtilityFunctions::loadServoMaxAngle() +
+             "var servoMAXAngle =  " + UtilityFunctions::loadServoMaxAngle() +
              ";\n";
-  globalJS = globalJS + "const servoRESTAngle =  " +
+  globalJS = globalJS + "var servoRESTAngle =  " +
              UtilityFunctions::loadServoRestAngle() + ";\n";
-  globalJS = globalJS + "const servoActionAngle =  " +
+  globalJS = globalJS + "var servoActionAngle =  " +
              UtilityFunctions::loadServoActionAngle() + ";\n";
-  globalJS = globalJS + "const servoActionDelay =  " +
+  globalJS = globalJS + "var servoActionDelay =  " +
              UtilityFunctions::loadServoActionHold() + ";\n";
-
-  globalJS = globalJS +
-             "const relayIOPIN =  " + UtilityFunctions::loadRelayIOPin() +
-             ";\n";
-
-  globalJS = globalJS + "const relayActionDelay =  " +
-             UtilityFunctions::loadRelayActionHold() + ";\n";
-
-  globalJS = globalJS + "const servoEnableFlag =  " +
+  
+  globalJS = globalJS + "var servoEnableFlag =  " +
              UtilityFunctions::loadServoEnableFlag() + ";\n";
 
-  globalJS = globalJS + "const servoBLEWaitonEnableFlag =  " +
+  globalJS = globalJS + "var servoBLEWaitonEnableFlag =  " +
              UtilityFunctions::loadServoWaitOnBleFlag() + ";\n";
 
-  globalJS = globalJS + "const relayEnableFlag =  " +
+  globalJS = globalJS + "var servoTogglePushFlag =  " +
+             UtilityFunctions::loadServoTogglePushFlag() + ";\n";
+
+  globalJS = globalJS +
+             "var relayIOPIN =  " + UtilityFunctions::loadRelayIOPin() +
+             ";\n";
+
+  globalJS = globalJS + "var relayActionDelay =  " +
+             UtilityFunctions::loadRelayActionHold() + ";\n";
+
+  globalJS = globalJS + "var relayEnableFlag =  " +
              UtilityFunctions::loadRelayEnableFlag() + ";\n";
 
-  globalJS = globalJS + "const relayBLEWaitonEnableFlag =  " +
+  globalJS = globalJS + "var relayBLEWaitonEnableFlag =  " +
              UtilityFunctions::loadRelayWaitOnBleFlag() + ";\n";
 
-  globalJS = globalJS + "const syncAIoTBLEDevEnableFlag =  " +
+  globalJS = globalJS + "var syncAIoTBLEDevEnableFlag =  " +
              UtilityFunctions::loadSyncAIoTWithBLEDevice() + ";\n";
 
   String chipInfo = UtilityFunctions::chipInfo();
@@ -163,7 +166,7 @@ void RC_WebInterface::refreshGlobalJS()
   webLog.replace("\"", "\\\"");     // escape out the double quotes
   webLog.replace("\n", "<br>\\\n"); // replace \n with <br>/ tag
 
-  globalJS = globalJS + "const statusTxt =  \"<strong>" + UtilityFunctions::getBuildTimeVersion() + "</strong><br>\\\n" +
+  globalJS = globalJS + "var statusTxt =  \"<strong>" + UtilityFunctions::getBuildTimeVersion() + "</strong><br>\\\n" +
              chipInfo + "<br>\\\n" +
              ((UtilityFunctions::loadAIoTDeviceID().length() != NVRAM_PERFS_AIoT_DEVICE_ID_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE ID NOT CORRECT set in setting page</span><br>\\\n" : "") +
              ((UtilityFunctions::loadAIoTDeviceSECRET().length() != NVRAM_PERFS_AIoT_DEVICE_SECRET_LEN) ? "<span style=\\\"color: red;\\\">AIoT DEVICE SECRET NOT CORRECT set in setting page</span><br>\\\n" : "") +
@@ -775,6 +778,28 @@ void RC_WebInterface::setupRoutes()
                {
                   _server.send(200, "plain/txt",
                  "{ \"success\": false, \"message\": \"Unable to Change Servo BLE WAIT FLAG -" +
+                     sucess + "\" }");
+               } });
+  
+    _server.on("/update-servo-TogglePush-enabled", HTTP_POST, [this]()
+             {
+               if (!checkAdminAuth())
+                 return;
+               String arg = _server.arg("servo_togglepush_enabled");
+               UtilityFunctions::debugLog("Servo is TogglePush enabled change requested to: " + arg);
+                arg.toLowerCase();
+               bool check = ( arg.equals("true")) ? true : false;
+
+               String sucess = UtilityFunctions::saveServoTogglePushFlag(check);
+
+               if (sucess.isEmpty()){
+
+              _server.send(200, "plain/txt", "{ \"success\": true }");
+
+              }else
+               {
+                  _server.send(200, "plain/txt",
+                 "{ \"success\": false, \"message\": \"Unable to Change Servo TogglePush FLAG -" +
                      sucess + "\" }");
                } });
 

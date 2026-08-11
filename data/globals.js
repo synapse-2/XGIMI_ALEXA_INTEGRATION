@@ -1,9 +1,9 @@
-//start of file 
-const headingTxt = 'XGIMI BH';
-const wifiStrength = "wifi-none";
-const bluetoothStatus = "bt-connected";
-const WifiRssi = -75;
-const projectorList = [
+//start of file - this is a dummy file it is created by webserver class dynamically
+var headingTxt = 'XGIMI BH';
+var wifiStrength = "wifi-none";
+var bluetoothStatus = "bt-connected";
+var WifiRssi = -75;
+var projectorList = [
     ["XGIMI Horizon Ultra", 0],
     ["XGIMI Elfin", 1],
     ["XGIMI Z6X", 2],
@@ -16,8 +16,8 @@ const projectorList = [
     ["XGIMI Z4Air", 9],
     ["XGIMI Horizon", 10]
 ];
-const projSelected = 0;
-const devHostname = "xigimi-alexa";
+var projSelected = 0;
+var devHostname = "xigimi-alexa";
 var statusTxt = 'This is ESP32-S3 chip with 2 CPU core(s) Clok Feq 240 MHz, WiFi/BLE, silicon revision v0.2, 16 MB external flash ' /
     'Minimum free heap size: 8144 KB ' /
     'Total heap: 265 KB ' /
