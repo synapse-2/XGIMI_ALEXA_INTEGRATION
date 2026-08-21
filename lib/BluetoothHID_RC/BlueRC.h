@@ -8,7 +8,7 @@
 
 #pragma once
 #include "defaults.h"
-#include "magicEnum/magic_enum.hpp"
+#include "magic_enum/magic_enum.hpp"
 #include <NimBLEDevice.h>
 #include <NimBLEHIDDevice.h>
 #include <HIDTypes.h>
