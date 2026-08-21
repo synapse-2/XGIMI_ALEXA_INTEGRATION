@@ -3,7 +3,7 @@
 #include "UtilityFunctions.h"
 #include "BlueRC.h"
 #include "BlueXGIMI_RC.h"
-#include "magicEnum/magic_enum.hpp"
+#include "magic_enum/magic_enum.hpp"
 #include "NimClassOfDeviceType.h"
 #include "NimBLEUtils.h"
 #ifdef XGIMI_USE_EXT_ADV

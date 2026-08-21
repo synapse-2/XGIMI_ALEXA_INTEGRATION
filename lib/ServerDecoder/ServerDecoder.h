@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#include "magicEnum/magic_enum.hpp"
+#include "magic_enum/magic_enum.hpp"
 
 namespace ServerDecoder
 {

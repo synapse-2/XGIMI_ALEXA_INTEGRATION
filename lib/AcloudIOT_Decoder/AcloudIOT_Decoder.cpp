@@ -3,8 +3,8 @@
 #include "CmdRingBuffer.h"
 #include "ConnectionHandlerDefinitions.h"
 #include "UtilityFunctions.h" // Custom utility functions
-#include "magicEnum/magic_enum.hpp"
-#include "magicEnum/magic_enum_iostream.hpp"
+#include "magic_enum/magic_enum.hpp"
+#include "magic_enum/magic_enum_iostream.hpp"
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 #include "thingProperties.h"
 

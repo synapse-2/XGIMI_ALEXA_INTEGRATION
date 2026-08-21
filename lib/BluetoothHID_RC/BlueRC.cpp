@@ -1,7 +1,7 @@
 #include "UtilityFunctions.h"
 #include "BlueRC.h"
 #include "services/gap/ble_svc_gap.h"
-#include "magicEnum/magic_enum.hpp"
+#include "magic_enum/magic_enum.hpp"
 #include "NimBLEUtils.h"
 #ifdef XGIMI_USE_EXT_ADV
 #include <NimBLEExtAdvertising.h>

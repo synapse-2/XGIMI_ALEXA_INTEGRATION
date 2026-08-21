@@ -12,8 +12,8 @@
 #include <cstring>
 #include <esp_chip_info.h>
 #include <format>
-#include <magicEnum/magic_enum.hpp>
-#include <magicEnum/magic_enum_iostream.hpp>
+#include <magic_enum/magic_enum.hpp>
+#include <magic_enum/magic_enum_iostream.hpp>
 #include <ranges>
 #include <string>
 #include "esp_partition.h"

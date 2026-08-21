@@ -21,8 +21,8 @@
 #include "WebLogPrint.h"
 #include "WiFiManager.h"
 #include "defaults.h"
-#include "magicEnum/magic_enum.hpp"
-#include "magicEnum/magic_enum_iostream.hpp"
+#include "magic_enum/magic_enum.hpp"
+#include "magic_enum/magic_enum_iostream.hpp"
 #include "nvs_flash.h"
 #include "thingProperties.h"
 #include <Arduino.h>
