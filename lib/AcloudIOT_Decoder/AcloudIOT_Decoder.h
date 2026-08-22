@@ -22,10 +22,12 @@ public:
     bool isConnectOK();
     void doCmd(ServerDecoder::Remote_Cmd *cmd);
     void setOldProjectorSwitch(bool val);
+    void getUpdateformAIoTCloud();
 
 protected:
     WiFiConnectionHandler * iot_connector;
     bool firstCloudSyncHasHappened = false; // used to ignore the first cloud update after connection as it syncs the variable
     CloudTelevision oldProjector_value;     // used to compare the value to derermine what to do
     bool isConnectOkState = false;
+    bool AIOT_hasBeenInitated = false;
 };

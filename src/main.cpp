@@ -304,7 +304,7 @@ void loop()
     // ArduinoCloud.addCallback(ArduinoIoTCloudEvent::DISCONNECT,
     // onNetworkError);
     aIOT.start();
-    UtilityFunctions::debugLog("AIoT SERVER started ... ");
+    
 
 #endif
   }
@@ -421,9 +421,11 @@ void loop()
       Wifi_Disconnect_Start_Time = 0;
     }
 
-    checkResetPressed();   // Check if the reset button has been pressed
-    ArduinoCloud.update(); // check we have updates from AIoT cloud, this will triggger call backs to be called on projector variable update
+    checkResetPressed(); // Check if the reset button has been pressed
+    aIOT.getUpdateformAIoTCloud(); // check we have updates from AIoT cloud, this will triggger call backs to be called on projector variable update
 
+
+    
     // Detect changes to the "sync AIoT with BLE" configuration flag and
     // update the local copy. Purpose: avoid spamming logs inside the called
     // helper which suppresses its own logs.

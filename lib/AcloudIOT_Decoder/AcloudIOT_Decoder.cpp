@@ -32,29 +32,62 @@ void AcloudIOT_Decoder::setup(String ssid, String psk)
 {
 
   // update the IOT device to conenct to
-  ArduinoCloud.setBoardId(UtilityFunctions::loadAIoTDeviceID());
-  ArduinoCloud.setSecretDeviceKey(UtilityFunctions::loadAIoTDeviceSECRET());
+  String AIoTDeviceID = UtilityFunctions::loadAIoTDeviceID();
+  String AIoTSecretDevicekey = UtilityFunctions::loadAIoTDeviceSECRET();
 
-  // when we get here we should have wi fi connected to the internet
+  if ((AIoTDeviceID.equals(NVRAM_PERFS_AIoT_DEVICE_ID_DEFAULT)) || (AIoTSecretDevicekey.equals(NVRAM_PERFS_AIoT_DEVICE_SECRET_DEFAULT)))
+  {
+    AIOT_hasBeenInitated = false;
+    UtilityFunctions::debugLogf("One or both AIoT device id:[%s] or device secret key:[%s] is blank AIOT is not started. Set the keys in the UI and restart \n", AIoTDeviceID, AIoTSecretDevicekey);
+    
+  }
+  else
+  {
+    ArduinoCloud.setBoardId(AIoTDeviceID);
+    ArduinoCloud.setSecretDeviceKey(AIoTSecretDevicekey);
+    UtilityFunctions::debugLogf("AIoT connecting to clooubd using device id:[%s] and device secret key:[%s] \n", AIoTDeviceID, AIoTSecretDevicekey);
+    // when we get here we should have wi fi connected to the internet
 
-  /*
-    The following function allows you to obtain more information
-    related to the state of network and IoT Cloud connection and errors
-    the higher number the more granular information you’ll get.
-    The default is 0 (only errors).
-    Maximum is 4
-*/
-  setDebugMessageLevel(ArduinoCloudDebugLevel);
-  ArduinoCloud.printDebugInfo();
-  // Connect to Arduino IoT Cloud
-  // initialize the WiFiConnectionHandler pointer
-  iot_connector = new WiFiConnectionHandler(ssid.c_str(), psk.c_str());
-  iot_connector->addCallback(NetworkConnectionEvent::ERROR, onNetworkErrorMain);
-  iot_connector->addCallback(NetworkConnectionEvent::DISCONNECTED,
-                             onNetworkDisconnectMain);
+    /*
+      The following function allows you to obtain more information
+      related to the state of network and IoT Cloud connection and errors
+      the higher number the more granular information you’ll get.
+      The default is 0 (only errors).
+      Maximum is 4
+  */
+    setDebugMessageLevel(ArduinoCloudDebugLevel);
+    ArduinoCloud.printDebugInfo();
+    // Connect to Arduino IoT Cloud
+    // initialize the WiFiConnectionHandler pointer
+    iot_connector = new WiFiConnectionHandler(ssid.c_str(), psk.c_str());
+    iot_connector->addCallback(NetworkConnectionEvent::ERROR, onNetworkErrorMain);
+    iot_connector->addCallback(NetworkConnectionEvent::DISCONNECTED,
+                               onNetworkDisconnectMain);
+    AIOT_hasBeenInitated = true;
+  }
 }
 
-void AcloudIOT_Decoder::start() { ArduinoCloud.begin(*iot_connector); }
+void AcloudIOT_Decoder::start()
+{
+  if (AIOT_hasBeenInitated)
+  {
+    ArduinoCloud.begin(*iot_connector);
+    UtilityFunctions::debugLog("AIoT SERVER started ... ");
+  }
+  else
+  {
+
+    UtilityFunctions::debugLog("AIoT SERVER NOT started ... ");
+  }
+}
+
+void AcloudIOT_Decoder::getUpdateformAIoTCloud()
+{
+  if (AIOT_hasBeenInitated)
+  {
+    ArduinoCloud.update(); // check we have updates from AIoT cloud, this will triggger call backs to be called on projector variable update
+  }
+}
 
 void AcloudIOT_Decoder::onNetworkConnect()
 {
@@ -189,8 +222,8 @@ void AcloudIOT_Decoder::onProjectorChange(CloudTelevision newPrj)
   if (!enQueuedCmd)
   {
     UtilityFunctions::debugLogf("Command received from AIOT but no change in "
-                               "old vs new cloud variable, cloud var value %s", UtilityFunctions::getAIoTProjectorVarValue().c_str());
-    
+                                "old vs new cloud variable, cloud var value %s",
+                                UtilityFunctions::getAIoTProjectorVarValue().c_str());
   }
 }
 
